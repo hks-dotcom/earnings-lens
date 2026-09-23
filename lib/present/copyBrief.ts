@@ -9,6 +9,9 @@ import { ALTMAN_CAP_NOTE } from "@/lib/metrics/health";
 import { LENS_NAME } from "@/lib/present/lensNames";
 import { findingProse } from "@/lib/present/findingExplanations";
 import type { ExplainedItem } from "@/lib/claude/explain";
+import { heroSubline, whyThisVerdict } from "@/lib/present/verdictReasons";
+import { riskWord } from "@/lib/present/riskWords";
+import { liquidityBriefLine } from "@/lib/present/liquidityDebt";
 
 /**
  * Deterministic "Copy brief" text -- no Claude call. Per spec: company,
@@ -35,11 +38,15 @@ export function buildCopyBrief(page: PageData, lens: LensResult): string {
   lines.push(`${page.companyName} (${page.ticker}) — ${page.header.fiscalQuarterLabel} — ${LENS_NAME[lens.lens]} lens`);
   lines.push("");
   lines.push(`Verdict: ${lens.quadrant}`);
+  lines.push(heroSubline(lens));
   lines.push(summaryText(lens, page.keyFinancials, page.health, standOut));
   lines.push("");
+  // The Why box's two lines, in the page's own words: risk as low, medium
+  // or high, never the rules' internal rung names.
+  const why = whyThisVerdict(lens, page.keyFinancials);
   lines.push("Behind the verdict:");
-  lines.push(`- Opportunity: ${lens.opportunity.high ? "HIGH" : "LOW"} — ${lens.opportunity.rule}`);
-  lines.push(`- Risk: ${lens.risk.high ? "HIGH" : "LOW"} — ${lens.risk.rule}`);
+  lines.push(`- ${why.risk.label} ${why.risk.text}`);
+  lines.push(`- ${why.opportunity.label} ${why.opportunity.text}`);
   lines.push(
     `- Payment behaviour: ${lens.paymentBehavior.state} (DPO ${lens.paymentBehavior.dpoCurrent?.toFixed(1) ?? "MISSING"} vs ${lens.paymentBehavior.dpoYearAgo?.toFixed(1) ?? "MISSING"} a year ago)`
   );
@@ -51,9 +58,8 @@ export function buildCopyBrief(page: PageData, lens: LensResult): string {
   for (const item of standOut) lines.push(`- ${briefLine(item, page.explained)}`);
   lines.push("");
   lines.push(`Terms finance will accept:`);
-  lines.push(`- Ladder rung: ${lens.ladder.rung} (${lens.ladder.rule})`);
   lines.push(
-    `- Payment terms: Net 30 ${lens.ladder.net30 ? "✓" : "✕"}${lens.ladder.escalateBeforeSigning ? " (escalate before signing)" : ""}, Net 45 ${lens.ladder.net45 ? "✓" : "✕"}, Net 60 ✕ (ceiling Net ${ladderCeilingDays(lens.ladder.rung)})`
+    `- Payment terms: Net 30 ${lens.ladder.net30 ? "✓" : "✕"}${lens.ladder.escalateBeforeSigning ? " (escalate before signing)" : ""}, Net 45 ${lens.ladder.net45 ? "✓" : "✕"}, Net 60 ✕ (risk ${riskWord(lens.ladder.rung)}, so the ceiling is Net ${ladderCeilingDays(lens.ladder.rung)}; Net 45 is offered only when risk is ${riskWord("Strong")})`
   );
   lines.push(`- Credit exposure: ${lens.dealStructure.creditExposure} (${lens.dealStructure.billingAssumption})`);
   lines.push(`- ${lens.negotiationNote}`);
@@ -94,6 +100,7 @@ export function buildCopyBrief(page: PageData, lens: LensResult): string {
       `- Heavy investment: capex ${formatMoneyInline(cash.capitalExpenditure, unit)} against operating cash flow ${formatMoneyInline(cash.operatingCashFlow, unit)}. Operations funded the quarter, so no runway applies and the terms ladder is untouched.`
     );
   }
+  lines.push(`- ${liquidityBriefLine(page.liquidity)}`);
   lines.push(
     `- Red flags (12mo): ${lens.redFlags.findings.length === 0 ? "none" : lens.redFlags.findings.map((f) => f.detail).join(" | ")}`
   );

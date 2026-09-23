@@ -14,6 +14,9 @@ import { bandPctWords, dpoMissingReason, payablesShown, RED_FLAG_HEADLINE } from
 import { LENS_NAME } from "@/lib/present/lensNames";
 import { MINUS } from "@/lib/present/format";
 import { runwayCaveat, runwaySubject } from "@/lib/rules/runway";
+import { riskWord } from "@/lib/present/riskWords";
+import { formatDate } from "@/lib/rules/redFlags";
+import { restructuringFilingsOf } from "@/lib/rules/explanationTriggers";
 
 /**
  * The verdict hero's subline and the "Why this verdict" box.
@@ -37,22 +40,22 @@ export function heroTermsPhrase(rung: LadderRung): string {
 }
 
 /**
- * "Strong", or "Strong, with spending cuts". Spending cuts don't move the
- * rung or the terms, but they put the company in the higher-risk half of
- * the matrix on their own, so a bare "Strong" beside that column would
- * leave the reader to work out why.
+ * "low", or "low, with spending cuts". Spending cuts don't move the rung or
+ * the terms, but they put the company in the higher-risk half of the
+ * matrix on their own, so a bare "low" beside that column would leave the
+ * reader to work out why.
  */
 function riskLabel(lens: LensResult): string {
-  return `${lens.ladder.rung}${lens.retrenchment.triggered ? ", with spending cuts" : ""}`;
+  return `${riskWord(lens.ladder.rung)}${lens.retrenchment.triggered ? ", with spending cuts" : ""}`;
 }
 
-/** "Risk: Neutral · Opportunity: high · Offer Net 30 and hold it" */
+/** "Risk: medium · Opportunity: high · Offer Net 30 and hold it" */
 export function heroSubline(lens: LensResult): string {
   return `Risk: ${riskLabel(lens)} · Opportunity: ${lens.opportunity.high ? "high" : "low"} · ${heroTermsPhrase(lens.ladder.rung)}`;
 }
 
 export interface WhyLine {
-  /** "Risk: Neutral." -- set in bold on the page. */
+  /** "Risk: medium." -- set in bold on the page. */
   label: string;
   /** The deciding reason with its figure, then any context. */
   text: string;
@@ -69,20 +72,43 @@ function zScore(z: number): string {
 
 
 /**
+ * The latest restructuring filing, and how many came before it in the
+ * window: "a restructuring filing (8-K Item 2.05) on 3 Jun 2026 and 1
+ * earlier". Undefined when there is none.
+ */
+export function restructuringWords(lens: LensResult): string | undefined {
+  const filings = restructuringFilingsOf(lens);
+  if (filings.length === 0) return undefined;
+  const earlier = filings.length > 1 ? ` and ${filings.length - 1} earlier` : "";
+  return `a restructuring filing (8-K Item 2.05) on ${formatDate(filings[0].filingDate)}${earlier}`;
+}
+
+/**
  * The retrenchment causes, as a reader would say them. The rules state
  * each cause in their own shorthand ("R&D down -3.4% Y/Y, beyond the 2%
- * flat band"); here the same facts read as a clause.
+ * flat band"); here the same facts read as a clause, with the restructuring
+ * filings named by the latest one.
  */
-function spendingCutWords(causes: string[]): string {
-  return causes
-    .map((c) => {
-      const filing = c.match(/^restructuring filing \(8-K Item 2\.05\) filed (.+)$/);
-      if (filing) return `a restructuring filing (8-K Item 2.05) on ${filing[1]}`;
-      const cut = c.match(/^(R&D|SG&A) down -?([\d.]+)% Y\/Y/);
-      if (cut) return `${cut[1]} down ${cut[2]}% on last year`;
-      return c;
-    })
-    .join(" and ");
+function spendingCutWords(lens: LensResult): string {
+  const cuts = lens.retrenchment.causes
+    .map((c) => c.match(/^(R&D|SG&A) down -?([\d.]+)% Y\/Y/))
+    .filter((m): m is RegExpMatchArray => m !== null)
+    .map((m) => `${m[1]} down ${m[2]}% on last year`);
+  const filing = restructuringWords(lens);
+  return [...(filing ? [filing] : []), ...cuts].join(" and ");
+}
+
+/**
+ * The payables clause when payables are not rising beyond the band: the
+ * fact, with no reading of it. Falling beyond the band states the day
+ * counts; within the band says so.
+ */
+function payablesNotRising(lens: LensResult): string {
+  const shown = payablesShown(lens);
+  if (lens.paymentBehavior.state === "falling" && shown) {
+    return `payables are falling: ${shown.days} days of cost of revenue, from ${shown.daysYearAgo} a year ago`;
+  }
+  return `payables are within the ±${DPO_BAND_PCT}% band`;
 }
 
 function riskReason(lens: LensResult, kf: KeyFinancials): string {
@@ -100,7 +126,7 @@ function riskReason(lens: LensResult, kf: KeyFinancials): string {
     ? `There are no red flags, and ${payablesUp}.`
     : payMissing
       ? `There are no red flags, and ${payablesUnknown}.`
-      : "There are no red flags and payables are not rising.";
+      : `There are no red flags and ${payablesNotRising(lens)}.`;
 
   const zoneSentence =
     zone.zone === undefined || z === undefined
@@ -138,7 +164,7 @@ function riskReason(lens: LensResult, kf: KeyFinancials): string {
     base = "Strong";
     sentences = payMissing
       ? [`The balance sheet is safe (Z'' ${z}), there are no red flags, and ${payablesUnknown}.`]
-      : [`The balance sheet is safe (Z'' ${z}), there are no red flags and payables are not rising.`];
+      : [`The balance sheet is safe (Z'' ${z}), there are no red flags and ${payablesNotRising(lens)}.`];
   } else if (zone.zone === "safe") {
     base = "Neutral";
     sentences = [
@@ -164,16 +190,16 @@ function riskReason(lens: LensResult, kf: KeyFinancials): string {
     const caveat = runwayCaveat(cash);
     if (quarters < RUNWAY_WEAK_BELOW_QUARTERS) {
       if (base === "Weak") {
-        sentences.push(`${also} ${covers}, under ${RUNWAY_WEAK_BELOW_QUARTERS}, which on its own sets risk to Weak${caveat}.`);
+        sentences.push(`${also} ${covers}, under ${RUNWAY_WEAK_BELOW_QUARTERS}, which on its own sets risk to ${riskWord("Weak")}${caveat}.`);
       } else {
-        sentences.unshift(`${subject} ${covers}, under ${RUNWAY_WEAK_BELOW_QUARTERS}, so risk is Weak${caveat}.`);
+        sentences.unshift(`${subject} ${covers}, under ${RUNWAY_WEAK_BELOW_QUARTERS}, so risk is ${riskWord("Weak")}${caveat}.`);
       }
     } else if (quarters < RUNWAY_NEUTRAL_CAP_QUARTERS) {
       if (base === "Strong") {
-        sentences.unshift(`${subject} ${covers}, under ${RUNWAY_NEUTRAL_CAP_QUARTERS}, so risk is capped at Neutral${caveat}.`);
+        sentences.unshift(`${subject} ${covers}, under ${RUNWAY_NEUTRAL_CAP_QUARTERS}, so risk is capped at ${riskWord("Neutral")}${caveat}.`);
       } else {
         sentences.push(
-          `${also} ${covers}, under ${RUNWAY_NEUTRAL_CAP_QUARTERS}, which on its own caps risk at Neutral${caveat}.`
+          `${also} ${covers}, under ${RUNWAY_NEUTRAL_CAP_QUARTERS}, which on its own caps risk at ${riskWord("Neutral")}${caveat}.`
         );
       }
     }
@@ -184,7 +210,7 @@ function riskReason(lens: LensResult, kf: KeyFinancials): string {
   // Spending cuts decide the matrix column whatever the rung, so they lead,
   // and the rung's own reasons follow after "Otherwise".
   if (lens.retrenchment.triggered) {
-    const causes = spendingCutWords(lens.retrenchment.causes);
+    const causes = spendingCutWords(lens);
     const verb = lens.retrenchment.causes.length > 1 ? "put" : "puts";
     const lead = `${causes[0].toUpperCase()}${causes.slice(1)} ${verb} it in the higher-risk half of the matrix.`;
     const [first, ...rest] = sentences;
@@ -201,7 +227,7 @@ function opportunityReason(lens: LensResult): string {
   const rd = lens.engineeringSpend;
 
   if (lens.lens === "SaaS" && lens.retrenchment.triggered) {
-    return `Spending cuts set opportunity low for ${LENS_NAME.SaaS}: ${spendingCutWords(lens.retrenchment.causes)}.`;
+    return `Spending cuts set opportunity low for ${LENS_NAME.SaaS}: ${spendingCutWords(lens)}.`;
   }
   if (revenue.direction === undefined || revenue.yoyPct === undefined) {
     return "Revenue on last year is not filed, so opportunity can't be read as high.";

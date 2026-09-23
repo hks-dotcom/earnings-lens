@@ -17,11 +17,14 @@ export function Tooltip({
   label,
   formula,
   explanation,
+  text,
   align = "left",
 }: {
   label: string;
-  formula: string;
-  explanation: string;
+  formula?: string;
+  explanation?: string;
+  /** One verbatim note, formula included, in place of the formula-then-explanation pair. */
+  text?: string;
   align?: "left" | "right";
 }) {
   const [open, setOpen] = useState(false);
@@ -34,13 +37,26 @@ export function Tooltip({
       data-open={open ? "true" : "false"}
       onClick={() => setOpen((o) => !o)}
       onBlur={() => setOpen(false)}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          setOpen((o) => !o);
+        }
+        if (e.key === "Escape") setOpen(false);
+      }}
     >
       i
       <span className="tipbox" role="tooltip">
-        <span className="tipbox-formula">
-          <span className="tipbox-term">Formula.</span> {formula}
-        </span>
-        <span className="tipbox-explanation">{explanation}</span>
+        {text ? (
+          <span className="tipbox-formula">{text}</span>
+        ) : (
+          <>
+            <span className="tipbox-formula">
+              <span className="tipbox-term">Formula.</span> {formula}
+            </span>
+            <span className="tipbox-explanation">{explanation}</span>
+          </>
+        )}
       </span>
     </span>
   );

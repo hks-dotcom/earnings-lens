@@ -7,6 +7,7 @@ import { buildStandOut, operatingTrajectory, StandOutItem } from "@/lib/present/
 import { financialTriggers } from "@/lib/rules/explanationTriggers";
 import { termsSentence } from "@/lib/present/termsSentence";
 import { chooseUnit } from "@/lib/present/format";
+import { restructuringWords } from "@/lib/present/verdictReasons";
 
 /**
  * The Summary: commentary, templated from the rules' output.
@@ -188,10 +189,16 @@ function watchClause(standOut: StandOutItem[]): string | undefined {
  *
  * Retrenchment is checked first and answers on its own: R&D or SG&A
  * falling is exactly the case where revenue growth would otherwise read as
- * an expanding customer.
+ * an expanding customer. A restructuring filing is named by the latest
+ * one, with a count of any earlier ones in the window.
  */
 function relationshipSentence(lens: LensResult): string {
-  if (lens.retrenchment.triggered) return "Spending cuts point to a shrinking customer.";
+  if (lens.retrenchment.triggered) {
+    const filing = restructuringWords(lens);
+    return filing
+      ? `Spending cuts, including ${filing}, point to a shrinking customer.`
+      : "Spending cuts point to a shrinking customer.";
+  }
 
   const revenueUp = lens.revenue.direction === "up";
   if (!revenueUp) {

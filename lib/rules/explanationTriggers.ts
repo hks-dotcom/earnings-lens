@@ -2,7 +2,6 @@ import { KeyFinancials } from "@/lib/xbrl/keyFinancials";
 import { LensResult } from "@/lib/rules/evaluateLens";
 import { CompanySubmissions, FilingEntry } from "@/lib/edgar/submissions";
 import { RedFlagFinding } from "@/lib/rules/redFlags";
-import { findRestructuringFiling } from "@/lib/rules/restructuring";
 import { formatMagnitude } from "@/lib/present/netIncomeGap";
 import {
   ACQUISITIONS_PCT_OF_REVENUE,
@@ -34,6 +33,7 @@ export type TriggerKind =
   | "unusual-tax"
   | "opposite-signs"
   | "retrenchment"
+  | "restructuring"
   | "dpo-rising"
   | "red-flag"
   | "acquisitions";
@@ -43,25 +43,13 @@ export type TriggerKind =
  *
  * "financials" means the results 8-K with all its exhibits plus the latest
  * 10-Q/10-K management discussion and notes -- the bundle that explains
- * anything visible in the quarter's figures. A red flag instead points at
- * the one filing behind it, because that filing is where the reason is
- * stated (an NT form states why the filer was late; a 4.02 states what is
- * being restated).
+ * anything visible in the quarter's figures. A red flag or a restructuring
+ * filing instead points at the one filing behind it, because that filing is
+ * where the reason is stated (an NT form states why the filer was late; a
+ * 4.02 states what is being restated; a 2.05 describes the plan).
  */
 export type TriggerSource =
-  | {
-      scope: "financials";
-      /**
-       * One more filing to read alongside the quarter's bundle.
-       *
-       * Retrenchment can fire from a restructuring filing (8-K Item 2.05),
-       * and that 8-K is where the plan is described -- often before the
-       * quarter's management discussion mentions it at all. It joins the
-       * same bundle rather than forming its own group, so reading it costs
-       * a document, not a call.
-       */
-      alsoRead?: { accessionNumber: string; form: string; filingDate: string };
-    }
+  | { scope: "financials" }
   | { scope: "filing"; accessionNumber: string; form: string; filingDate: string }
   /** No filed text can answer this -- resolved to "Not explained in the filing." with no call. */
   | { scope: "none"; reason: string };
@@ -230,6 +218,16 @@ export function filingBehindRedFlag(
   return undefined;
 }
 
+/** The trigger key for one restructuring filing: unique per filing, and the cache row is stored under that filing. */
+export function restructuringKey(accessionNumber: string): string {
+  return `restructuring:${accessionNumber}`;
+}
+
+/** The restructuring filings behind a spending-cuts signal, newest first. */
+export function restructuringFilingsOf(lens: LensResult): { filingDate: string; accessionNumber: string }[] {
+  return lens.retrenchment.filings ?? [];
+}
+
 export function buildExplanationTriggers(
   kf: KeyFinancials,
   lens: LensResult,
@@ -253,25 +251,35 @@ export function buildExplanationTriggers(
     });
   }
 
-  if (lens.retrenchment.triggered) {
-    const restructuring = findRestructuringFiling(subs);
+  // Spending cuts: each restructuring filing is its own trigger, read from
+  // that 8-K and cached under it -- a filing never changes, so its answer is
+  // asked for once, and a second filing in the window is a second question
+  // rather than a rewrite of the first. An R&D or SG&A cut is a figure in
+  // the quarter, so the quarter's own filed text answers it.
+  for (const filing of restructuringFilingsOf(lens)) {
+    const entry = subs.filings.find((f) => f.accessionNumber === filing.accessionNumber);
+    triggers.push({
+      kind: "restructuring",
+      key: restructuringKey(filing.accessionNumber),
+      title: "Restructuring filing",
+      detail: `A restructuring filing (8-K Item 2.05) filed ${filing.filingDate}.`,
+      question:
+        "What does this filing say the restructuring or cost-reduction plan is, and why the company is undertaking it?",
+      source: entry
+        ? { scope: "filing", accessionNumber: entry.accessionNumber, form: entry.form, filingDate: entry.filingDate }
+        : { scope: "none", reason: "The filing is not in the submissions list." },
+    });
+  }
+  const figureCuts = lens.retrenchment.causes.filter((c) => /^(R&D|SG&A)/.test(c));
+  if (figureCuts.length > 0) {
     triggers.push({
       kind: "retrenchment",
       key: "retrenchment",
       title: "Spending cuts",
-      detail: `Spending under review: ${lens.retrenchment.causes.join("; ")}.`,
+      detail: `Spending under review: ${figureCuts.join("; ")}.`,
       question:
-        "What does the filing say about why research and development or selling, general and administrative spending fell, or about a restructuring or cost-reduction plan?",
-      source: restructuring
-        ? {
-            scope: "financials",
-            alsoRead: {
-              accessionNumber: restructuring.accessionNumber,
-              form: "8-K",
-              filingDate: restructuring.filingDate,
-            },
-          }
-        : { scope: "financials" },
+        "What does the filing say about why research and development or selling, general and administrative spending fell, or about a cost-reduction plan?",
+      source: { scope: "financials" },
     });
   }
 

@@ -6,7 +6,7 @@ import {
   Statements,
   StatementValue,
 } from "@/lib/xbrl/statements";
-import { formatChange, formatMoney, formatPeriodEnd, Unit } from "@/lib/present/format";
+import { formatChange, formatMoney, formatMoneyInline, formatPeriodEnd, Unit } from "@/lib/present/format";
 
 /**
  * How the statement tabs show a filed figure. Nothing here changes a
@@ -95,16 +95,29 @@ export function cellTitle(row: StatementRow, col: StatementColumn, cell: Stateme
   lines.push(`Method: ${method}`);
   if (cell.joinedFrom) lines.push(`Read under ${cell.joinedFrom}, the element this line used in that filing`);
   if (cell.nilPeriods?.length) lines.push(`${cell.nilPeriods.join(", ")}: not in the filed statement, read as nil`);
-  if (cell.restated) {
-    lines.push(
-      `As restated in ${cell.restated.form} filed ${cell.restated.filingDate}; originally ${formatMoney(cell.restated.original, unit)}`
-    );
-  }
+  const recast = recastText(cell, unit);
+  if (recast) lines.push(recast);
   return lines.join("\n");
 }
 
+/**
+ * "Recast in 10-K filed Feb 13, 2026; originally −$77M in 10-K filed
+ * Feb 14, 2025." The original is the figure Key financials shows, from the
+ * period's own filing. Signs as filed, like the rest of the provenance.
+ */
+export function recastText(cell: StatementValue, unit: Unit): string | undefined {
+  const r = cell.recast;
+  if (!r) return undefined;
+  // A word joiner after the minus sign keeps "−$77M" on one line in the note.
+  const original = formatMoneyInline(r.original, unit).replace("−", "−\u2060");
+  return `Recast in ${r.form} filed ${formatPeriodEnd(r.filingDate)}; originally ${original} in ${r.originalForm} filed ${formatPeriodEnd(r.originalFilingDate)}.`;
+}
+
+/** The recast mark: a later filing presents the period differently. */
+export const RECAST_MARK = "ᶜ";
+
 export function derivedMark(cell: StatementValue): string {
-  return `${cell.derived ? "†" : ""}${cell.nilPeriods?.length ? "ⁿ" : ""}${cell.restated ? "ʳ" : ""}`;
+  return `${cell.derived ? "†" : ""}${cell.nilPeriods?.length ? "ⁿ" : ""}${cell.recast ? RECAST_MARK : ""}`;
 }
 
 function monthsOf(end: string): string {
@@ -117,7 +130,7 @@ function monthsOf(end: string): string {
 
 /**
  * The † footnote under a statement: each derivation that appears on screen,
- * naming its columns and method, then the marks (ⁿ nil, ʳ restated), then
+ * naming its columns and method, then the marks (ⁿ nil, ᶜ recast), then
  * how to read signs and changes.
  */
 export function statementFootnote(s: Statements, tab: StatementTab, annual: boolean, unit: Unit): string {
@@ -142,11 +155,8 @@ export function statementFootnote(s: Statements, tab: StatementTab, annual: bool
   }
   const nil = rows.filter((r) => cells(r).some((c) => isValue(c) && c.nilPeriods?.length));
   if (nil.length) parts.push(`ⁿ ${nil.map((r) => r.label).join(", ")}: a prior quarter not in the filed statement is read as nil.`);
-  const restated = rows.filter((r) => cells(r).some((c) => isValue(c) && c.restated));
-  if (restated.length) {
-    parts.push(
-      `ʳ Restated: ${restated.map((r) => r.label).join(", ")} shown as the latest filing presenting the period restates it; hover for the original, as Key financials shows it.`
-    );
+  if (rows.some((r) => cells(r).some((c) => isValue(c) && c.recast))) {
+    parts.push(`${RECAST_MARK} Recast: a later filing presents this period differently; the figure shown is the latest presentation.`);
   }
   if (tab === "income" && rows.some((r) => r.companyTag)) {
     parts.push("Lines between revenue and operating income are the company's own, with its captions and order; lines on its own tags are read from each filing.");

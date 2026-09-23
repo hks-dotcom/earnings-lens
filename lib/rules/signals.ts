@@ -1,7 +1,7 @@
 import { KeyFinancials } from "@/lib/xbrl/keyFinancials";
 import { FinancialHealth } from "@/lib/metrics/health";
 import { CompanySubmissions } from "@/lib/edgar/submissions";
-import { findRestructuringFiling } from "@/lib/rules/restructuring";
+import { findRestructuringFilings, RestructuringFinding } from "@/lib/rules/restructuring";
 import { formatDate } from "@/lib/rules/redFlags";
 import { DPO_BAND_PCT, GROWTH_FLAT_BAND_PCT } from "@/lib/rules/declaredValues";
 
@@ -113,6 +113,12 @@ export function computePaymentBehaviorSignal(health: FinancialHealth): PaymentBe
 export interface RetrenchmentSignal {
   triggered: boolean;
   causes: string[];
+  /**
+   * Every restructuring filing in the window, newest first -- one cause
+   * each. Present only when there is at least one, so a company without
+   * one carries exactly the fields it always did.
+   */
+  filings?: RestructuringFinding[];
 }
 
 /**
@@ -127,9 +133,9 @@ export function computeRetrenchmentSignal(
 ): RetrenchmentSignal {
   const causes: string[] = [];
 
-  const restructuring = findRestructuringFiling(subs, now);
-  if (restructuring) {
-    causes.push(`restructuring filing (8-K Item 2.05) filed ${formatDate(restructuring.filingDate)}`);
+  const filings = findRestructuringFilings(subs, now);
+  for (const f of filings) {
+    causes.push(`restructuring filing (8-K Item 2.05) filed ${formatDate(f.filingDate)}`);
   }
 
   const rndCurrent = kf.researchAndDevelopment.values[0]?.value;
@@ -146,5 +152,7 @@ export function computeRetrenchmentSignal(
     causes.push(`SG&A down ${sgaYoy.toFixed(1)}% Y/Y, beyond the ${GROWTH_FLAT_BAND_PCT}% flat band`);
   }
 
-  return { triggered: causes.length > 0, causes };
+  const out: RetrenchmentSignal = { triggered: causes.length > 0, causes };
+  if (filings.length > 0) out.filings = filings;
+  return out;
 }

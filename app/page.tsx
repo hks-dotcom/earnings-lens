@@ -104,7 +104,13 @@ export default function Home() {
           {page && (
             <>
               <FinancialsPanel key={page.ticker} page={page} tab={tab} onTabChange={setTab} />
-              <HealthTiles health={page.health} segments={page.segments} redFlags={page.lenses.Services.redFlags} kf={page.keyFinancials} />
+              <HealthTiles
+                health={page.health}
+                segments={page.segments}
+                redFlags={page.lenses.Services.redFlags}
+                kf={page.keyFinancials}
+                liquidity={page.liquidity}
+              />
               <LensBoard page={page} lensName={lens} onOpenTab={openTab} />
             </>
           )}

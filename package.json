@@ -17,16 +17,17 @@
     "test:ladder": "tsx --env-file-if-exists=.env.local scripts/test-ladder.ts",
     "test:periods": "tsx --env-file-if-exists=.env.local scripts/test-periods.ts",
     "test:oneoff": "tsx --env-file-if-exists=.env.local scripts/test-oneoff.ts",
+    "test:findings": "tsx --env-file-if-exists=.env.local scripts/test-findings.ts",
     "test:resolution": "tsx --env-file-if-exists=.env.local scripts/test-resolution.ts",
     "test:footing": "tsx --env-file-if-exists=.env.local scripts/test-footing.ts NVDA MSFT WMT UFPT NAII AMZN GOOGL FDX SNAP RIVN UBER TGT ZM",
-    "test:restated": "tsx --env-file-if-exists=.env.local scripts/test-restated.ts NVDA MSFT WMT UFPT NAII AMZN GOOGL FDX SNAP RIVN UBER TGT ZM",
+    "test:recast": "tsx --env-file-if-exists=.env.local scripts/test-recast.ts NVDA MSFT WMT UFPT NAII AMZN GOOGL FDX SNAP RIVN UBER TGT ZM",
     "test:statements-snapshot": "tsx --env-file-if-exists=.env.local scripts/diff-statements-snapshot.ts NVDA MSFT WMT UFPT NAII AMZN GOOGL FDX SNAP RIVN UBER TGT ZM",
     "test:snapshot": "tsx --env-file-if-exists=.env.local scripts/diff-snapshot.ts NVDA MSFT WMT UFPT NAII AMZN GOOGL FDX SNAP RIVN UBER TGT ZM",
     "test:rules-snapshot": "tsx --env-file-if-exists=.env.local scripts/diff-rules-snapshot.ts 2026-09-21 NVDA MSFT WMT UFPT NAII AMZN GOOGL FDX SNAP RIVN UBER TGT ZM",
     "snapshot": "tsx --env-file-if-exists=.env.local scripts/snapshot.ts NVDA MSFT WMT UFPT NAII AMZN GOOGL FDX SNAP RIVN UBER TGT ZM",
     "rules-snapshot": "tsx --env-file-if-exists=.env.local scripts/rules-snapshot.ts 2026-09-21 NVDA MSFT WMT UFPT NAII AMZN GOOGL FDX SNAP RIVN UBER TGT ZM",
     "statements-snapshot": "tsx --env-file-if-exists=.env.local scripts/statements-snapshot.ts NVDA MSFT WMT UFPT NAII AMZN GOOGL FDX SNAP RIVN UBER TGT ZM",
-    "check": "npm run typecheck && npm run lint && npm run test:deadlines && npm run test:runway && npm run test:ladder && npm run test:periods && npm run test:oneoff && npm run test:resolution && npm run test:verify && npm run test:snapshot && npm run test:rules-snapshot && npm run test:footing && npm run test:restated && npm run test:statements-snapshot"
+    "check": "npm run typecheck && npm run lint && npm run test:deadlines && npm run test:runway && npm run test:ladder && npm run test:periods && npm run test:oneoff && npm run test:findings && npm run test:resolution && npm run test:verify && npm run test:snapshot && npm run test:rules-snapshot && npm run test:footing && npm run test:recast && npm run test:statements-snapshot"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.127.0",

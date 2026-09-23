@@ -29,7 +29,11 @@ import { FlowFacts } from "@/lib/present/flowFacts";
 import {
   ACQUISITIONS_PCT_OF_REVENUE,
   BORROWING_PCT_OF_REVENUE,
+  RETURNS_PCT_OF_REVENUE,
 } from "@/lib/rules/declaredValues";
+import { formatDate } from "@/lib/rules/redFlags";
+import { restructuringFilingsOf, restructuringKey } from "@/lib/rules/explanationTriggers";
+import { riskWord } from "@/lib/present/riskWords";
 import { LENS_NAME } from "@/lib/present/lensNames";
 
 /**
@@ -114,6 +118,13 @@ export interface StandOutItem {
    */
   explainKey?: string;
   /**
+   * Further explanations that close `sentence`, each as its own sentence
+   * with its own citation. Only spending cuts have any: one per
+   * restructuring filing after the first, since each filing is explained
+   * (and cached) on its own.
+   */
+  alsoExplainKeys?: string[];
+  /**
    * Further rule-based sentences, each followed by its own explanation.
    * Only the one-off item has any: when more than one of its triggers
    * fires, it is one item with a sentence per trigger.
@@ -149,6 +160,16 @@ function pctOnPositiveBase(current: number | undefined, base: number | undefined
 function pct1(value: number | undefined): string {
   if (value === undefined) return "MISSING";
   return `${value < 0 ? MINUS : ""}${Math.abs(value).toFixed(1)}%`;
+}
+
+/**
+ * An amount something is compared against: "none" when it is zero, so a
+ * finding reads "$249M this quarter, against none in Q2 FY26" rather than
+ * against "$0M". Only an exact zero: a figure that merely rounds to $0M is
+ * still an amount, and missing stays MISSING.
+ */
+export function comparedMoney(value: number | undefined, unit: Unit): string {
+  return value === 0 ? "none" : formatMoneyInline(value, unit);
 }
 
 /**
@@ -222,7 +243,7 @@ function redFlagItems(lens: LensResult): StandOutItem[] {
     tag: "RED FLAG",
     tone: "watch" as const,
     headline: RED_FLAG_HEADLINE[finding.type],
-    sentence: "A red-flag filing asks whether they can pay, and sets the payment-terms ladder to Weak.",
+    sentence: `A red-flag filing asks whether they can pay, and sets risk to ${riskWord("Weak")}.`,
     figures: finding.detail,
     rule: "flagged on a late-filing notice, bankruptcy, debt called early, auditor change, restatement or missed filing deadline in the last 12 months.",
     explainKey: `red-flag:${finding.type}:${finding.date}`,
@@ -256,7 +277,7 @@ function heavyInvestmentItem(lens: LensResult, kf: KeyFinancials, unit: Unit): S
   if (c.capitalExpenditure === undefined || c.operatingCashFlow === undefined) return undefined;
   const q = kf.quarters;
   const cell = (value: number | undefined, i: number) =>
-    value === undefined ? undefined : `${formatMoneyInline(value, unit)} (${q[i]?.label ?? "?"})`;
+    value === undefined ? undefined : `${i === 0 ? formatMoneyInline(value, unit) : comparedMoney(value, unit)} (${q[i]?.label ?? "?"})`;
   const capexCells = [cell(c.capitalExpenditure, 0), cell(c.capitalExpenditureYearAgo, 4)].filter(Boolean);
   const ocfCells = [cell(c.operatingCashFlow, 0), cell(c.operatingCashFlowYearAgo, 4)].filter(Boolean);
 
@@ -271,7 +292,7 @@ function heavyInvestmentItem(lens: LensResult, kf: KeyFinancials, unit: Unit): S
   };
 }
 
-const CASH_BURN_RULE = `operating cash flow negative this quarter. Runway = (cash + short-term investments) ÷ the larger of this quarter's and the four-quarter average burn; under ${RUNWAY_NEUTRAL_CAP_QUARTERS} quarters caps risk at Neutral, under ${RUNWAY_WEAK_BELOW_QUARTERS} sets it to Weak.`;
+const CASH_BURN_RULE = `operating cash flow negative this quarter. Runway = (cash + short-term investments) ÷ the larger of this quarter's and the four-quarter average burn; under ${RUNWAY_NEUTRAL_CAP_QUARTERS} quarters caps risk at ${riskWord("Neutral")}, under ${RUNWAY_WEAK_BELOW_QUARTERS} sets it to ${riskWord("Weak")}.`;
 
 function cashBurnItem(lens: LensResult, kf: KeyFinancials, unit: Unit): StandOutItem | undefined {
   const r = lens.cashPosition;
@@ -315,7 +336,7 @@ function cashBurnItem(lens: LensResult, kf: KeyFinancials, unit: Unit): StandOut
   // a reader who can only see one of the two can't check the figure.
   const fcfCells = [0, 1, 4]
     .filter((i) => kf.freeCashFlow.values[i] !== undefined && q[i])
-    .map((i) => `${formatMoneyInline(kf.freeCashFlow.values[i]!.value, unit)} (${q[i].label})`);
+    .map((i) => `${i === 0 ? formatMoneyInline(kf.freeCashFlow.values[i]!.value, unit) : comparedMoney(kf.freeCashFlow.values[i]!.value, unit)} (${q[i].label})`);
   const average =
     r.averageBurn === undefined
       ? "four-quarter average burn not available"
@@ -453,17 +474,65 @@ export function oneOffItem(kf: KeyFinancials, unit: Unit): StandOutItem | undefi
   };
 }
 
-function spendingCutsItem(lens: LensResult): StandOutItem | undefined {
+/** "A", "A and B", "A, B and C". */
+export function listInWords(parts: string[]): string {
+  if (parts.length <= 1) return parts.join("");
+  return `${parts.slice(0, -1).join(", ")} and ${parts[parts.length - 1]}`;
+}
+
+/**
+ * Spending cuts. A restructuring filing is named with its date, every one
+ * in the window, oldest first; each filing's explanation closes the
+ * sentence as its own sentence with its own citation. An R&D or SG&A cut is
+ * a sentence of its own, closed by the quarter's explanation.
+ */
+function spendingCutsItem(lens: LensResult, kf: KeyFinancials, unit: Unit): StandOutItem | undefined {
   if (!lens.retrenchment.triggered) return undefined;
+  const filings = [...restructuringFilingsOf(lens)].reverse();
+  // The cuts the rules found, in their words: "R&D down -3.4% Y/Y, beyond ...".
+  const cuts = lens.retrenchment.causes
+    .map((c) => c.match(/^(R&D|SG&A) down -?([\d.]+)% Y\/Y/))
+    .filter((m): m is RegExpMatchArray => m !== null)
+    .map((m) => ({ label: m[1], pct: m[2] }));
+  const cutSentence = cuts.length
+    ? `${listInWords(cuts.map((c) => `${c.label} down ${c.pct}%`))} on last year.`
+    : undefined;
+  const cutFigures = cuts.map((c) => {
+    const item = c.label === "R&D" ? kf.researchAndDevelopment : kf.sga;
+    return `${c.label} ${formatMoneyInline(item.values[0]?.value, unit)}, from ${comparedMoney(item.values[4]?.value, unit)} in ${kf.quarters[4]?.label ?? "the year-ago quarter"}`;
+  });
+
+  const dates = filings.map((f) => formatDate(f.filingDate));
+  const filingSentence =
+    filings.length === 0
+      ? undefined
+      : filings.length === 1
+        ? `A restructuring filing (8-K Item 2.05) on ${dates[0]}.`
+        : `Restructuring filings (8-K Item 2.05) on ${listInWords(dates)}.`;
+  const keys = filings.map((f) => restructuringKey(f.accessionNumber));
+
+  const sentences: { sentence: string; explainKey: string }[] = [];
+  if (filingSentence) sentences.push({ sentence: filingSentence, explainKey: keys[0] });
+  if (cutSentence) sentences.push({ sentence: cutSentence, explainKey: "retrenchment" });
+  if (sentences.length === 0) return undefined;
+  const [first, ...rest] = sentences;
+
+  const figures = [
+    ...filings.map((f, i) => `8-K filed ${dates[i]}, accession ${f.accessionNumber}`),
+    ...cutFigures,
+  ].join(" · ");
+
   return {
     kind: "spending-cuts",
     tag: "SPENDING CUTS",
     tone: "watch",
-    headline: "Spending under review.",
-    sentence: "Existing contracts may be revisited.",
-    figures: lens.retrenchment.causes.join(" · "),
+    headline: "Spending under review; existing contracts may be revisited.",
+    sentence: first.sentence,
+    figures,
     rule: `flagged on a restructuring filing (8-K Item 2.05) in the last 12 months, or R&D or SG&A down more than ${GROWTH_FLAT_BAND_PCT}% on last year. Raises risk on both lenses and sets opportunity low for ${LENS_NAME.SaaS}.`,
-    explainKey: "retrenchment",
+    explainKey: first.explainKey,
+    ...(filingSentence && keys.length > 1 ? { alsoExplainKeys: keys.slice(1) } : {}),
+    ...(rest.length ? { more: rest } : {}),
   };
 }
 
@@ -506,7 +575,7 @@ function costsItem(kf: KeyFinancials, unit: Unit): StandOutItem | undefined {
     tone: faster ? "watch" : "good",
     headline: faster ? "Overhead growing faster than sales." : "Overhead growing slower than sales.",
     sentence: `SG&A ${moveWords(sga!, sgaYearAgo!, unit)} on last year against revenue ${moveWords(revenue!, revenueYearAgo!, unit)}.`,
-    figures: `SG&A ${formatMoneyInline(sga, unit)}, from ${formatMoneyInline(sgaYearAgo, unit)} · revenue ${formatMoneyInline(revenue, unit)}, from ${formatMoneyInline(revenueYearAgo, unit)}`,
+    figures: `SG&A ${formatMoneyInline(sga, unit)}, from ${comparedMoney(sgaYearAgo, unit)} · revenue ${formatMoneyInline(revenue, unit)}, from ${comparedMoney(revenueYearAgo, unit)}`,
     rule: `flagged when SG&A growth is more than ${COSTS_VS_REVENUE_POINTS} points away from revenue growth, year on year.`,
   };
 }
@@ -600,7 +669,7 @@ function lossesItem(kf: KeyFinancials, health: FinancialHealth, unit: Unit): Sta
     tone: trajectory.tone,
     headline: trajectory.headline,
     sentence: trajectory.sentence,
-    figures: `Operating income ${formatMoneyInline(current, unit)}, from ${formatMoneyInline(yearAgo, unit)} in ${kf.quarters[4]?.label ?? "the year-ago quarter"}${marginPart}`,
+    figures: `Operating income ${formatMoneyInline(current, unit)}, from ${comparedMoney(yearAgo, unit)} in ${kf.quarters[4]?.label ?? "the year-ago quarter"}${marginPart}`,
     rule: `flagged when operating income moves more than ${OPERATING_INCOME_MOVE_PCT}% on last year; past ${OPERATING_INCOME_FAST_MOVE_PCT}% the Summary calls it fast.`,
   };
 }
@@ -662,7 +731,7 @@ function termsItem(lens: LensResult, kf: KeyFinancials): StandOutItem {
     headline: termsSentence(lens),
     sentence: `${billingPhrase(lens)} ${paymentTimingCaveat(lens, kf) ?? payablesFact(lens)}`,
     figures: "",
-    rule: `baseline Net ${PAYMENT_TERMS_BASELINE_DAYS}; ceiling Net ${PAYMENT_TERMS_CEILING_DAYS}, offered only when risk is Strong; Net 60 never approved.`,
+    rule: `baseline Net ${PAYMENT_TERMS_BASELINE_DAYS}; ceiling Net ${PAYMENT_TERMS_CEILING_DAYS}, offered only when risk is ${riskWord("Strong")}; Net 60 never approved.`,
     terms: [
       { label: "Net 30", ok: l.net30 },
       { label: "Net 45", ok: l.net45 },
@@ -709,7 +778,7 @@ function borrowingItem(kf: KeyFinancials, flows: FlowFacts, unit: Unit): StandOu
     flows.longTermDebt !== undefined
       ? ` · long-term debt ${formatMoneyInline(flows.longTermDebt, unit)}${
           flows.longTermDebtYearAgo !== undefined
-            ? `, from ${formatMoneyInline(flows.longTermDebtYearAgo, unit)} in ${kf.quarters[4]?.label ?? "the year-ago quarter"}`
+            ? `, from ${comparedMoney(flows.longTermDebtYearAgo, unit)} in ${kf.quarters[4]?.label ?? "the year-ago quarter"}`
             : ""
         }`
       : "";
@@ -720,7 +789,7 @@ function borrowingItem(kf: KeyFinancials, flows: FlowFacts, unit: Unit): StandOu
     headline: fcfNegative ? "Borrowing while investment runs ahead of cash." : "Borrowing while returning more than it generates.",
     sentence: fcfNegative
       ? `Net new debt of ${formatMoneyInline(debt, unit)} this quarter, with free cash flow at ${formatMoneyInline(fcf, unit)}.`
-      : `Net new debt of ${formatMoneyInline(debt, unit)} this quarter, while buybacks and dividends of ${formatMoneyInline(returns, unit)} over four quarters exceed free cash flow of ${formatMoneyInline(t.freeCashFlow, unit)}.`,
+      : `Net new debt of ${formatMoneyInline(debt, unit)} this quarter, while buybacks and dividends of ${formatMoneyInline(returns, unit)} over four quarters exceed free cash flow${t.freeCashFlow === 0 ? ", which was none" : ` of ${formatMoneyInline(t.freeCashFlow, unit)}`}.`,
     figures: `${debtLinesText(flows, unit)}${ltd}`,
     rule: `net new debt above ${BORROWING_PCT_OF_REVENUE}% of quarterly revenue (${formatMoneyInline(band, unit)} here), while free cash flow is negative or buybacks and dividends exceed it. No effect on risk.`,
   };
@@ -733,7 +802,7 @@ function acquisitionsItem(kf: KeyFinancials, flows: FlowFacts, unit: Unit, ticke
   if (a <= (revenue * ACQUISITIONS_PCT_OF_REVENUE) / 100) return undefined;
   const yearAgo =
     flows.acquisitionsYearAgo !== undefined
-      ? `, against ${formatMoneyInline(flows.acquisitionsYearAgo, unit)} in ${kf.quarters[4]?.label ?? "the year-ago quarter"}`
+      ? `, against ${comparedMoney(flows.acquisitionsYearAgo, unit)} in ${kf.quarters[4]?.label ?? "the year-ago quarter"}`
       : "";
   const caption = flows.acquisitionsCaption ? `${ticker}'s line: "${flows.acquisitionsCaption}"` : "The acquisitions line";
   return {
@@ -748,20 +817,31 @@ function acquisitionsItem(kf: KeyFinancials, flows: FlowFacts, unit: Unit, ticke
   };
 }
 
-function returnsItem(flows: FlowFacts, unit: Unit): StandOutItem | undefined {
+/**
+ * Buybacks plus dividends over four quarters above free cash flow over the
+ * same quarters -- and above a declared share of the latest quarter's
+ * revenue, so a token dividend against a near-zero free cash flow is not a
+ * finding.
+ */
+export function returnsItem(kf: KeyFinancials, flows: FlowFacts, unit: Unit): StandOutItem | undefined {
   const t = flows.ttm;
+  const revenue = kf.revenue.values[0]?.value;
   if (t.buybacks === undefined || t.dividends === undefined || t.freeCashFlow === undefined) return undefined;
+  if (revenue === undefined || revenue <= 0) return undefined;
   const returns = t.buybacks + t.dividends;
-  if (returns <= 0 || returns <= t.freeCashFlow) return undefined;
+  const threshold = (revenue * RETURNS_PCT_OF_REVENUE) / 100;
+  if (returns <= t.freeCashFlow || returns <= threshold) return undefined;
   const span = t.from && t.to ? `, ${t.from} to ${t.to}` : "";
+  const against =
+    t.freeCashFlow === 0 ? "against none in free cash flow" : `against free cash flow of ${formatMoneyInline(t.freeCashFlow, unit)}`;
   return {
     kind: "returns",
     tag: "RETURNS",
     tone: "watch",
     headline: "Returning more cash than it generates.",
-    sentence: `Buybacks and dividends of ${formatMoneyInline(returns, unit)} over four quarters, against free cash flow of ${formatMoneyInline(t.freeCashFlow, unit)}.`,
+    sentence: `Buybacks and dividends of ${formatMoneyInline(returns, unit)} over four quarters, ${against}.`,
     figures: `Buybacks ${formatMoneyInline(t.buybacks, unit)} · dividends ${formatMoneyInline(t.dividends, unit)} · free cash flow ${formatMoneyInline(t.freeCashFlow, unit)}${span}`,
-    rule: "flagged when buybacks plus dividends over four quarters exceed free cash flow over the same quarters, and are above zero. No effect on risk.",
+    rule: `flagged when buybacks plus dividends over the last four quarters exceed free cash flow over the same quarters, and exceed ${RETURNS_PCT_OF_REVENUE}% of quarterly revenue (${formatMoneyInline(threshold, unit)} here).`,
   };
 }
 
@@ -815,10 +895,10 @@ export function buildStandOut(
   if (flows) {
     push(items, borrowingItem(kf, flows, unit));
     push(items, acquisitionsItem(kf, flows, unit, ticker));
-    push(items, returnsItem(flows, unit));
+    push(items, returnsItem(kf, flows, unit));
   }
   push(items, oneOffItem(kf, unit));
-  push(items, spendingCutsItem(lens));
+  push(items, spendingCutsItem(lens, kf, unit));
   push(items, payablesItem(lens));
   push(items, costsItem(kf, unit));
   push(items, lossesItem(kf, health, unit));

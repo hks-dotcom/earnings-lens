@@ -52,10 +52,18 @@ export interface StatementValue {
   /**
    * An income statement standard row read from the column's presentation
    * (the latest-filed statement that presents the period) where that
-   * differs from Key financials: the filing it was restated in, and the
-   * figure Key financials shows.
+   * differs from Key financials: the filing that recast it, the figure Key
+   * financials shows, and the filing that figure comes from (the period's
+   * own filing).
    */
-  restated?: { form: string; filingDate: string; accessionNumber: string; original: number };
+  recast?: {
+    form: string;
+    filingDate: string;
+    accessionNumber: string;
+    original: number;
+    originalForm: string;
+    originalFilingDate: string;
+  };
 }
 
 export interface MissingValue {
@@ -629,7 +637,7 @@ function resource(
   quarters: FilingPeriod[],
   years: FilingPeriod[]
 ) {
-  const apply = (cells: StatementCell[], cols: ColumnSource[]) =>
+  const apply = (cells: StatementCell[], cols: ColumnSource[], periods: FilingPeriod[]) =>
     cells.map((c, i) => {
       if (!isValue(c)) return c;
       const got = sourcedValue(facts, c.concept, cols[i]);
@@ -637,16 +645,18 @@ function resource(
       return {
         ...c,
         value: got.value,
-        restated: {
+        recast: {
           form: got.source.form,
           filingDate: got.source.filingDate,
           accessionNumber: got.source.accessionNumber,
           original: c.value,
+          originalForm: periods[i].filing.form,
+          originalFilingDate: periods[i].filing.filingDate,
         },
       };
     });
-  r.quarterly = apply(r.quarterly, sources.quarterly.slice(0, quarters.length));
-  r.annual = apply(r.annual, sources.annual.slice(0, years.length));
+  r.quarterly = apply(r.quarterly, sources.quarterly.slice(0, quarters.length), quarters);
+  r.annual = apply(r.annual, sources.annual.slice(0, years.length), years);
 }
 
 // --- building everything --------------------------------------------------------
@@ -770,7 +780,7 @@ export function buildStatements(
 
   // One presentation per column: the standard rows are re-read from the
   // same statement the company lines come from. Where Key financials shows
-  // something else for the period, the cell carries the restatement.
+  // something else for the period, the cell is marked recast.
   const sources = presentationSources(pool, quarterPeriods, years, extractList);
   for (const r of [revenue, grossProfit, operatingIncome, nonop, interest, otherNonop, pretax, incomeTax, netIncome]) {
     resource(r, facts, sources, quarterPeriods, years);

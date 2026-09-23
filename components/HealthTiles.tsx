@@ -3,7 +3,17 @@ import { SegmentRevenue } from "@/lib/xbrl/segments";
 import { RedFlagsResult } from "@/lib/rules/redFlags";
 import { KeyFinancials } from "@/lib/xbrl/keyFinancials";
 import { Tooltip } from "@/components/Tooltip";
-import { chooseUnit, dayAfter, formatMoneyInline, formatPeriodRange } from "@/lib/present/format";
+import { chooseUnit, dayAfter, formatMoneyInline, formatPeriodEnd, formatPeriodRange } from "@/lib/present/format";
+import {
+  componentsLine,
+  LIQUIDITY_TIP,
+  LiquidityDebt,
+  LiquidityPeriod,
+  liquidityAmount,
+  liquidityLabel,
+  netHeader,
+} from "@/lib/present/liquidityDebt";
+import { HEALTH_BENCHMARKS } from "@/lib/rules/declaredValues";
 
 /**
  * Verbatim from the spec's "Plain-English explanations": formula first,
@@ -65,7 +75,8 @@ function Tile({
 }: {
   label: string;
   value: string;
-  sub: React.ReactNode;
+  /** The benchmark line; the red-flags tile has none. */
+  sub?: string;
   tooltip: { key: keyof typeof TIPS; label: string };
   align?: "right";
 }) {
@@ -77,7 +88,7 @@ function Tile({
         <Tooltip label={tooltip.label} formula={tip.formula} explanation={tip.explanation} align={align} />
       </div>
       <div style={{ fontSize: 20, fontWeight: 600, whiteSpace: "nowrap", fontVariantNumeric: "tabular-nums" }}>{value}</div>
-      <div className="hsub">{sub}</div>
+      {sub && <div className="hsub">{sub}</div>}
     </div>
   );
 }
@@ -119,94 +130,140 @@ function SegmentLine({ segments, kf }: { segments: SegmentRevenue | null; kf: Ke
   );
 }
 
+/** One period's pair of bars, on the strip's shared scale. */
+function PeriodBars({ l, p, max }: { l: LiquidityDebt; p: LiquidityPeriod; max: number }) {
+  const width = (v: number | undefined) => (v === undefined || max <= 0 ? 0 : Math.max(0, (v / max) * 100));
+  return (
+    <div className="liq-pair">
+      <h4>
+        {p.label || "Year-ago quarter"} {p.periodEnd && <span>· {formatPeriodEnd(p.periodEnd)}</span>}
+      </h4>
+      <div className="liq-bar">
+        <span className="liq-name">{liquidityLabel(l)}</span>
+        <div className="liq-track">
+          <div className="liq-fill liq-cash" style={{ width: `${width(p.liquidity)}%` }} />
+        </div>
+        <span className="liq-amt">{liquidityAmount(p.liquidity, l.scale)}</span>
+      </div>
+      <div className="liq-bar">
+        <span className="liq-name">Debt</span>
+        {l.debtTagged ? (
+          <>
+            <div className="liq-track">
+              <div className="liq-fill liq-debt" style={{ width: `${width(p.debt)}%` }} />
+            </div>
+            <span className="liq-amt">{liquidityAmount(p.debt, l.scale)}</span>
+          </>
+        ) : (
+          <span className="liq-none">No debt tagged</span>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Liquidity vs debt: the latest quarter beside the same quarter last year,
+ * all four bars on one scale. Teal for liquidity, slate for debt; nothing
+ * red or green, because neither side is good or bad news on its own.
+ */
+function LiquidityStrip({ l }: { l: LiquidityDebt }) {
+  const values = [l.latest.liquidity, l.latest.debt, l.yearAgo.liquidity, l.yearAgo.debt].filter(
+    (v): v is number => v !== undefined
+  );
+  const max = values.length ? Math.max(...values) : 0;
+  const head = netHeader(l);
+  return (
+    <div className="liq">
+      <div className="liq-head">
+        <div className="liq-k">
+          Liquidity vs debt
+          <Tooltip label="Liquidity vs debt" text={LIQUIDITY_TIP} />
+        </div>
+        <div className="liq-net">
+          {head.now}
+          {head.yearAgo && <span>{head.yearAgo}</span>}
+        </div>
+      </div>
+      <div className="liq-pairs">
+        <PeriodBars l={l} p={l.latest} max={max} />
+        <PeriodBars l={l} p={l.yearAgo} max={max} />
+      </div>
+      <div className="liq-parts">{componentsLine(l)}</div>
+    </div>
+  );
+}
+
 export function HealthTiles({
   health,
   segments,
   redFlags,
   kf,
+  liquidity,
 }: {
   health: FinancialHealth;
   segments: SegmentRevenue | null;
   redFlags: RedFlagsResult;
   kf: KeyFinancials;
+  liquidity?: LiquidityDebt;
 }) {
   const currentRatio = health.currentRatio[0];
   const debtEquity = health.debtToEquity[0];
   const dso = health.dso[0];
   const dpo = health.dpo[0];
-  const dpoYearAgo = health.dpo[4];
   const z = health.altmanZDoublePrime[0];
   const zone = health.altmanZone[0];
+  const b = HEALTH_BENCHMARKS;
 
-  // The zone the RULES read, so the tile and the verdict cannot disagree.
-  // When a distress score has been lifted to grey, the tile says grey and
-  // the note under the panel says why.
-  const zZone =
-    zone?.zone === undefined
-      ? undefined
-      : zone.zone === "safe"
-        ? "safe zone (> 2.6)"
-        : zone.zone === "distress"
-          ? "distress zone (< 1.1)"
-          : zone.capped
-            ? "treated as grey zone"
-            : "grey zone (1.1–2.6)";
-
+  // Each tile is the metric and one benchmark line. The formula is in the
+  // (i); the zone and the year-ago day count are in the rules' own text
+  // (the Why box, the payables finding and the terms line), not here.
   return (
-    <div style={{ background: "var(--bg-white)", border: "1px solid var(--border-card)", borderRadius: 12, padding: "20px 22px", display: "flex", flexDirection: "column", gap: 12 }}>
+    <div
+      data-health-panel
+      style={{ background: "var(--bg-white)", border: "1px solid var(--border-card)", borderRadius: 12, padding: "20px 22px", display: "flex", flexDirection: "column", gap: 12 }}
+    >
       <div style={{ fontSize: 12, fontWeight: 600, letterSpacing: "0.08em", color: "var(--text-tertiary)" }}>FINANCIAL HEALTH</div>
       <div className="health-tiles" style={{ marginLeft: -14 }}>
         <Tile
           label="Current ratio"
           value={currentRatio === undefined ? "MISSING" : `${currentRatio.toFixed(1)}x`}
-          sub={" "}
+          sub={`Benchmark: above ${b.currentRatioAbove.toFixed(1)}x`}
           tooltip={{ key: "currentRatio", label: "Current ratio" }}
         />
         {/*
-          "—" with "debt not tagged in filings" when the filer has never
-          tagged debt in the lookback; MISSING only when a tag exists but
-          isn't filed for this quarter. An empty row means two different
-          things and a reader can't tell them apart from the row alone.
+          "—" when the filer has never tagged debt in the lookback; MISSING
+          only when a tag exists but isn't filed for this quarter. The strip
+          below says "No debt tagged" in words.
         */}
         <Tile
           label="Debt / equity"
           value={debtEquity !== undefined ? debtEquity.toFixed(2) : kf.debtTagFiledInLookback ? "MISSING" : "—"}
-          sub={debtEquity === undefined && !kf.debtTagFiledInLookback ? "debt not tagged in filings" : " "}
+          sub={`Benchmark: below ${b.debtToEquityBelow.toFixed(1)}`}
           tooltip={{ key: "debtEquity", label: "Debt / equity" }}
         />
         <Tile
           label="DSO"
           value={dso === undefined ? "MISSING" : `${dso.toFixed(1)} days`}
-          sub="receivables ÷ revenue"
+          sub={`Benchmark: within ${b.dsoWithinDays} days`}
           tooltip={{ key: "dso", label: "DSO" }}
         />
         <Tile
           label="DPO"
           value={dpo === undefined ? "MISSING" : `${dpo.toFixed(1)} days`}
-          sub={
-            <>
-              payables ÷ cost of revenue
-              {dpoYearAgo !== undefined && (
-                <>
-                  <br />
-                  {dpoYearAgo.toFixed(1)} a year ago
-                </>
-              )}
-            </>
-          }
+          sub={`Benchmark: within ${b.dpoWithinDays} days`}
           tooltip={{ key: "dpo", label: "DPO" }}
         />
         <Tile
           label="Altman Z''"
           value={z === undefined ? "MISSING" : z.toFixed(2)}
-          sub={zZone ?? ""}
+          sub={`Benchmark: above ${b.altmanZAbove}`}
           tooltip={{ key: "altmanZ", label: "Altman Z''" }}
           align="right"
         />
         <Tile
           label="Red flags, 12 mo"
           value={String(redFlags.findings.length)}
-          sub="last 12 months"
           tooltip={{ key: "redFlags", label: "Red flags, 12 mo" }}
           align="right"
         />
@@ -214,6 +271,7 @@ export function HealthTiles({
       {zone?.capped && (
         <div style={{ fontSize: 12, color: "var(--text-tertiary)" }}>{ALTMAN_CAP_NOTE}</div>
       )}
+      {liquidity && <LiquidityStrip l={liquidity} />}
       <SegmentLine segments={segments} kf={kf} />
     </div>
   );

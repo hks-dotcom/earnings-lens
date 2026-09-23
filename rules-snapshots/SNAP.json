@@ -27,6 +27,12 @@
       "triggered": true,
       "causes": [
         "restructuring filing (8-K Item 2.05) filed 15 Apr 2026"
+      ],
+      "filings": [
+        {
+          "filingDate": "2026-04-15",
+          "accessionNumber": "0001193125-26-155861"
+        }
       ]
     },
     "redFlags": {
@@ -96,6 +102,12 @@
       "triggered": true,
       "causes": [
         "restructuring filing (8-K Item 2.05) filed 15 Apr 2026"
+      ],
+      "filings": [
+        {
+          "filingDate": "2026-04-15",
+          "accessionNumber": "0001193125-26-155861"
+        }
       ]
     },
     "redFlags": {

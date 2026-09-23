@@ -676,11 +676,13 @@
             "method": "direct",
             "derived": false,
             "source": "company-facts",
-            "restated": {
+            "recast": {
               "form": "10-Q",
               "filingDate": "2026-08-26",
               "accessionNumber": "0001045810-26-000075",
-              "original": 2236000000
+              "original": 2236000000,
+              "originalForm": "10-Q",
+              "originalFilingDate": "2025-08-27"
             }
           },
           {

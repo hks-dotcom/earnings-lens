@@ -250,11 +250,13 @@
             "method": "computed-difference",
             "derived": true,
             "source": "company-facts",
-            "restated": {
+            "recast": {
               "form": "10-K",
               "filingDate": "2026-03-11",
               "accessionNumber": "0000027419-26-000016",
-              "original": 29676000000
+              "original": 29676000000,
+              "originalForm": "10-K",
+              "originalFilingDate": "2024-03-13"
             }
           }
         ]

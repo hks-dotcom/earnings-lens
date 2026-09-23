@@ -98,8 +98,9 @@ export interface ExplainContext {
  *
  * The "financials" group is anchored on the latest 10-Q/10-K and reads the
  * results 8-K with every exhibit plus that filing's management discussion
- * and notes. A red flag is its own group, anchored on the filing behind it,
- * because that filing is where the reason is stated.
+ * and notes. A red flag or a restructuring filing is its own group,
+ * anchored on the filing behind it, because that filing is where the reason
+ * is stated.
  */
 function groupTriggers(triggers: ExplanationTrigger[], ctx: ExplainContext): TriggerGroup[] {
   const groups: TriggerGroup[] = [];
@@ -114,22 +115,7 @@ function groupTriggers(triggers: ExplanationTrigger[], ctx: ExplainContext): Tri
         const results8K = resultsEightKForPeriod(ctx.subs, periodic.reportDate);
         const eightK = results8K ? await wholeFilingDocs(ctx.cik, results8K) : [];
         const periodicParts = await periodicDocs(ctx.cik, periodic);
-
-        // Filings a trigger asked to have read alongside the quarter (a
-        // restructuring 8-K, today), de-duplicated in case two triggers
-        // name the same one.
-        const extraAccessions = new Set(
-          financial
-            .map((t) => (t.source.scope === "financials" ? t.source.alsoRead?.accessionNumber : undefined))
-            .filter((a): a is string => Boolean(a))
-        );
-        const extras: SourceDoc[] = [];
-        for (const accession of extraAccessions) {
-          const entry = ctx.subs.filings.find((f) => f.accessionNumber === accession);
-          if (entry) extras.push(...(await wholeFilingDocs(ctx.cik, entry)));
-        }
-
-        return [...eightK, ...extras, ...periodicParts];
+        return [...eightK, ...periodicParts];
       },
     });
   }

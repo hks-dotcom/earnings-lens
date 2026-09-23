@@ -113,6 +113,7 @@ export function shownByExplainKey(items: StandOutItem[]): Map<string, string> {
   const figures = (item: StandOutItem) => (item.figures ? ` Figures: ${item.figures}` : "");
   for (const item of items) {
     if (item.explainKey) out.set(item.explainKey, `${item.headline} ${item.sentence}${figures(item)}`);
+    for (const key of item.alsoExplainKeys ?? []) out.set(key, `${item.headline} ${item.sentence}${figures(item)}`);
     for (const m of item.more ?? []) out.set(m.explainKey, `${item.headline} ${m.sentence}${figures(item)}`);
   }
   return out;
@@ -120,20 +121,22 @@ export function shownByExplainKey(items: StandOutItem[]): Map<string, string> {
 
 /**
  * The finding's running text as one string: the rule-based sentence, the
- * explanation that closes it with its citation in brackets, and for the
- * one-off item each further sentence with its own. The Copy brief's
+ * explanation that closes it with its citation in brackets (for spending
+ * cuts, one per restructuring filing), and for the one-off item each
+ * further sentence with its own. The Copy brief's
  * version of what the board shows.
  */
 export function findingProse(item: StandOutItem, explained: ExplainedItem[]): string {
   const shown = findingShownText(item);
-  const withExplanation = (sentence: string, key: string | undefined) => {
+  const closing = (key: string | undefined) => {
     const e = explanationFor(key, explained, shown);
-    if (!e) return sentence;
+    if (!e) return "";
     const cite = e.citation ? ` [${citationLabel(e.citation)}: ${citationDetail(e.citation)}]` : "";
-    return `${sentence} ${e.sentences.join(" ")}${cite}`;
+    return ` ${e.sentences.join(" ")}${cite}`;
   };
+  const withExplanation = (sentence: string, key: string | undefined) => `${sentence}${closing(key)}`;
   return [
-    withExplanation(item.sentence, item.explainKey),
+    `${withExplanation(item.sentence, item.explainKey)}${(item.alsoExplainKeys ?? []).map(closing).join("")}`,
     ...(item.more ?? []).map((m) => withExplanation(m.sentence, m.explainKey)),
   ].join(" ");
 }

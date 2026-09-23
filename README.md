@@ -34,10 +34,10 @@ Amazon, read as a counterparty in the quarter ended 30 June 2026. The board
 opens with the verdict, and the two lines that decided it:
 
 > ## Verdict: Pursue with guardrails
-> Risk: Neutral · Opportunity: high · Offer Net 30 and hold it
+> Risk: medium · Opportunity: high · Offer Net 30 and hold it
 >
 > **Why this verdict**<br>
-> **Risk: Neutral.** Payables are up 27% on last year, beyond the ±10% band.
+> **Risk: medium.** Payables are up 27% on last year, beyond the ±10% band.
 > The balance sheet is safe (Z'' 2.71) and there are no red flags.<br>
 > **Opportunity: high.** Revenue is up 20% on last year, beyond the ±2% flat
 > band; R&D is not filed, so revenue decides alone.
@@ -70,7 +70,9 @@ tag opens that statement's tab. Chips above the list filter the findings by
 statement (All 7, P&L 4, Balance sheet 2, Cash flow 3 here); the terms and
 any red flag stay visible under every filter, so a filter never hides a
 reason to escalate. Borrowing, acquisitions and investments, and returns
-(buybacks plus dividends above free cash flow) are display only: they never
+(buybacks plus dividends over the last four quarters above free cash flow
+over the same quarters, and above 5% of quarterly revenue) are display only:
+they never
 move the ladder or the quadrant and are not in the Summary.
 
 On the page every finding also ends with its rule, e.g. for the one-off item:
@@ -122,11 +124,61 @@ toggle: Key financials, Income statement, Balance sheet and Cash flow.
   dollars, never coloured.
 - **One presentation per column.** Every row in an income statement column
   comes from the latest-filed statement that presents that period. Where a
-  standard row then differs from Key financials, the cell is marked restated,
-  with the original on hover.
+  standard row then differs from Key financials, the cell is marked recast
+  (ᶜ): a later filing presents the period differently, and the figure shown
+  is the latest presentation. Its hover names both filings: "Recast in 10-K
+  filed Feb 13, 2026; originally −$77M in 10-K filed Feb 14, 2025." A
+  restatement filing (8-K Item 4.02) is a different thing, and a red flag.
 - **The tabs never hold up the board.** They load after it; the first time a
   filing is read the panel says "Reading filing 3 of 8", one filing per
   request, and each filing's extract is stored so it is read once.
+
+### Financial health
+
+Under the statements, six tiles: current ratio, debt / equity, DSO, DPO,
+Altman Z'' and red flags in the last 12 months. Each tile is the metric and
+one benchmark line, and nothing else; the formula is in its (i), which opens
+on hover, focus or tap and states the formula first.
+
+| Tile | Benchmark |
+|---|---|
+| Current ratio | above 1.0x |
+| Debt / equity | below 1.0 |
+| DSO | within 45 days |
+| DPO | within 45 days (the terms ceiling) |
+| Altman Z'' | above 2.6 (the rules' own safe zone) |
+| Red flags, 12 mo | the count only |
+
+Benchmarks are reference points, not rules, and vary by industry: retailers
+often run a current ratio below 1.0x by design. They carry no colour and no
+tick or cross, move nothing, and are declared in the board's footnotes with
+the other values. The zone and DPO's year-ago figure live where the rules use
+them -- the Why box, the payables finding and the terms line.
+
+Beneath the tiles, **liquidity vs debt**: the latest quarter beside the same
+quarter last year, each with two bars on one shared scale -- cash and
+short-term investments (teal) against debt (slate), never red or green.
+
+- **Liquidity** is the runway's figure, with the runway's rule: cash plus
+  short-term investments; cash alone when short-term investments are never
+  filed (the bar then reads "Cash"), or when they are filed but not for the
+  quarter (the line under the bars says so).
+- **Debt** is long-term debt including the part due within a year, plus
+  short-term borrowings, from the Balance sheet tab's rows. Leases are
+  excluded. A row the filer uses that is missing for the quarter makes debt
+  and the net figure MISSING; a filer that has tagged no debt at all shows
+  "No debt tagged", with no bar and no net figure.
+- **The header** states the net position, "Net Debt $10.3B" when debt is the
+  larger and "Net Cash" when liquidity is, then the same a year ago. A line
+  of components follows: "Q2 FY26: cash $78.2B + short-term investments
+  $44.8B · long-term debt, incl. the part due within a year, $133.0B +
+  short-term borrowings $0.3B. Leases excluded."
+
+Amounts are in $B with one decimal ($M with one decimal when quarterly
+revenue is under $100M). The strip is display only: it has no effect on the
+ladder, the quadrant, the Summary or the findings. The Copy brief carries it
+as one line: "Liquidity vs debt: $123.0B vs $133.3B, Net Debt $10.3B (Net
+Cash $36.9B a year ago)."
 
 ## How it works
 
@@ -150,12 +202,18 @@ ticker → SEC EDGAR → rules → verdict, why, Summary, what stands out, terms
    and a deal structure. Nothing here is a model output. Given the same
    filings and the same date, it returns the same answer.
 3. **Verdict and why.** The board opens with the verdict in large type and one
-   line under it: the risk rung (with "with spending cuts" when a restructuring
-   filing or an R&D or SG&A cut puts the company in the higher-risk half of the
-   matrix), high or low opportunity, and the terms. Beside the matrix, "Why
-   this verdict" gives the input that decided each axis, with its figure —
-   payables up 27%, Z'' 2.71, revenue up 20% — using the rules' own values.
-   The rules themselves are in the board's footnotes.
+   line under it: risk as low, medium or high (the ladder's three rungs, in
+   the reader's words: "Risk: low · Opportunity: high · Offer Net 30; Net 45
+   if pushed"), with "with spending cuts" when a restructuring filing or an
+   R&D or SG&A cut puts the company in the higher-risk half of the matrix;
+   high or low opportunity; and the terms. Net 45 is offered only when risk
+   is low. Beside the matrix, "Why this verdict" gives the input that decided
+   each axis, with its figure — payables up 27%, Z'' 2.71, revenue up 20% —
+   using the rules' own values, and states the payables fact rather than a
+   reading of it ("payables are falling: 56.9 days of cost of revenue, from
+   64.0 a year ago"). Where there are restructuring filings it names the
+   latest and counts the rest ("on 3 Jun 2026 and 1 earlier"). The rules
+   themselves are in the board's footnotes.
 4. **Summary.** The Summary beside the matrix is commentary, templated from
    the rules' own output and carrying no ratio values. The verdict is its
    first part; on the page it starts at the second, because the verdict is
@@ -197,7 +255,11 @@ Claude is asked a narrow question per flagged item and is given only filed
 text to answer it from: the results 8-K with all of its exhibits (press
 release, and CFO commentary or prepared remarks when a company files them),
 the latest 10-Q or 10-K management discussion and notes, a Form 12b-25
-late-filing notice, and any 8-K behind a flag.
+late-filing notice, and any 8-K behind a flag. Each restructuring filing
+(8-K Item 2.05) in the window is its own question, read from that 8-K and
+cached under it; the spending-cuts finding lists every one ("Restructuring
+filings (8-K Item 2.05) on 29 Jan 2026 and 3 Jun 2026") and each filing's
+answer closes it as its own sentence with its own citation.
 
 Every answer comes back with the verbatim passages it relied on, and the app
 checks them before anything is shown:
@@ -351,8 +413,12 @@ together, the unusual-tax repeat rule, and the wording and precision the board
 shows), the resolution tests (the nil rule, splice recency, cross-tag
 year-to-date subtraction, zeros proving nothing, negative derived payments),
 a footing test that checks every income statement column of every fixture
-adds up to operating income, a restated check that lists every income
-statement cell whose presentation differs from Key financials, and three
+adds up to operating income, a recast check that lists every income
+statement cell whose presentation differs from Key financials, the findings
+tests (the returns threshold below and above its size test, every
+restructuring filing in the window, "none" for a zero comparison, risk as
+low / medium / high, the payables clause, and liquidity vs debt against
+Amazon's figures), and three
 snapshot diffs over thirteen real companies — one over every Key financials
 figure with its full provenance, one over every rules output, one over every
 statement cell. All report per-cell and per-field changes, so a change in
@@ -366,7 +432,7 @@ whose change reads in dollars (SNAP, RIVN), a cash burn with a runway figure
 item (NVDA, AMZN, GOOGL, UBER, ZM), a tax position that repeats from a year
 earlier and so is not a one-off (RIVN), a company with no debt tagged (ZM), a
 restructuring filing (FDX, SNAP), the grey zone (WMT, TGT), the one path from
-grey to Weak (TGT) and the Altman distress cap (UBER). Where no real filer
+grey to high risk (TGT) and the Altman distress cap (UBER). Where no real filer
 reaches a rule, the rule gets unit tests instead of a ticker — the two runway
 thresholds, a first-year unusual tax item and net income against operating
 income with opposite signs are in that position. A rule nothing exercises is a rule

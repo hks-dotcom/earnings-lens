@@ -690,11 +690,13 @@
             "method": "direct",
             "derived": false,
             "source": "company-facts",
-            "restated": {
+            "recast": {
               "form": "10-Q",
               "filingDate": "2026-07-23",
               "accessionNumber": "0001652044-26-000071",
-              "original": 155000000
+              "original": 155000000,
+              "originalForm": "10-Q",
+              "originalFilingDate": "2025-07-24"
             }
           },
           {
@@ -710,11 +712,13 @@
             "method": "direct",
             "derived": false,
             "source": "company-facts",
-            "restated": {
+            "recast": {
               "form": "10-K",
               "filingDate": "2026-02-05",
               "accessionNumber": "0001652044-26-000018",
-              "original": 919000000
+              "original": 919000000,
+              "originalForm": "10-K",
+              "originalFilingDate": "2025-02-05"
             }
           },
           {
@@ -723,11 +727,13 @@
             "method": "direct",
             "derived": false,
             "source": "company-facts",
-            "restated": {
+            "recast": {
               "form": "10-K",
               "filingDate": "2026-02-05",
               "accessionNumber": "0001652044-26-000018",
-              "original": 299000000
+              "original": 299000000,
+              "originalForm": "10-K",
+              "originalFilingDate": "2024-01-31"
             }
           }
         ]

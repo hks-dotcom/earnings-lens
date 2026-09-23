@@ -211,6 +211,9 @@ export function StandOutList({
               )}
               <b style={{ fontWeight: 600 }}>{item.headline}</b> {item.sentence}
               <Explained explanation={explanationFor(item.explainKey, explained, findingShownText(item))} />
+              {item.alsoExplainKeys?.map((key) => (
+                <Explained key={key} explanation={explanationFor(key, explained, findingShownText(item))} />
+              ))}
               {item.more?.map((m) => (
                 <span key={m.explainKey}>
                   {" "}

@@ -6,13 +6,15 @@ import { KeyFinancialsTable } from "@/components/KeyFinancialsTable";
 import { ScrollHint } from "@/components/ScrollHint";
 import { chooseUnit, formatMoney, formatPeriodEnd, Unit } from "@/lib/present/format";
 import { fiscalYearInfo } from "@/lib/present/fiscalYear";
-import { isValue, StatementColumn, StatementRow, Statements } from "@/lib/xbrl/statements";
+import { isValue, StatementColumn, StatementRow, Statements, StatementValue } from "@/lib/xbrl/statements";
 import {
   cellTitle,
   changeText,
   derivedMark,
   displayValue,
   isRed,
+  RECAST_MARK,
+  recastText,
   statementFootnote,
   StatementTab,
 } from "@/lib/present/statementDisplay";
@@ -113,6 +115,44 @@ function StatementTable({ s, tab, annual, unit }: { s: Statements; tab: Statemen
   );
 }
 
+/**
+ * The cell's marks. A recast cell's mark opens its own note on hover, focus
+ * or tap -- the one provenance line a reader needs to see, not only find in
+ * the native tooltip -- so it can be read and screenshotted like the "i" tips.
+ */
+function CellMarks({ cell, unit }: { cell: StatementValue; unit: Unit }) {
+  const [open, setOpen] = useState(false);
+  const recast = recastText(cell, unit);
+  const marks = derivedMark(cell);
+  if (!recast) return <span className="st-mark">{marks}</span>;
+  return (
+    <>
+      <span className="st-mark">{marks.replace(RECAST_MARK, "")}</span>
+      <span
+        className="recast-wrap"
+        tabIndex={0}
+        role="button"
+        aria-label={recast}
+        data-open={open ? "true" : "false"}
+        onClick={() => setOpen((o) => !o)}
+        onBlur={() => setOpen(false)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            setOpen((o) => !o);
+          }
+          if (e.key === "Escape") setOpen(false);
+        }}
+      >
+        <span className="st-mark">{RECAST_MARK}</span>
+        <span className="recast-box" role="tooltip">
+          {recast}
+        </span>
+      </span>
+    </>
+  );
+}
+
 function Row({ r, cols, annual, unit }: { r: StatementRow; cols: StatementColumn[]; annual: boolean; unit: Unit }) {
   if (r.kind === "section") {
     return (
@@ -144,7 +184,7 @@ function Row({ r, cols, annual, unit }: { r: StatementRow; cols: StatementColumn
           return (
             <td key={i} title={title}>
               <span className={isRed(r, c) ? "st-neg" : undefined}>{formatMoney(displayValue(r, c), unit)}</span>
-              <span className="st-mark">{derivedMark(c)}</span>
+              <CellMarks cell={c} unit={unit} />
               {change && <span className="st-change">{change}</span>}
             </td>
           );

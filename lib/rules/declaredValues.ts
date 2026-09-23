@@ -116,3 +116,29 @@ export const BORROWING_PCT_OF_REVENUE = 5;
 
 /** Acquisitions and investments: the line above this share of quarterly revenue. Also an explanation trigger. */
 export const ACQUISITIONS_PCT_OF_REVENUE = 5;
+
+/**
+ * Returns: buybacks plus dividends over the last four quarters above free
+ * cash flow over the same quarters, and above this share of the latest
+ * quarter's revenue. The size test keeps a company whose free cash flow is
+ * near zero or negative from firing on a token dividend.
+ */
+export const RETURNS_PCT_OF_REVENUE = 5;
+
+/**
+ * Financial health benchmarks: one reference line under each tile.
+ * Reference points, not rules -- nothing reads them but the tiles and the
+ * footer, and they vary by industry. DPO's is the terms ceiling (a company
+ * inside it pays suppliers within the longest terms we'd offer) and Z''s is
+ * the rules' own safe zone.
+ */
+export const HEALTH_BENCHMARKS = {
+  currentRatioAbove: 1.0,
+  debtToEquityBelow: 1.0,
+  dsoWithinDays: 45,
+  dpoWithinDays: PAYMENT_TERMS_CEILING_DAYS,
+  altmanZAbove: ALTMAN_ZONES.safeAbove,
+} as const;
+
+export const BENCHMARKS_NOTE =
+  "Benchmarks are reference points, not rules, and vary by industry: retailers often run a current ratio below 1.0x by design.";

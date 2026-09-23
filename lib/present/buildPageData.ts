@@ -36,7 +36,14 @@ import { buildStatements } from "@/lib/xbrl/statements";
 import { buildFlowFacts, FlowFacts } from "@/lib/present/flowFacts";
 import { loadFilingExtract } from "@/lib/xbrl/statementLoader";
 import { FilingStatementExtract } from "@/lib/xbrl/statementExtract";
-import { ACQUISITIONS_PCT_OF_REVENUE } from "@/lib/rules/declaredValues";
+import { buildLiquidityDebt, LiquidityDebt } from "@/lib/present/liquidityDebt";
+import {
+  ACQUISITIONS_PCT_OF_REVENUE,
+  BENCHMARKS_NOTE,
+  BORROWING_PCT_OF_REVENUE,
+  HEALTH_BENCHMARKS,
+  RETURNS_PCT_OF_REVENUE,
+} from "@/lib/rules/declaredValues";
 
 export interface HeaderLine {
   periodEndDate: string;
@@ -72,6 +79,8 @@ export interface PageData {
   claudeDiagnostics: ExplainDiagnostics;
   /** Cash-flow figures behind the borrowing, acquisitions and returns findings. */
   flows: FlowFacts;
+  /** The liquidity vs debt strip under the health tiles. Display only. */
+  liquidity: LiquidityDebt;
   footer: {
     zSafeAbove: number;
     zDistressBelow: number;
@@ -91,6 +100,10 @@ export interface PageData {
     taxDivergencePct: number;
     statutoryTaxRatePct: number;
     acquisitionsPct: number;
+    borrowingPct: number;
+    returnsPct: number;
+    benchmarks: typeof HEALTH_BENCHMARKS;
+    benchmarksNote: string;
     claudeDailyCap: number;
   };
 }
@@ -181,7 +194,11 @@ export async function buildPageData(rawTicker: string, now: Date = new Date()): 
   // built here from company facts. The tab's filings are read later, by
   // the tab; the board only reads the latest filing, and only when the
   // acquisitions finding fires and needs the company's caption for the line.
-  let flows = buildFlowFacts(buildStatements(facts, kf, periodic, new Map()), kf);
+  const baseStatements = buildStatements(facts, kf, periodic, new Map());
+  let flows = buildFlowFacts(baseStatements, kf);
+  // The liquidity vs debt strip reads the Balance sheet tab's own rows,
+  // which come from company facts alone.
+  const liquidity = buildLiquidityDebt(baseStatements, kf);
   const revenueNow = kf.revenue.values[0]?.value;
   const acquisitionsFire =
     flows.acquisitions !== undefined &&
@@ -232,6 +249,7 @@ export async function buildPageData(rawTicker: string, now: Date = new Date()): 
     explained,
     claudeDiagnostics,
     flows,
+    liquidity,
     footer: {
       zSafeAbove: ALTMAN_ZONES.safeAbove,
       zDistressBelow: ALTMAN_ZONES.distressBelow,
@@ -251,6 +269,10 @@ export async function buildPageData(rawTicker: string, now: Date = new Date()): 
       taxDivergencePct: TAX_DIVERGENCE_PCT_OF_REVENUE,
       statutoryTaxRatePct: STATUTORY_TAX_RATE_PCT,
       acquisitionsPct: ACQUISITIONS_PCT_OF_REVENUE,
+      borrowingPct: BORROWING_PCT_OF_REVENUE,
+      returnsPct: RETURNS_PCT_OF_REVENUE,
+      benchmarks: HEALTH_BENCHMARKS,
+      benchmarksNote: BENCHMARKS_NOTE,
       claudeDailyCap: CLAUDE_DAILY_CAP,
     },
   };

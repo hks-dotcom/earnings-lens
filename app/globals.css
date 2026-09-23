@@ -761,3 +761,146 @@ button.stand-src:focus-visible {
   font-style: italic;
   font-size: 12.5px;
 }
+
+/*
+ * A recast cell's mark opens its note on hover, keyboard focus or tap. The
+ * box opens under the figure and toward the table's left, since recast
+ * cells can sit in the rightmost column.
+ */
+.recast-wrap {
+  position: relative;
+  display: inline-block;
+  cursor: help;
+  outline: none;
+  border-radius: 3px;
+}
+.recast-wrap:focus-visible {
+  box-shadow: 0 0 0 2px var(--nova-strong);
+}
+.recast-box {
+  display: none;
+  position: absolute;
+  top: 16px;
+  right: -6px;
+  z-index: 10;
+  width: 280px;
+  max-width: 70vw;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: var(--text-primary);
+  color: #f4f2ee;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+  white-space: normal;
+  text-align: left;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+}
+.recast-wrap:hover .recast-box,
+.recast-wrap:focus-visible .recast-box,
+.recast-wrap[data-open="true"] .recast-box {
+  display: block;
+}
+
+/*
+ * Liquidity vs debt, under the health tiles: two periods side by side, two
+ * bars each, all four on one scale. Teal for liquidity, slate for debt.
+ */
+.liq {
+  padding-top: 16px;
+  border-top: 1px solid var(--border-subtle);
+}
+.liq-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 4px 12px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.liq-k {
+  font-size: 12.5px;
+  color: var(--text-tertiary);
+}
+.liq-net {
+  font-size: 15px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.liq-net span {
+  font-weight: 400;
+  font-size: 13px;
+  color: var(--text-tertiary);
+}
+.liq-pairs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 36px;
+}
+.liq-pair {
+  min-width: 0;
+}
+.liq-pair h4 {
+  margin: 0 0 6px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-tertiary);
+}
+.liq-pair h4 span {
+  font-weight: 400;
+}
+.liq-bar {
+  display: grid;
+  grid-template-columns: 190px minmax(0, 1fr) 74px;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  margin: 5px 0;
+}
+.liq-name {
+  color: #4a4741;
+  min-width: 0;
+}
+.liq-track {
+  height: 12px;
+  background: #f3f1ec;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.liq-fill {
+  height: 100%;
+  border-radius: 3px;
+}
+.liq-cash {
+  background: var(--core-strong);
+}
+.liq-debt {
+  background: var(--info-strong);
+}
+.liq-amt {
+  text-align: right;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.liq-none {
+  grid-column: 2 / 4;
+  font-size: 12.5px;
+  color: var(--text-tertiary);
+}
+.liq-parts {
+  font-size: 11.5px;
+  color: var(--text-tertiary);
+  margin-top: 10px;
+  line-height: 1.5;
+  overflow-wrap: break-word;
+}
+@media (max-width: 760px) {
+  .liq-pairs {
+    grid-template-columns: 1fr;
+  }
+  .liq-bar {
+    grid-template-columns: 130px minmax(0, 1fr) 64px;
+    font-size: 12px;
+  }
+}
