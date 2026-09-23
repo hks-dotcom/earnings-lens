@@ -32,6 +32,8 @@ body{margin:0;font-family:'IBM Plex Sans',system-ui,sans-serif;background:#E9E6D
 .fill.cash{background:var(--nc)}.fill.debt{background:var(--slate)}
 .bar .amt{text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
 .pair .netl{font-size:12.5px;color:var(--muted);margin-top:4px}
+.per{font-size:11.5px;color:var(--muted);margin-left:8px}
+.bar.one{grid-template-columns:230px 1fr 80px;margin:7px 0}
 .parts{font-size:11.5px;color:var(--muted);margin-top:10px;line-height:1.5}
 .seg{font-size:12px;color:var(--muted);margin-top:14px}
 .ann{font-size:12px;color:#8A5A00;background:#FFF6E0;border:1px dashed #D9B45A;border-radius:8px;padding:8px 10px;line-height:1.5;margin:0}
@@ -40,7 +42,7 @@ body{margin:0;font-family:'IBM Plex Sans',system-ui,sans-serif;background:#E9E6D
 </head>
 <body>
 <div class="wrap">
-<p class="note">Earnings Lens — mock: liquidity vs debt in Financial health. Amazon.com (AMZN) Q2 FY26. Every figure in the new strip is from the filed balance sheet rows already in the statement tabs.</p>
+<p class="note">Earnings Lens — mock: liquidity vs debt in Financial health, latest quarter only. NVIDIA (NVDA) Q2 FY27, figures from the live page. Every figure in the new strip is from the filed balance sheet rows already in the statement tabs.</p>
 
 <section class="panel" aria-label="Financial health">
   <p class="lbl">FINANCIAL HEALTH</p>
@@ -55,29 +57,17 @@ body{margin:0;font-family:'IBM Plex Sans',system-ui,sans-serif;background:#E9E6D
 
   <div class="liq">
     <div class="liq-head">
-      <div class="k">Liquidity vs debt <span class="i" title="Cash and short-term investments against borrowings. Debt is long-term debt including the part due within a year, plus short-term borrowings; leases are excluded. Net Debt = debt − cash and short-term investments. The runway uses the same cash and short-term investments.">i</span></div>
-      <div class="net">Net Debt $10.3B <span>· Net Cash $36.9B a year ago</span></div>
+      <div class="k">Liquidity vs debt <span class="i" title="Cash and short-term investments against borrowings, at the amounts on the latest balance sheet. Leases and marketable equity securities are excluded.">i</span> <span class="per">Q2 FY27 · Jul 26, 2026</span></div>
+      <div class="net">Net Cash $23.2B <span>· Net Cash $48.3B a year ago</span></div>
     </div>
-    <div class="pairs">
-      <div class="pair">
-        <h4>Q2 FY26 <span>· Jun 30, 2026</span></h4>
-        <div class="bar"><span class="name">Cash and short-term investments</span><div class="track"><div class="fill cash" style="width:92.3%"></div></div><span class="amt">$123.0B</span></div>
-        <div class="bar"><span class="name">Debt</span><div class="track"><div class="fill debt" style="width:100%"></div></div><span class="amt">$133.3B</span></div>
-      </div>
-      <div class="pair">
-        <h4>Q2 FY25 <span>· Jun 30, 2025</span></h4>
-        <div class="bar"><span class="name">Cash and short-term investments</span><div class="track"><div class="fill cash" style="width:69.9%"></div></div><span class="amt">$93.2B</span></div>
-        <div class="bar"><span class="name">Debt</span><div class="track"><div class="fill debt" style="width:42.2%"></div></div><span class="amt">$56.3B</span></div>
-      </div>
-    </div>
-    <div class="parts">Q2 FY26: cash $78.2B + short-term investments $44.8B · long-term debt, incl. the part due within a year, $133.0B + short-term borrowings $0.3B. Leases excluded.</div>
+    <div class="bar one"><span class="name">Cash and short-term investments</span><div class="track"><div class="fill cash" style="width:100%"></div></div><span class="amt">$56.6B</span></div>
+    <div class="bar one"><span class="name">Debt</span><div class="track"><div class="fill debt" style="width:59.0%"></div></div><span class="amt">$33.4B</span></div>
+    <div class="parts">Cash and cash equivalents $22.4B + Marketable debt securities $34.1B · short-term debt $1.0B + long-term debt $32.4B. Marketable equity securities $42.8B and leases excluded.</div>
   </div>
-
 </section>
 
 <p class="ann"><b>Notes for the build.</b>
-(1) A strip under the six tiles, not a seventh tile: two bars per period (latest quarter and the same quarter last year) on one shared scale, the net figure in the header, the components beneath. Display only: no effect on the ladder, the Summary or the findings.
-(2) Cash and short-term investments = the runway's liquidity, same rule: short-term investments never filed → cash only, labelled "Cash"; filed but missing for the quarter → cash only, and the line says so.
+(1) A strip under the six tiles for the latest quarter only: two full-width bars on one scale, the period next to the title, the net figure in the header with last year's net as a short muted clause, and the components line beneath. The year-ago bars are gone. Display only: no effect on the ladder, the Summary or the findings. (Tiles above are AMZN's from the earlier mock; the strip shows NVDA's live figures.) (2) Cash and short-term investments = the runway's liquidity, same rule: short-term investments never filed → cash only, labelled "Cash"; filed but missing for the quarter → cash only, and the line says so.
 (3) Debt = long-term debt including the part due within a year + short-term borrowings (the statement tab's rows). Leases excluded, and the hover says so. If either debt row is missing for the quarter, debt and net show MISSING. A company that has never tagged debt shows "No debt tagged" and no net figure.
 (4) Net reads "Net Debt $X" when debt is larger, "Net Cash $X" when liquidity is larger (capital N and D/C, everywhere including the Copy brief). Neutral colours only: teal for cash, slate for debt; nothing red or green.
 (5) Amounts in $B with one decimal (one decimal in $M under $100M quarterly revenue, as elsewhere). The Copy brief gains one line: "Liquidity vs debt: $123.0B vs $133.3B, Net Debt $10.3B (Net Cash $36.9B a year ago)."
