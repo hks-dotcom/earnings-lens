@@ -159,31 +159,54 @@ Beneath the tiles, **liquidity vs debt**: the latest quarter beside the same
 quarter last year, each with two bars on one shared scale -- cash and
 short-term investments (teal) against debt (slate), never red or green.
 
-- **Liquidity** is the runway's figure, with the runway's rule: cash plus
-  short-term investments; cash alone when short-term investments are never
-  filed, or when they are filed but not for the quarter (the bar then reads
-  "Cash"). Only the first is complete liquidity. A company that holds
-  short-term investments but didn't file them for the quarter has a
-  cash-only figure that can flip the answer, so that period's net figure
-  reads "Net MISSING" and the line under the bars says why. The runway
-  keeps its cash-only fallback, which can only understate it.
-- **Debt** is long-term debt including the part due within a year, plus
-  short-term borrowings, from the Balance sheet tab's rows. Leases are
-  excluded. A row the filer uses that is missing for the quarter makes debt
-  and the net figure MISSING; a filer that has tagged no debt at all shows
-  "No debt tagged", with no bar and no net figure.
-- **The header** states the net position, "Net Debt $10.3B" when debt is the
-  larger and "Net Cash" when liquidity is, then the same a year ago. A line
-  of components follows: "Q2 FY26: cash $78.2B + short-term investments
-  $44.8B · long-term debt, incl. the part due within a year, $133.0B +
-  short-term borrowings $0.3B. Leases excluded."
+Each period is read from a filing's own balance sheet, not from Key
+financials: the latest-filed filing whose balance sheet presents that date,
+the same latest-presentation rule the income statement uses. The extractor
+reads the balance sheet's lines, captions and dates, and every instant
+figure the filing reports at those dates, notes included; each filing's
+extract is stored and read once.
+
+- **Liquidity** is the balance sheet's cash line, whatever element carries
+  it, plus current-asset lines that are marketable debt securities or
+  short-term investments. Equity securities and restricted cash are
+  excluded, and the line under the bars names them. A line that combines
+  debt and equity securities and can't be split (NVIDIA's 10-K "Marketable
+  securities") leaves that period's net figure MISSING, and the line says
+  why. A cash line whose element or caption already includes short-term
+  investments (Target's) is complete liquidity, and the bar reads "Cash and
+  short-term investments".
+- **Debt** is short-term borrowings (commercial paper included), the current
+  portion of long-term debt and long-term debt, non-current, at the carrying
+  amounts in that filing for that date, on the face of the balance sheet or
+  only in the notes. A combined element is read only when its components
+  aren't filed, and never on top of them; a face-value or principal figure
+  never stands in for a filed carrying amount. Leases are excluded. Where a
+  debt line includes finance leases, the notes' figure without them is used
+  when the filing has one (FedEx); otherwise the line is used as filed and
+  says "includes finance leases, as filed" (Target). A company-specific
+  element counts only when its caption plainly names borrowings, debt, notes
+  or commercial paper. No debt element at all reads "No debt on the balance
+  sheet", with no debt bar and no net figure.
+- **The header** states the net position, "Net Debt $9.6B" when debt is the
+  larger and "Net Cash" when liquidity is, then the same a year ago -- only
+  when both sides are complete for the period; otherwise "Net MISSING". A
+  line of components follows, in the company's own captions: "Q2 FY26: Cash
+  and cash equivalents $78.2B + Marketable securities $44.8B · short-term
+  debt $0.3B + long-term debt, current maturities $3.3B + long-term debt
+  $128.9B. Leases excluded."
+
+The strip's debt is the carrying amount, so it can differ from the Balance
+sheet tab's long-term debt, which is Key financials' one tag across time:
+Amazon's "Notes outstanding" is the face value, $771M above the carrying
+amounts on its balance sheet. Key financials, debt / equity and the runway
+keep their own figures.
 
 Amounts are set per period: $M when the larger of the period's two amounts
 is under $1B (whole numbers, or one decimal when quarterly revenue is under
 $100M), otherwise $B with one decimal. The strip is display only: it has no
 effect on the ladder, the quadrant, the Summary or the findings. The Copy
-brief carries it as one line: "Liquidity vs debt: $123.0B vs $133.3B, Net
-Debt $10.3B (Net Cash $36.9B a year ago)."
+brief carries it as one line: "Liquidity vs debt: $123.0B vs $132.5B, Net
+Debt $9.6B (Net Cash $37.3B a year ago)."
 
 ## How it works
 
@@ -194,10 +217,10 @@ ticker → SEC EDGAR → rules → verdict, why, Summary, what stands out, terms
 
 1. **EDGAR.** XBRL company facts supply the figures; the submissions feed
    supplies the filing list, 8-K item numbers, the filer category and the
-   fiscal year end. Segment revenue and the income statement's own lines come
-   from each filing's XBRL instance and linkbases, found through the filing
-   index, because the aggregated APIs strip dimensional facts and company
-   tags.
+   fiscal year end. Segment revenue, the income statement's own lines and
+   the liquidity vs debt strip's balance sheets come from each filing's XBRL
+   instance and linkbases, found through the filing index, because the
+   aggregated APIs strip dimensional facts and company tags.
 2. **Rules.** Fixed, declared rules turn those figures into signals (revenue
    and R&D growth, payment behaviour, spending cuts, red-flag filings), an
    Altman Z'' score, a cash position (a burn, with a runway of cash plus
@@ -211,9 +234,11 @@ ticker → SEC EDGAR → rules → verdict, why, Summary, what stands out, terms
    the reader's words: "Risk: low · Opportunity: high · Offer Net 30; Net 45
    if pushed"), with "with spending cuts" when a restructuring filing or an
    R&D or SG&A cut puts the company in the higher-risk half of the matrix;
-   high or low opportunity; and the terms. The matrix's risk axis reads the
-   same phrase ("Counterparty risk: low, with spending cuts →"). Net 45 is
-   offered only when risk is low. Beside the matrix, "Why this verdict"
+   high or low opportunity; and the terms. The matrix's axes name the scale
+   ("Counterparty risk →", "lower risk" and "higher risk" under the columns,
+   "Relationship opportunity ↑"), not the company's reading of it, which
+   stays in that line and the Why box. Net 45 is offered only when risk is
+   low. Beside the matrix, "Why this verdict"
    gives the input that decided each axis, with its figure — payables up
    27%, Z'' 2.71, revenue up 20% — using the rules' own values, and states
    the payables fact rather than a reading of it ("payables are falling:
@@ -360,12 +385,14 @@ price feed or a data vendor.
   scope, so the red-flags count is never presented as a clean going-concern
   check: the tile's own explanation and the board's footnotes both say it was
   not checked.
-- **Company-extension XBRL tags are read on the income statement only.** Its
-  lines come from each filing, own tags included. The balance sheet, the cash
-  flow and Key financials use standard tags only, because company facts
-  exposes nothing else: a filer that moves a line to its own tag there shows
-  that cell as MISSING ("filed under the company's own tag") rather than
-  wrong.
+- **Company-extension XBRL tags are read on the income statement and in the
+  liquidity vs debt strip only.** The income statement's lines come from each
+  filing, own tags included; the strip reads a company's own balance-sheet
+  line only when its caption plainly says what it is. The Balance sheet tab,
+  the cash flow and Key financials use standard tags only, because company
+  facts exposes nothing else: a filer that moves a line to its own tag there
+  shows that cell as MISSING ("filed under the company's own tag") rather
+  than wrong.
 - **No stock prices.** The Altman Z'' variant used here is the book-equity one,
   which needs no market capitalisation.
 - **Red flags are a live, trailing-12-month window from today**, not from the
@@ -424,12 +451,14 @@ statement cell whose presentation differs from Key financials, the findings
 tests (the returns threshold below and above its size test, every
 restructuring filing in the window, "none" for a zero comparison, risk as
 low / medium / high, the payables clause, and liquidity vs debt against
-Amazon's figures, with the net MISSING rule and the per-period units), and
-three snapshot diffs over thirteen real companies — one over every Key financials
-figure with its full provenance, one over every rules output, one over every
-statement cell. All report per-cell and per-field changes, so a change in
-what EDGAR returns shows up as a diff rather than as a quietly different
-verdict.
+Amazon's figures, read from each filing's balance sheet: equity securities,
+a combined debt-and-equity line, finance leases as filed and split out, face
+values never read, no debt, company-specific captions and the per-period
+units), and three snapshot diffs over thirteen real companies — one over
+every Key financials figure with its full provenance, one over every rules
+output, one over every statement cell. All report per-cell and per-field
+changes, so a change in what EDGAR returns shows up as a diff rather than
+as a quietly different verdict.
 
 The thirteen are chosen so that between them they exercise every branch worth
 exercising: a derived Q4 from a just-filed 10-K (MSFT, FDX), an operating loss

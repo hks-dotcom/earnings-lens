@@ -10,8 +10,11 @@
 //   and count the earlier ones. No fixture has two, so they are built here.
 // - A zero comparison amount reads "none".
 // - Risk reads low / medium / high; the payables clause states the fact.
-// - Liquidity vs debt: AMZN's check values, the net wording, and the
-//   no-debt and missing cases.
+// - Liquidity vs debt, read from each filing's balance sheet: AMZN's check
+//   values, equity securities excluded, a combined debt-and-equity line,
+//   cash including short-term investments, finance leases as filed and
+//   split out, face values never read, no debt, company-specific lines,
+//   units, and which filing a date is read from.
 //
 // Usage: npx tsx scripts/test-findings.ts
 
@@ -23,8 +26,19 @@ import { LensResult } from "@/lib/rules/evaluateLens";
 import { heroSubline, whyThisVerdict } from "@/lib/present/verdictReasons";
 import { buildSummary } from "@/lib/present/summary";
 import { FinancialHealth } from "@/lib/metrics/health";
-import { buildLiquidityDebt, componentsLine, liquidityAmount, liquidityBriefLine, liquidityLabel, netHeader, stripUnit } from "@/lib/present/liquidityDebt";
-import { Statements, StatementRow, StatementCell } from "@/lib/xbrl/statements";
+import {
+  componentsLine,
+  LiquidityDebt,
+  liquidityAmount,
+  liquidityBriefLine,
+  liquidityLabel,
+  LiquidityPeriod,
+  netHeader,
+  readBalanceSheetPeriod,
+  stripUnit,
+} from "@/lib/present/liquidityDebt";
+import { candidateFilings } from "@/lib/present/liquiditySources";
+import { FilingStatementExtract } from "@/lib/xbrl/statementExtract";
 
 let pass = 0;
 let fail = 0;
@@ -271,109 +285,285 @@ check(
 );
 
 // --- liquidity vs debt --------------------------------------------------------
-function bsRow(key: string, latest: number | undefined, yearAgo: number | undefined, notFiled = false): StatementRow {
-  const c = (v: number | undefined): StatementCell =>
-    v === undefined ? { missing: "not filed for this period" } : { value: v * M, concept: "t", method: "instant", derived: false, source: "company-facts" };
-  return { key, label: key, kind: "line", quarterly: [c(latest), c(undefined), c(undefined), c(undefined), c(yearAgo)], annual: [], notFiled };
+// Each period is read from one filing's own balance sheet. The extracts are
+// built here in the shape the extractor stores, with real filers' elements
+// and captions; figures in $M.
+type BsLine = [element: string, caption: string, value?: number, total?: boolean];
+type NoteFact = [element: string, caption: string, value: number];
+const DATE = "2026-06-30";
+function extractOf(lines: BsLine[], notes: NoteFact[] = [], accessionNumber = "0000000000-26-000001"): FilingStatementExtract {
+  const instants: FilingStatementExtract["instants"] = {};
+  const instantCaptions: Record<string, string> = {};
+  for (const [element, , value] of lines) if (value !== undefined) instants[element] = [{ end: DATE, value: value * M }];
+  for (const [element, caption, value] of notes) {
+    instants[element] = [{ end: DATE, value: value * M }];
+    instantCaptions[element] = caption;
+  }
+  return {
+    version: 4,
+    accessionNumber,
+    form: "10-Q",
+    reportDate: DATE,
+    filingDate: "2026-07-31",
+    incomeStatement: null,
+    facts: {},
+    acquisitions: null,
+    balanceSheet: {
+      role: "r",
+      roleDefinition: "Statement - Balance Sheets",
+      dates: [DATE],
+      lines: lines.map(([element, caption, , total]) => ({ element, caption, total: total ?? false })),
+    },
+    instants,
+    instantCaptions,
+    instanceBytes: 0,
+    requests: 0,
+  };
 }
-function statements(rows: StatementRow[]): Statements {
-  return { quarters: [], years: [], income: [], balance: rows, cashFlow: [], joins: [] };
-}
+const read = (e: FilingStatementExtract, label = "Q2 FY26", revenue = 200_606 * M) => readBalanceSheetPeriod(e, DATE, label, revenue);
+const strip = (latest: LiquidityPeriod, yearAgo: LiquidityPeriod): LiquidityDebt => ({ latest, yearAgo });
+const figures = (p: LiquidityPeriod) => [p.liquidity === undefined ? undefined : p.liquidity / M, p.debt === undefined ? undefined : p.debt / M, p.net === undefined ? undefined : p.net / M];
+const ASSETS_TOTALS: BsLine[] = [["us-gaap:AssetsCurrent", "Total current assets", 1, true], ["us-gaap:Assets", "Total assets", 1, true]];
 
-// AMZN's check values, Q2 FY26 and Q2 FY25.
-const amzn = buildLiquidityDebt(
-  statements([
-    bsRow("cash", 78_188, 57_741),
-    bsRow("shortTermInvestments", 44_800, 35_439),
-    bsRow("longTermDebt", 132_995, 56_082),
-    bsRow("shortTermBorrowings", 325, 173),
-  ]),
-  kfWith({ revenue: line(200_606) })
+// AMZN, Q2 FY26 and Q2 FY25 (10-Qs 0001018724-26-000026 and -25-000086):
+// long-term debt, non-current on the face; the current portion and
+// short-term debt only in the notes; "Notes outstanding" (LongTermDebt) is
+// the face value and is never read while the carrying amounts are filed.
+const amznNow = read(
+  extractOf(
+    [
+      ["us-gaap:CashAndCashEquivalentsAtCarryingValue", "Cash and cash equivalents", 78_213],
+      ["us-gaap:MarketableSecuritiesCurrent", "Marketable securities", 44_775],
+      ["us-gaap:InventoryNet", "Inventories", 38_184],
+      ...ASSETS_TOTALS,
+      ["us-gaap:AccruedLiabilitiesCurrent", "Accrued expenses and other", 73_406],
+      ["us-gaap:LiabilitiesCurrent", "Total current liabilities", 241_274, true],
+      ["amzn:LeaseLiabilityNoncurrent", "Long-term lease liabilities", 94_338],
+      ["us-gaap:LongTermDebtNoncurrent", "Long-term debt", 128_894],
+    ],
+    [
+      ["us-gaap:LongTermDebt", "Notes outstanding", 132_995],
+      ["us-gaap:LongTermDebtCurrent", "Long-Term Debt, Current Maturities", 3_330],
+      ["us-gaap:DebtInstrumentCarryingAmount", "Long-term debt", 128_894],
+      ["us-gaap:ShortTermBorrowings", "Short-term debt", 325],
+    ]
+  )
 );
-check("liquidity: AMZN latest", [amzn.latest.liquidity! / M, amzn.latest.debt! / M, amzn.latest.net! / M], [122_988, 133_320, 10_332]);
-check("liquidity: AMZN year ago", [amzn.yearAgo.liquidity! / M, amzn.yearAgo.debt! / M, amzn.yearAgo.net! / M], [93_180, 56_255, -36_925]);
-check("liquidity: AMZN header", netHeader(amzn), { now: "Net Debt $10.3B", yearAgo: " · Net Cash $36.9B a year ago" });
+const amznThen = read(
+  extractOf(
+    [
+      ["us-gaap:CashAndCashEquivalentsAtCarryingValue", "Cash and cash equivalents", 57_741],
+      ["us-gaap:MarketableSecuritiesCurrent", "Marketable securities", 35_439],
+      ...ASSETS_TOTALS,
+      ["us-gaap:LiabilitiesCurrent", "Total current liabilities", 186_921, true],
+      ["us-gaap:LongTermDebtNoncurrent", "Long-term debt", 50_718],
+    ],
+    [
+      ["us-gaap:LongTermDebt", "Notes outstanding", 56_082],
+      ["us-gaap:LongTermDebtCurrent", "Long-Term Debt, Current Maturities", 5_005],
+      ["us-gaap:ShortTermBorrowings", "Short-term debt", 173],
+    ]
+  ),
+  "Q2 FY25"
+);
+const amzn = strip(amznNow, amznThen);
+check("liquidity: AMZN Q2 FY26 liquidity, debt, net", figures(amznNow), [122_988, 132_549, 9_561]);
+check("liquidity: AMZN Q2 FY26 debt lines", amznNow.debtLines.map((d) => [d.element, d.value / M, d.where]), [
+  ["us-gaap:ShortTermBorrowings", 325, "notes"],
+  ["us-gaap:LongTermDebtCurrent", 3_330, "notes"],
+  ["us-gaap:LongTermDebtNoncurrent", 128_894, "statement"],
+]);
+check("liquidity: AMZN Q2 FY25 liquidity, debt, net", figures(amznThen), [93_180, 55_896, -37_284]);
+check("liquidity: AMZN header", netHeader(amzn), { now: "Net Debt $9.6B", yearAgo: " · Net Cash $37.3B a year ago" });
 check(
   "liquidity: AMZN components line",
   componentsLine(amzn),
-  "Q2 FY26: cash $78.2B + short-term investments $44.8B · long-term debt, incl. the part due within a year, $133.0B + short-term borrowings $0.3B. Leases excluded."
+  "Q2 FY26: Cash and cash equivalents $78.2B + Marketable securities $44.8B · short-term debt $0.3B + long-term debt, current maturities $3.3B + long-term debt $128.9B. Leases excluded."
 );
+check("liquidity: AMZN Copy brief line", liquidityBriefLine(amzn), "Liquidity vs debt: $123.0B vs $132.5B, Net Debt $9.6B (Net Cash $37.3B a year ago).");
+
+// NVDA Q2 FY27: marketable equity securities excluded; "Short-term debt"
+// (DebtCurrent) holds both short-term parts, so nothing is added from the notes.
+const nvda = read(
+  extractOf(
+    [
+      ["us-gaap:CashAndCashEquivalentsAtCarryingValue", "Cash and cash equivalents", 22_443],
+      ["us-gaap:DebtSecuritiesCurrent", "Marketable debt securities", 34_143],
+      ["us-gaap:EquitySecuritiesFvNi", "Marketable equity securities", 42_783],
+      ...ASSETS_TOTALS,
+      ["us-gaap:DebtCurrent", "Short-term debt", 1_000],
+      ["us-gaap:LiabilitiesCurrent", "Total current liabilities", 43_019, true],
+      ["us-gaap:LongTermDebtNoncurrent", "Long-term debt", 32_366],
+    ],
+    [["us-gaap:LongTermDebtCurrent", "Current portion", 1_000]]
+  ),
+  "Q2 FY27"
+);
+check("liquidity: NVDA equity securities excluded", [...figures(nvda), nvda.excluded.map((x) => x.element)], [56_586, 33_366, -23_220, ["us-gaap:EquitySecuritiesFvNi"]]);
 check(
-  "liquidity: AMZN Copy brief line",
-  liquidityBriefLine(amzn),
-  "Liquidity vs debt: $123.0B vs $133.3B, Net Debt $10.3B (Net Cash $36.9B a year ago)."
+  "liquidity: NVDA components line",
+  componentsLine(strip(nvda, nvda)),
+  "Q2 FY27: Cash and cash equivalents $22.4B + Marketable debt securities $34.1B · short-term debt $1.0B + long-term debt $32.4B. Marketable equity securities $42.8B and leases excluded."
 );
 
-const noDebt = buildLiquidityDebt(
-  statements([bsRow("cash", 1_000, 900), bsRow("shortTermInvestments", 500, 400), bsRow("longTermDebt", undefined, undefined), bsRow("shortTermBorrowings", undefined, undefined, true)]),
-  kfWith({ revenue: line(1_000), debtTagFiledInLookback: false } as never)
+// NVDA's FY26 10-K: one company line for debt and equity securities together.
+const combined = read(
+  extractOf([
+    ["us-gaap:CashAndCashEquivalentsAtCarryingValue", "Cash and cash equivalents", 10_605],
+    ["nvda:MarketableSecuritiesAndEquitySecuritiesFVNI", "Marketable securities", 51_951],
+    ...ASSETS_TOTALS,
+    ["us-gaap:LongTermDebtNoncurrent", "Long-term debt", 8_468],
+  ]),
+  "Q4 FY26"
 );
-check("liquidity: never tagged debt", [noDebt.debtTagged, netHeader(noDebt).now, noDebt.latest.net], [false, "No debt tagged", undefined]);
-
-const missingStb = buildLiquidityDebt(
-  statements([bsRow("cash", 1_000, 900), bsRow("shortTermInvestments", 500, 400), bsRow("longTermDebt", 800, 700), bsRow("shortTermBorrowings", undefined, 50)]),
-  kfWith({ revenue: line(1_000) })
-);
-check("liquidity: a debt row missing for the quarter makes debt and net MISSING", [missingStb.latest.debt, netHeader(missingStb).now], [undefined, "Net MISSING"]);
-
-const cashOnly = buildLiquidityDebt(
-  statements([bsRow("cash", 60, 50), bsRow("shortTermInvestments", undefined, undefined, true), bsRow("longTermDebt", 20, 25), bsRow("shortTermBorrowings", undefined, undefined, true)]),
-  kfWith({ revenue: line(35), shortTermInvestmentsFiledEver: false } as never)
-);
+check("liquidity: a combined debt-and-equity line leaves net MISSING", [combined.liquidityComplete, combined.net, netHeader(strip(combined, amznThen)).now], [false, undefined, "Net MISSING"]);
 check(
-  "liquidity: short-term investments never filed, cash only, $M under $100M revenue",
-  [componentsLine(cashOnly), netHeader(cashOnly)],
-  [
-    "Q2 FY26: cash $60.0M · long-term debt, incl. the part due within a year, $20.0M; no short-term borrowings tagged. Leases excluded.",
-    { now: "Net Cash $40.0M", yearAgo: " · Net Cash $25.0M a year ago" },
-  ]
+  "liquidity: the components line says why",
+  componentsLine(strip(combined, amznThen)),
+  "Q4 FY26: Cash and cash equivalents $10.6B + Marketable securities $52.0B (debt and equity securities combined) · long-term debt $8.5B. Leases excluded. Q4 FY26: Marketable securities combines debt and equity securities and can't be split, so there is no net figure."
 );
 
-const stiMissing = buildLiquidityDebt(
-  statements([bsRow("cash", 1_000, 900), bsRow("shortTermInvestments", undefined, 400), bsRow("longTermDebt", 800, 700), bsRow("shortTermBorrowings", undefined, undefined, true)]),
-  kfWith({ revenue: line(1_000) })
+// TGT: the cash line's own element includes short-term investments; debt
+// elements that include finance leases, with nothing to split them.
+const tgt = read(
+  extractOf([
+    ["us-gaap:CashCashEquivalentsAndShortTermInvestments", "Cash and cash equivalents", 5_411],
+    ...ASSETS_TOTALS,
+    ["us-gaap:LongTermDebtAndCapitalLeaseObligationsCurrent", "Current portion of long-term debt and other borrowings", 1_136],
+    ["us-gaap:LiabilitiesCurrent", "Total current liabilities", 21_180, true],
+    ["us-gaap:LongTermDebtAndCapitalLeaseObligations", "Long-term debt and other borrowings", 14_221],
+  ])
+);
+check("liquidity: TGT cash line includes short-term investments", [liquidityLabel(tgt), ...figures(tgt)], ["Cash and short-term investments", 5_411, 15_357, 9_946]);
+check(
+  "liquidity: TGT finance leases as filed",
+  componentsLine(strip(tgt, tgt)),
+  "Q2 FY26: Cash and cash equivalents $5.4B · current portion of long-term debt and other borrowings $1.1B (includes finance leases, as filed) + long-term debt and other borrowings $14.2B (includes finance leases, as filed). Other leases excluded."
+);
+
+// GOOGL: a total of cash and marketable securities is a sum, never added.
+const googl = read(
+  extractOf(
+    [
+      ["us-gaap:CashAndCashEquivalentsAtCarryingValue", "Cash and cash equivalents", 55_911],
+      ["us-gaap:MarketableSecuritiesCurrent", "Marketable securities", 186_563],
+      ["us-gaap:CashCashEquivalentsAndShortTermInvestments", "Total cash, cash equivalents, and marketable securities", 242_474, true],
+      ...ASSETS_TOTALS,
+      ["us-gaap:LiabilitiesCurrent", "Total current liabilities", 126_111, true],
+      ["us-gaap:LongTermDebtNoncurrent", "Long-term debt", 98_165],
+    ],
+    [
+      ["us-gaap:CommercialPaper", "Commercial paper", 0],
+      ["us-gaap:LongTermDebtCurrent", "Long-Term Debt, Current Maturities", 1_999],
+      ["us-gaap:DebtInstrumentCarryingAmount", "Long-Term Debt, Gross", 101_085],
+    ]
+  )
+);
+check("liquidity: GOOGL totals skipped, current portion from the notes", figures(googl), [242_474, 100_164, -142_310]);
+
+// FDX's 10-K: finance leases sit inside both debt lines (its finance-lease
+// figures are captioned as those lines), and the notes file long-term debt
+// without them, so that figure replaces the two lines.
+const fdx = read(
+  extractOf(
+    [
+      ["us-gaap:CashAndCashEquivalentsAtCarryingValue", "Cash and cash equivalents", 13_311],
+      ...ASSETS_TOTALS,
+      ["us-gaap:LongTermDebtAndCapitalLeaseObligationsCurrent", "Current portion of long-term debt", 1_676],
+      ["us-gaap:ShortTermBorrowings", "Short-term borrowings", 745],
+      ["us-gaap:LiabilitiesCurrent", "Total current liabilities", 1, true],
+      ["us-gaap:LongTermDebtNoncurrent", "LONG-TERM DEBT, LESS CURRENT PORTION", 23_293],
+    ],
+    [
+      ["us-gaap:FinanceLeaseLiabilityCurrent", "Current portion of long-term debt", 170],
+      ["us-gaap:FinanceLeaseLiabilityNoncurrent", "Long-term debt, less current portion", 1_344],
+      ["us-gaap:DebtInstrumentCarryingAmount", "Long-Term Debt, Gross", 23_694],
+      ["us-gaap:LongTermDebt", "Long-Term Debt", 23_455],
+    ]
+  ),
+  "Q4 FY26"
+);
+check("liquidity: FDX long-term debt without finance leases replaces the lines", [...figures(fdx), fdx.debtLines.map((d) => d.element)], [13_311, 24_200, 10_889, ["us-gaap:ShortTermBorrowings", "us-gaap:LongTermDebt"]]);
+check(
+  "liquidity: FDX components line",
+  componentsLine(strip(fdx, fdx)),
+  "Q4 FY26: Cash and cash equivalents $13.3B · short-term borrowings $0.7B + long-term debt $23.5B (from the notes, without finance leases). Leases excluded."
+);
+
+// A face value is never read: only a combined element equal to the gross figure is filed.
+const faceOnly = read(
+  extractOf(
+    [["us-gaap:CashAndCashEquivalentsAtCarryingValue", "Cash and cash equivalents", 1_000], ...ASSETS_TOTALS],
+    [
+      ["us-gaap:LongTermDebt", "Long-Term Debt", 49_085],
+      ["us-gaap:DebtInstrumentCarryingAmount", "Long-Term Debt, Gross", 49_085],
+    ]
+  )
+);
+check("liquidity: only a face value filed, debt MISSING", [faceOnly.debtState, faceOnly.debt, faceOnly.net], ["missing", undefined, undefined]);
+
+// Nothing tagged as debt at the date: "No debt on the balance sheet".
+const zm = read(
+  extractOf([
+    ["us-gaap:CashAndCashEquivalentsAtCarryingValue", "Cash and cash equivalents", 932],
+    ["us-gaap:AvailableForSaleSecuritiesDebtSecuritiesCurrent", "Marketable securities", 6_318],
+    ...ASSETS_TOTALS,
+    ["zm:AccruedLiabilitiesAndOtherLiabilitiesCurrent", "Accrued expenses and other current liabilities", 558],
+  ])
+);
+check("liquidity: no debt on the balance sheet", [zm.debtState, netHeader(strip(zm, zm))], ["none", { now: "No debt on the balance sheet", yearAgo: " · no debt a year ago" }]);
+
+// Company-specific lines count only when the caption plainly names debt;
+// restricted cash is excluded.
+const company = read(
+  extractOf([
+    ["us-gaap:CashAndCashEquivalentsAtCarryingValue", "Cash and cash equivalents", 900],
+    ["us-gaap:RestrictedCashAndCashEquivalentsAtCarryingValue", "Restricted cash and cash equivalents", 100],
+    ["co:ShortTermDeposits", "Short-term investments", 50],
+    ...ASSETS_TOTALS,
+    ["co:RevolverCurrent", "Borrowings under revolving credit facility", 40],
+    ["co:AccruedInterest", "Accrued interest on notes", 5],
+    ["us-gaap:LiabilitiesCurrent", "Total current liabilities", 1, true],
+    ["co:LeaseLiabilityNoncurrent", "Long-term lease liabilities", 300],
+    ["co:SeniorNotesNet", "Senior notes, net", 600],
+  ])
 );
 check(
-  "liquidity: short-term investments filed but missing this quarter, cash only and said so",
-  [stiMissing.latest.liquidity! / M, componentsLine(stiMissing)],
-  [1_000, "Q2 FY26: cash $1.0B (short-term investments not filed for this quarter, so cash only) · long-term debt, incl. the part due within a year, $0.8B; no short-term borrowings tagged. Leases excluded."]
+  "liquidity: company-specific lines by caption",
+  [company.investmentLines.map((x) => x.element), company.excluded.map((x) => x.element), company.debtLines.map((d) => [d.element, d.part])],
+  [["co:ShortTermDeposits"], ["us-gaap:RestrictedCashAndCashEquivalentsAtCarryingValue"], [["co:RevolverCurrent", "current-all"], ["co:SeniorNotesNet", "noncurrent"]]]
 );
-// Cash alone is not complete liquidity when short-term investments are
-// filed but not for the quarter: the bar reads "Cash", the net is MISSING.
-check(
-  "liquidity: short-term investments missing this quarter, net MISSING, bar reads Cash",
-  [stiMissing.latest.net, netHeader(stiMissing), liquidityLabel(stiMissing.latest), liquidityLabel(stiMissing.yearAgo), liquidityBriefLine(stiMissing)],
-  [
-    undefined,
-    { now: "Net MISSING", yearAgo: " · Net Cash $0.6B a year ago" },
-    "Cash",
-    "Cash and short-term investments",
-    "Liquidity vs debt: cash $1.0B (short-term investments not filed for this quarter) vs $0.8B, Net MISSING (Net Cash $0.6B a year ago).",
-  ]
-);
-// Never filed: cash is complete liquidity, so the net stands.
-check("liquidity: short-term investments never filed, the net stands", [cashOnly.latest.net! / M, liquidityLabel(cashOnly.latest)], [-40, "Cash"]);
 
 // Units per period: $M under $1B (whole, or one decimal under $100M
-// quarterly revenue), $B from $1B up. A UFPT-sized filer no longer reads $0.0B.
-const small = buildLiquidityDebt(
-  statements([bsRow("cash", 23.4, 1_200), bsRow("shortTermInvestments", undefined, undefined, true), bsRow("longTermDebt", 130.6, 180.2), bsRow("shortTermBorrowings", undefined, undefined, true)]),
-  kfWith({ revenue: line(150), shortTermInvestmentsFiledEver: false } as never)
-);
-check(
-  "liquidity: $M whole under $1B, $B from $1B, per period",
-  [netHeader(small), componentsLine(small), liquidityAmount(small.yearAgo.liquidity, small.yearAgo.unit)],
-  [
-    { now: "Net Debt $107M", yearAgo: " · Net Cash $1.0B a year ago" },
-    "Q2 FY26: cash $23M · long-term debt, incl. the part due within a year, $131M; no short-term borrowings tagged. Leases excluded.",
-    "$1.2B",
-  ]
-);
-check("liquidity: $M with one decimal under $100M revenue", [stripUnit([23.4 * M, 130.6 * M], 80 * M), stripUnit([999 * M], 80 * M), stripUnit([1_000 * M], 80 * M)], [
-  { scale: "M", decimals: 1 },
+// quarterly revenue), $B from $1B up.
+check("liquidity: units", [stripUnit([23.4 * M, 130.6 * M], 150 * M), stripUnit([999 * M], 80 * M), stripUnit([1_000 * M], 80 * M)], [
+  { scale: "M", decimals: 0 },
   { scale: "M", decimals: 1 },
   { scale: "B", decimals: 1 },
 ]);
+check("liquidity: a UFPT-sized amount", liquidityAmount(117.3 * M, stripUnit([9 * M, 117.3 * M], 150 * M)), "$117M");
+
+// Which filing a date is read from: the latest filed whose balance sheet
+// can present it -- a fiscal year end is presented again by the next 10-K.
+const filing = (form: string, reportDate: string, filingDate: string) => ({ filing: { form, reportDate, filingDate, accessionNumber: `${form}-${reportDate}` } });
+const kfFilings = {
+  lookbackPeriods: [
+    filing("10-K", "2026-06-30", "2026-07-29"),
+    filing("10-Q", "2026-03-31", "2026-04-29"),
+    filing("10-Q", "2025-12-31", "2026-01-28"),
+    filing("10-Q", "2025-09-30", "2025-10-29"),
+    filing("10-K", "2025-06-30", "2025-07-30"),
+    filing("10-Q", "2025-03-31", "2025-04-30"),
+  ],
+} as unknown as KeyFinancials;
+check("liquidity: a year-end date, newest filing first", candidateFilings("2025-06-30", kfFilings).map((f) => f.accessionNumber), [
+  "10-K-2026-06-30",
+  "10-Q-2026-03-31",
+  "10-Q-2025-12-31",
+  "10-Q-2025-09-30",
+  "10-K-2025-06-30",
+]);
+check("liquidity: a quarter-end date, its own filing only", candidateFilings("2025-03-31", kfFilings).map((f) => f.accessionNumber), ["10-Q-2025-03-31"]);
 
 console.log(`\n${pass} passed, ${fail} failed`);
 if (fail > 0) process.exit(1);

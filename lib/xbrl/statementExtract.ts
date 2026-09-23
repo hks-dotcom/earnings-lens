@@ -20,14 +20,18 @@ import { DURATION_CONCEPTS } from "@/lib/xbrl/concepts";
  *   the filing reports for those lines -- including lines on the company's
  *   own tags, which company facts does not carry;
  * - the cash-flow statement's acquisitions line: its element and caption,
- *   and whether it is filed under the company's own tag.
+ *   and whether it is filed under the company's own tag;
+ * - the balance sheet: its lines in the filing's order with the filing's
+ *   captions, the dates it presents, and every non-dimensional instant
+ *   figure in US dollars the instance reports at those dates -- notes
+ *   included, because a current portion of debt is often only there.
  *
  * Read from the filing itself: the instance, and the presentation,
  * calculation and label linkbases. Never from rendered R-files.
  */
 
 /** Bump when the extraction logic changes; rows stored under an older version are re-extracted. */
-export const STATEMENT_EXTRACT_VERSION = 3;
+export const STATEMENT_EXTRACT_VERSION = 4;
 
 export interface ExtractedLine {
   element: string;
@@ -38,6 +42,18 @@ export interface ExtractedLine {
   signSource: "calc" | "default";
   /** Part of cost of revenue: gross profit sits after the last such line. */
   costOfRevenue: boolean;
+}
+
+export interface BalanceSheetLine {
+  element: string;
+  caption: string;
+  /** A sum of other lines on the statement (a subtotal or total): never added to anything. */
+  total: boolean;
+}
+
+export interface ExtractedInstant {
+  end: string;
+  value: number;
 }
 
 export interface ExtractedFact {
@@ -67,6 +83,20 @@ export interface FilingStatementExtract {
    */
   facts: Record<string, ExtractedFact[]>;
   acquisitions: { element: string; caption: string; companyTag: boolean } | null;
+  balanceSheet: {
+    role: string;
+    roleDefinition: string;
+    /** The instant dates the statement presents: those with a total-assets figure. */
+    dates: string[];
+    lines: BalanceSheetLine[];
+  } | null;
+  /**
+   * Every non-dimensional instant fact in US dollars at the balance sheet's
+   * dates, by element -- the statement's own lines and the notes' figures.
+   */
+  instants: Record<string, ExtractedInstant[]>;
+  /** The filing's caption for each element in `instants` that is not a balance-sheet line. */
+  instantCaptions: Record<string, string>;
   /** For the performance report. */
   instanceBytes: number;
   requests: number;
@@ -233,6 +263,48 @@ function extractAcquisitions(lb: Linkbases): FilingStatementExtract["acquisition
   return null;
 }
 
+/**
+ * The balance sheet's role: a Statement role, not parenthetical, named as a
+ * balance sheet or statement of financial position (or condition), whose
+ * presentation includes total assets. The first in the filing's order.
+ */
+function balanceSheetRole(lb: Linkbases): { role: string; lines: PresentedLine[] } | undefined {
+  for (const [role, definition] of lb.roles) {
+    if (!isStatementRole(definition)) continue;
+    if (!/balance sheet|financial position|financial condition/i.test(definition)) continue;
+    const arcsForRole = lb.presentation.get(role);
+    if (!arcsForRole) continue;
+    const lines = flattenPresentation(arcsForRole);
+    if (lines.some((l) => l.concept === "us-gaap:Assets")) return { role, lines };
+  }
+  return undefined;
+}
+
+function extractBalanceSheetLines(lb: Linkbases): { role: string; roleDefinition: string; lines: BalanceSheetLine[] } | null {
+  const found = balanceSheetRole(lb);
+  if (!found) return null;
+  const parents = calculationParents(lb, found.role);
+  // Some filers keep the balance sheet's calculation in another role.
+  if (parents.size === 0) {
+    for (const r of lb.calculation.keys()) for (const [k, v] of calculationParents(lb, r)) if (!parents.has(k)) parents.set(k, v);
+  }
+  const presented = found.lines.filter((l) => !STRUCTURAL.test(l.concept));
+  const onStatement = new Set(presented.map((l) => l.concept));
+  const lines: BalanceSheetLine[] = [];
+  const seen = new Set<string>();
+  for (const l of presented) {
+    if (seen.has(l.concept)) continue;
+    seen.add(l.concept);
+    const kids = parents.get(l.concept);
+    lines.push({
+      element: l.concept,
+      caption: captionFor(lb, l.concept, l.preferredLabel) ?? l.concept.split(":")[1],
+      total: (kids !== undefined && [...kids].some((k) => onStatement.has(k))) || l.preferredLabel === LABEL_ROLE.total,
+    });
+  }
+  return { role: found.role, roleDefinition: lb.roles.get(found.role) ?? "", lines };
+}
+
 interface Context {
   start?: string;
   end: string;
@@ -292,6 +364,27 @@ function durationFacts(xml: string): Record<string, ExtractedFact[]> {
   return out;
 }
 
+/** Every non-dimensional instant fact in US dollars, by element. */
+function instantFacts(xml: string): Record<string, ExtractedInstant[]> {
+  const contexts = parseContexts(xml);
+  const usd = usdUnits(xml);
+  const out: Record<string, ExtractedInstant[]> = {};
+  const re = /<([\w-]+:[\w.-]+)\b([^>]*)>([^<]*)<\/\1>/g;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(xml))) {
+    const unit = m[2].match(/unitRef="([^"]+)"/)?.[1];
+    if (!unit || !usd.has(unit)) continue;
+    const ref = m[2].match(/contextRef="([^"]+)"/)?.[1];
+    const ctx = ref ? contexts.get(ref) : undefined;
+    if (!ctx || ctx.dimensional || ctx.start) continue;
+    const raw = m[3].trim();
+    if (raw === "" || Number.isNaN(Number(raw))) continue;
+    const list = (out[m[1]] ??= []);
+    if (!list.some((f) => f.end === ctx.end)) list.push({ end: ctx.end, value: Number(raw) });
+  }
+  return out;
+}
+
 export async function extractFilingStatement(cik: string, filing: FilingEntry): Promise<FilingStatementExtract> {
   let requests = 1;
   const files = await getFilingFiles(cik, filing.accessionNumber);
@@ -304,14 +397,34 @@ export async function extractFilingStatement(cik: string, filing: FilingEntry): 
   const lb = parseLinkbases(docs);
   const incomeStatement = extractIncomeStatement(lb);
   const acquisitions = extractAcquisitions(lb);
+  const bsLines = extractBalanceSheetLines(lb);
 
   let facts: Record<string, ExtractedFact[]> = {};
+  let balanceSheet: FilingStatementExtract["balanceSheet"] = null;
+  const instants: Record<string, ExtractedInstant[]> = {};
+  const instantCaptions: Record<string, string> = {};
   let instanceBytes = 0;
-  if (files.instance && incomeStatement) {
+  if (files.instance && (incomeStatement || bsLines)) {
     const xml = await getFilingDocument(cik, filing.accessionNumber, files.instance);
     requests++;
     instanceBytes = Buffer.byteLength(xml, "utf8");
-    facts = durationFacts(xml);
+    if (incomeStatement) facts = durationFacts(xml);
+    if (bsLines) {
+      // The dates the statement presents: every date with a total-assets figure.
+      const all = instantFacts(xml);
+      const dates = (all["us-gaap:Assets"] ?? []).map((f) => f.end).sort().reverse();
+      for (const [element, list] of Object.entries(all)) {
+        const kept = list.filter((f) => dates.includes(f.end));
+        if (kept.length) instants[element] = kept;
+      }
+      const onStatement = new Set(bsLines.lines.map((l) => l.element));
+      for (const element of Object.keys(instants)) {
+        if (onStatement.has(element)) continue;
+        const caption = captionFor(lb, element);
+        if (caption) instantCaptions[element] = caption;
+      }
+      balanceSheet = { ...bsLines, dates };
+    }
   }
 
   return {
@@ -323,6 +436,9 @@ export async function extractFilingStatement(cik: string, filing: FilingEntry): 
     incomeStatement,
     facts,
     acquisitions,
+    balanceSheet,
+    instants,
+    instantCaptions,
     instanceBytes,
     requests,
   };

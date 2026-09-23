@@ -21,7 +21,6 @@ export function VerdictMatrix({
   opportunityHigh,
   riskHigh,
   rung,
-  riskText,
   quadrant,
 }: {
   ticker: string;
@@ -29,13 +28,13 @@ export function VerdictMatrix({
   opportunityHigh: boolean;
   riskHigh: boolean;
   rung: LadderRung;
-  /** The hero's risk phrase: "medium", or "low, with spending cuts". */
-  riskText: string;
   quadrant: Quadrant;
 }) {
   const color = COLORS[lens];
   const W = 330;
-  const H = 320;
+  // The axes name the scale, not the company's reading of it: that stays in
+  // the hero line and the Why box.
+  const H = 338;
   const boxSize = 138;
   const gap = 6;
   const top = 8;
@@ -94,11 +93,19 @@ export function VerdictMatrix({
         {ticker}
       </text>
 
+      <text x={leftX + boxSize / 2} y={top + 2 * boxSize + gap + 16} textAnchor="middle" fontSize={11} fill="#6B675F">
+        lower risk
+      </text>
+      <text x={rightX + boxSize / 2} y={top + 2 * boxSize + gap + 16} textAnchor="middle" fontSize={11} fill="#6B675F">
+        higher risk
+      </text>
       <text x={rightX - gap / 2} y={H - 8} textAnchor="middle" fontSize={12} fill="#55524C">
-        Counterparty risk: {riskText} &#8594;
+        Counterparty risk &#8594;
       </text>
       <text x={16} y={top + boxSize + gap} textAnchor="middle" fontSize={12} fill="#55524C" transform={`rotate(-90 16 ${top + boxSize + gap})`}>
-        Relationship opportunity &#8594;
+        Relationship opportunity{" "}
+        {/* Upright on the rotated line, so the arrow points up the axis. */}
+        <tspan rotate="90" dy={-8}>&#8593;</tspan>
       </text>
     </svg>
   );

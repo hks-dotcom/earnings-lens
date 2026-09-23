@@ -43,9 +43,9 @@ export function heroTermsPhrase(rung: LadderRung): string {
  * "low", or "low, with spending cuts". Spending cuts don't move the rung or
  * the terms, but they put the company in the higher-risk half of the
  * matrix on their own, so a bare "low" beside that column would leave the
- * reader to work out why. The matrix's risk axis reads the same phrase.
+ * reader to work out why.
  */
-export function riskLabel(lens: LensResult): string {
+function riskLabel(lens: LensResult): string {
   return `${riskWord(lens.ladder.rung)}${lens.retrenchment.triggered ? ", with spending cuts" : ""}`;
 }
 

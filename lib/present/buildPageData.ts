@@ -36,7 +36,9 @@ import { buildStatements } from "@/lib/xbrl/statements";
 import { buildFlowFacts, FlowFacts } from "@/lib/present/flowFacts";
 import { loadFilingExtract } from "@/lib/xbrl/statementLoader";
 import { FilingStatementExtract } from "@/lib/xbrl/statementExtract";
-import { buildLiquidityDebt, LiquidityDebt } from "@/lib/present/liquidityDebt";
+import { LiquidityDebt } from "@/lib/present/liquidityDebt";
+import { loadLiquidityDebt } from "@/lib/present/liquiditySources";
+import { FilingEntry } from "@/lib/edgar/submissions";
 import {
   ACQUISITIONS_PCT_OF_REVENUE,
   BENCHMARKS_NOTE,
@@ -196,9 +198,23 @@ export async function buildPageData(rawTicker: string, now: Date = new Date()): 
   // acquisitions finding fires and needs the company's caption for the line.
   const baseStatements = buildStatements(facts, kf, periodic, new Map());
   let flows = buildFlowFacts(baseStatements, kf);
-  // The liquidity vs debt strip reads the Balance sheet tab's own rows,
-  // which come from company facts alone.
-  const liquidity = buildLiquidityDebt(baseStatements, kf);
+
+  // Filings the board reads itself -- the strip's two balance sheets, the
+  // acquisitions caption -- are loaded once each: from the store when they
+  // are there, otherwise extracted and stored.
+  const loaded = new Map<string, Promise<FilingStatementExtract>>();
+  const loadExtract = (filing: FilingEntry) => {
+    let p = loaded.get(filing.accessionNumber);
+    if (!p) {
+      p = loadFilingExtract(record.cik, record.ticker, filing).then((r) => r.extract);
+      loaded.set(filing.accessionNumber, p);
+    }
+    return p;
+  };
+
+  // The liquidity vs debt strip reads each period from a filing's own
+  // balance sheet, not from the Key financials rows.
+  const liquidity = await loadLiquidityDebt(kf, loadExtract);
   const revenueNow = kf.revenue.values[0]?.value;
   const acquisitionsFire =
     flows.acquisitions !== undefined &&
@@ -207,7 +223,7 @@ export async function buildPageData(rawTicker: string, now: Date = new Date()): 
     flows.acquisitions > (revenueNow * ACQUISITIONS_PCT_OF_REVENUE) / 100;
   if (acquisitionsFire && latestPeriod) {
     try {
-      const { extract } = await loadFilingExtract(record.cik, record.ticker, latestPeriod.filing);
+      const extract = await loadExtract(latestPeriod.filing);
       const extracts = new Map<string, FilingStatementExtract>([[extract.accessionNumber, extract]]);
       flows = buildFlowFacts(buildStatements(facts, kf, periodic, extracts), kf);
     } catch {

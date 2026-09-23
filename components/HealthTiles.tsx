@@ -12,6 +12,7 @@ import {
   liquidityAmount,
   liquidityLabel,
   netHeader,
+  NO_DEBT,
 } from "@/lib/present/liquidityDebt";
 import { HEALTH_BENCHMARKS } from "@/lib/rules/declaredValues";
 
@@ -131,7 +132,7 @@ function SegmentLine({ segments, kf }: { segments: SegmentRevenue | null; kf: Ke
 }
 
 /** One period's pair of bars, on the strip's shared scale. */
-function PeriodBars({ l, p, max }: { l: LiquidityDebt; p: LiquidityPeriod; max: number }) {
+function PeriodBars({ p, max }: { p: LiquidityPeriod; max: number }) {
   const width = (v: number | undefined) => (v === undefined || max <= 0 ? 0 : Math.max(0, (v / max) * 100));
   return (
     <div className="liq-pair">
@@ -147,7 +148,7 @@ function PeriodBars({ l, p, max }: { l: LiquidityDebt; p: LiquidityPeriod; max: 
       </div>
       <div className="liq-bar">
         <span className="liq-name">Debt</span>
-        {l.debtTagged ? (
+        {p.debtState !== "none" ? (
           <>
             <div className="liq-track">
               <div className="liq-fill liq-debt" style={{ width: `${width(p.debt)}%` }} />
@@ -155,7 +156,7 @@ function PeriodBars({ l, p, max }: { l: LiquidityDebt; p: LiquidityPeriod; max: 
             <span className="liq-amt">{liquidityAmount(p.debt, p.unit)}</span>
           </>
         ) : (
-          <span className="liq-none">No debt tagged</span>
+          <span className="liq-none">{NO_DEBT}</span>
         )}
       </div>
     </div>
@@ -186,8 +187,8 @@ function LiquidityStrip({ l }: { l: LiquidityDebt }) {
         </div>
       </div>
       <div className="liq-pairs">
-        <PeriodBars l={l} p={l.latest} max={max} />
-        <PeriodBars l={l} p={l.yearAgo} max={max} />
+        <PeriodBars p={l.latest} max={max} />
+        <PeriodBars p={l.yearAgo} max={max} />
       </div>
       <div className="liq-parts">{componentsLine(l)}</div>
     </div>

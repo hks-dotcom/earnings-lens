@@ -36,7 +36,8 @@ export function Footer({ page }: { page: PageData }) {
         it low for {LENS_NAME.SaaS}. Net {f.paymentCeilingDays} is offered only when risk is low.
       </p>
       <p>
-        <b>Display-only findings.</b> No effect on risk or the Summary. Borrowing: net new debt above{" "}
+        <b>Display-only findings</b>, shown only when their rule fires; none of them affects risk or the Summary.
+        Borrowing: net new debt above{" "}
         {f.borrowingPct}% of quarterly revenue while free cash flow is negative or buybacks and dividends exceed it.
         Acquisitions and investments: above {f.acquisitionsPct}% of quarterly revenue. Returns: buybacks plus
         dividends over the last four quarters above free cash flow over the same quarters, and above {f.returnsPct}%
