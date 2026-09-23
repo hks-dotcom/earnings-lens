@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Earnings Lens — lens section target (Amazon)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{--ink:#1C1B19;--muted:#6B675F;--line:#ECE9E2;--border:#D6D2C8;--nc:#1F6F5C;--nc-bg:#E4EFEA;--neutral:#F1EFEA;--watch:#B06A00;--good:#1F6F5C;--act:#3B4BA8;--bad-bg:#F6E6E3;--bad:#9B3B2E;--ok-bg:#E8F2EE}
+*{box-sizing:border-box}
+body{margin:0;font-family:'IBM Plex Sans',system-ui,sans-serif;background:#E9E6DF;color:var(--ink)}
+.wrap{max-width:1180px;margin:0 auto;padding:24px 16px 48px;display:flex;flex-direction:column;gap:16px}
+.note{font-size:12px;color:var(--muted);margin:0}
+.panel{background:#fff;border:1px solid var(--border);border-radius:12px;padding:20px 22px}
+.lbl{font-size:12px;font-weight:600;letter-spacing:.08em;color:var(--muted);margin:0 0 10px}
+.tiles{display:grid;grid-template-columns:repeat(6,1fr)}
+.tile{padding:0 14px;border-left:1px solid var(--line)}.tile:first-child{border-left:0;padding-left:0}
+.tile .k{font-size:12px;color:var(--muted)}.tile .v{font-size:20px;font-weight:600;margin:4px 0}.tile .s{font-size:12px;color:var(--muted);line-height:1.35}
+.seg{font-size:12px;color:var(--muted);margin-top:14px}
+.board{background:#fff;border:2px solid var(--nc);border-radius:14px;padding:22px 24px;display:flex;flex-direction:column;gap:20px}
+.id{font-size:12px;color:var(--muted)}
+.title{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap}
+.title h2{margin:0;font-family:Fraunces,Georgia,serif;font-weight:600;font-size:24px}
+.title em{font-size:13px;color:var(--muted)}
+.top{display:grid;grid-template-columns:300px 1fr;gap:28px;align-items:center}
+.verdict{font-family:Fraunces,Georgia,serif;font-size:26px;font-weight:600;color:var(--nc);margin:0 0 8px}
+.matrix{display:grid;grid-template-columns:1fr 1fr;gap:6px;width:280px}
+.q{height:136px;border-radius:8px;background:var(--neutral);font-size:12px;text-align:center;color:var(--muted);padding:5px 7px;position:relative}
+.q.on{background:var(--nc-bg);color:var(--nc);font-weight:600}
+.dot{position:absolute;left:28px;top:52px;display:flex;align-items:center;gap:5px;font-size:11px;color:var(--ink);font-weight:600}
+.dot i{width:18px;height:18px;border-radius:50%;background:var(--nc);display:inline-block}
+.axis{font-size:11px;color:var(--muted);margin-top:5px}
+.summary p{margin:0;font-size:17px;line-height:1.6}
+.stand{display:flex;flex-direction:column;border-top:1px solid var(--line)}
+.item{display:grid;grid-template-columns:110px 1fr;gap:14px;padding:12px 0 12px 14px;border-bottom:1px solid var(--line);border-left:3px solid transparent;align-items:baseline}
+.item.watch{border-left-color:var(--watch)}.item.good{border-left-color:var(--good)}.item.act{border-left-color:var(--act)}
+.tag{font-size:11px;font-weight:600;letter-spacing:.07em}
+.watch .tag{color:var(--watch)}.good .tag{color:var(--good)}.act .tag{color:var(--act)}
+.item b{font-weight:600}
+.fig{color:var(--muted);font-size:13px;display:block;margin-top:3px}
+.pill{display:inline-block;padding:2px 8px;margin-right:5px;border-radius:6px;font-weight:600;font-size:12.5px}
+.ok{background:var(--ok-bg);color:var(--good)}.no{background:var(--bad-bg);color:var(--bad)}
+.oneline{font-size:14px;color:#3F3C37;margin:0}
+.actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+button{height:40px;padding:0 16px;border:1px solid var(--nc);border-radius:8px;background:#fff;color:var(--nc);font-family:inherit;font-size:14px;font-weight:600}
+.foot{font-size:12px;color:var(--muted);line-height:1.6}
+.ann{font-size:12px;color:#8A5A00;background:#FFF6E0;border:1px dashed #D9B45A;border-radius:8px;padding:8px 10px}
+@media (max-width:760px){.top{grid-template-columns:1fr}.item{grid-template-columns:1fr;gap:4px}.tiles{grid-template-columns:repeat(2,1fr);row-gap:14px}.tile:nth-child(odd){border-left:0;padding-left:0}}
+
+.minitable{width:100%;border-collapse:collapse;font-size:13.5px}
+.minitable th{font-size:11px;color:var(--muted);font-weight:600;text-align:right;padding:6px 8px;border-bottom:1px solid var(--line)}
+.minitable th:first-child,.minitable td:first-child{text-align:left}
+.minitable td{padding:8px;text-align:right;border-bottom:1px solid var(--line)}
+.miss{color:#9C978C}
+.top{align-items:start}
+.rightcol{display:flex;flex-direction:column;gap:16px}
+.whybox{background:var(--neutral);border-radius:10px;padding:14px 16px}
+.whybox p{margin:0 0 6px;font-size:14.5px;line-height:1.5}
+.whybox .k{font-weight:600}
+.rules{margin-top:8px;padding-top:8px;border-top:1px solid #E2DED5;font-size:12.5px;color:var(--muted);line-height:1.55}
+.rule{display:block;margin-top:5px;font-size:12px;color:var(--muted)}
+.rule b{font-weight:600;color:#6B675F}
+.item.info{border-left-color:#5B6770}.info .tag{color:#5B6770}
+.filing{margin-top:8px;padding:9px 11px;background:#F6F4EF;border-radius:8px;font-size:13.5px;line-height:1.55}
+.filing .src{display:block;margin-top:5px;font-size:12px;color:var(--muted)}
+.filing .none{font-style:italic;color:var(--muted)}
+.fn{border-top:1px solid var(--line);padding-top:12px;font-size:12px;color:var(--muted);line-height:1.6}
+.fn p{margin:0 0 5px}.fn b{color:#6B675F}
+@media (max-width:760px){.top{grid-template-columns:minmax(0,1fr)!important}.matrix{width:100%;max-width:280px}}
+.hero{font-family:Fraunces,Georgia,serif;font-size:36px;font-weight:600;color:var(--nc);line-height:1.15;padding:4px 0 14px;border-bottom:1px solid var(--line)}
+.hero .hl{color:var(--ink)}
+.hero .hsub{font-family:'IBM Plex Sans',system-ui,sans-serif;font-size:14px;font-weight:500;color:var(--muted);margin-top:6px}
+@media (max-width:760px){.hero{font-size:28px}}
+.sitefoot{font-size:12px;color:var(--muted);text-align:center;padding:8px 0}
+
+.fin-head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--line);margin-bottom:6px}
+.tabs{display:flex;gap:2px;flex-wrap:wrap}
+.tabs button,.seg button{height:auto;border:0;background:none;font-family:inherit;cursor:pointer}
+.tabs button{padding:9px 12px;font-size:14px;font-weight:500;color:var(--muted);border-bottom:2px solid transparent;border-radius:0}
+.tabs button[aria-selected="true"]{color:var(--ink);font-weight:600;border-bottom-color:var(--nc)}
+.seg{display:inline-flex;border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:6px}
+.seg button{padding:5px 11px;font-size:13px;font-weight:500;color:var(--muted);border-radius:0}
+.seg button[aria-pressed="true"]{background:var(--nc-bg);color:var(--nc);font-weight:600}
+.tabs button:focus-visible,.seg button:focus-visible{outline:2px solid var(--act);outline-offset:-2px}
+.minitable td,.minitable th{white-space:nowrap;font-variant-numeric:tabular-nums}
+.minitable th span{display:block;font-weight:400;font-size:10.5px}
+.minitable td:first-child{white-space:normal;min-width:200px}
+.minitable th:first-child,.minitable td:first-child{position:sticky;left:0;background:#fff}
+.minitable tr.tot td{font-weight:600}
+.minitable tr.of td{font-size:12.5px;color:#55524C}.minitable tr.of td:first-child{padding-left:22px;color:var(--muted)}
+.minitable tr.sec td{font-size:11px;font-weight:600;letter-spacing:.07em;color:var(--muted);padding-top:14px}
+.minitable .neg{color:var(--bad)}.minitable .dg{color:var(--muted);font-size:10.5px}
+.minitable td.nfl{text-align:left;color:#9C978C;font-style:italic;font-size:12.5px}
+.coid{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;margin:0 0 6px}.coid b{font-size:17px;font-weight:600}.coid span{font-size:13px;color:var(--muted)}
+.chg{display:block;font-size:10.5px;color:var(--muted);font-weight:400;margin-top:1px}
+.finfn{font-size:12px;color:var(--muted);line-height:1.55;margin:10px 0 0}
+
+.item{grid-template-columns:150px 1fr!important}
+.srcs{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;letter-spacing:0}
+.srcb{height:auto;border:1px solid var(--border);background:#fff;color:var(--muted);font:500 10.5px 'IBM Plex Sans',system-ui,sans-serif;border-radius:5px;padding:1px 6px;cursor:pointer}
+.srcb:hover{border-color:var(--nc);color:var(--nc)}
+.srcb.fixed{cursor:default}.srcb.fixed:hover{border-color:var(--border);color:var(--muted)}
+.cite{margin-left:6px;font-size:11px;color:var(--muted);text-decoration:none;border-bottom:1px dotted #B8B3A8;white-space:nowrap}.cite:hover{color:var(--nc);border-color:var(--nc)}
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
+.filters button{height:auto;border:1px solid var(--border);background:#fff;color:var(--muted);font:500 13px 'IBM Plex Sans',system-ui,sans-serif;border-radius:16px;padding:4px 12px;cursor:pointer}
+.filters button span{color:#9C978C;margin-left:3px}
+.filters button[aria-pressed="true"]{background:var(--nc-bg);border-color:var(--nc);color:var(--nc);font-weight:600}
+.filters button:focus-visible,.srcb:focus-visible{outline:2px solid var(--act);outline-offset:2px}
+.item.hide{display:none}
+@media (max-width:760px){.item{grid-template-columns:1fr!important}}
+</style></head><body><div class="wrap">
+<p class="note">Earnings Lens — target layout, v1.5: statement tabs and cash-flow findings on top of the final polish. Figures: Amazon.com (AMZN) Q2 FY26, CoreThread lens, from the live app and Code's read-only data run of 22 Sep 2026.</p>
+
+<div class="panel">
+  <div class="coid"><b>AMAZON COM INC (AMZN)</b><span>Fiscal year runs January to December, so FY26 = Jan–Dec 2026 · latest quarter Q2 FY26, ended Jun 30, 2026</span></div>
+  <div class="fin-head">
+    <div class="tabs" role="tablist" id="tabs">
+      <button role="tab" data-tab="kf" aria-selected="true">Key financials</button>
+      <button role="tab" data-tab="is" aria-selected="false">Income statement</button>
+      <button role="tab" data-tab="bs" aria-selected="false">Balance sheet</button>
+      <button role="tab" data-tab="cf" aria-selected="false">Cash flow</button>
+    </div>
+    <div class="seg" id="view"><button data-view="q" aria-pressed="true">Quarterly</button><button data-view="a" aria-pressed="false">Annual</button></div>
+  </div>
+  <p class="lbl" style="margin-top:10px">$ MILLIONS</p>
+  <div id="fin"></div>
+</div>
+
+<div class="board">
+  <div class="id">AMAZON COM INC (AMZN) · fiscal year Jan–Dec · quarter ended Jun 30, 2026 (Q2 FY26) · CoreThread lens</div>
+  <div class="title"><h2>What this means for CoreThread</h2><em>Can we safely do business with them, and on what structure?</em></div>
+
+  <div class="hero"><span class="hl">Verdict:</span> Pursue with guardrails<div class="hsub">Risk: Neutral · Opportunity: high · Offer Net 30 and hold it</div></div>
+  <div class="top">
+    <div>
+      <div class="matrix">
+        <div class="q">Pursue</div>
+        <div class="q on">Pursue with guardrails<span class="dot"><i></i>AMZN</span></div>
+        <div class="q">Monitor</div>
+        <div class="q">Limit exposure</div>
+      </div>
+      <div class="axis">↑ Opportunity · Counterparty risk: Neutral →</div>
+    </div>
+    <div class="rightcol">
+      <div class="summary">
+        <p class="lbl">SUMMARY</p>
+        <p>The balance sheet is strong and profits are growing, but investment is currently running ahead of cash from operations. A one-off non-operating item moved net income this quarter; see below. The one thing to watch is payables stretching. Growth points to an expanding customer; R&amp;D is not filed. Offer Net 30 and hold it; expect pressure for longer terms.</p>
+      </div>
+      <div class="whybox">
+        <p class="lbl" style="margin-bottom:8px">WHY THIS VERDICT</p>
+        <p><span class="k">Risk: Neutral.</span> Payables are up 27% on last year, beyond the ±10% band. The balance sheet is safe (Z'' 2.71) and there are no red flags.</p>
+        <p><span class="k">Opportunity: high.</span> Revenue is up 20% on last year, beyond the ±2% flat band; R&amp;D is not filed, so revenue decides alone.</p>
+
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <p class="lbl" style="margin-bottom:4px">WHAT STANDS OUT</p>
+    <p class="foot" style="margin:0 0 10px">Where a finding says why, the reason comes from the filing: Claude explains from filed text only, and every quoted passage and figure is checked against the filing before it is shown.</p>
+    <div class="filters" id="filters" role="group" aria-label="Filter findings by statement">
+      <button data-f="all" aria-pressed="true">All <span>7</span></button>
+      <button data-f="is" aria-pressed="false">P&amp;L <span>4</span></button>
+      <button data-f="bs" aria-pressed="false">Balance sheet <span>2</span></button>
+      <button data-f="cf" aria-pressed="false">Cash flow <span>3</span></button>
+    </div>
+    <div class="stand">
+      <div class="item watch" data-src="cf"><span class="tag">HEAVY INVESTMENT<span class="srcs"><button class="srcb" data-go="cf" title="Open the Cash flow tab">Cash flow</button></span></span><div><b>Investing more than it generates.</b> Capital spending of $54,208M this quarter against operating cash flow of $45,387M.
+        <span class="fig">Capex $54,208M (Q2 FY26), $32,183M (Q2 FY25) · operating cash flow $45,387M (Q2 FY26), $32,515M (Q2 FY25)</span>
+        <span class="rule"><b>Rule:</b> operating cash flow positive, free cash flow negative. No runway and no effect on risk; a company whose operations burn cash shows a runway instead.</span></div></div>
+
+      <div class="item watch" data-src="cf bs"><span class="tag">BORROWING<span class="srcs"><button class="srcb" data-go="cf" title="Open the Cash flow tab">Cash flow</button><button class="srcb" data-go="bs" title="Open the Balance sheet tab">Balance sheet</button></span></span><div><b>Borrowing while investment runs ahead of cash.</b> Net new debt of $10,600M this quarter, with free cash flow at −$8,821M.
+        <span class="fig">Long-term debt raised $13,557M, repaid $2,752M · short-term raised $9,368M, repaid $9,573M · long-term debt $132,995M, from $56,082M in Q2 FY25</span>
+        <span class="rule"><b>Rule:</b> net new debt above 5% of quarterly revenue ($10,030M here), while free cash flow is negative or buybacks and dividends exceed it. No effect on risk.</span></div></div>
+
+      <div class="item info" data-src="cf"><span class="tag">ACQUISITIONS AND INVESTMENTS<span class="srcs"><button class="srcb" data-go="cf" title="Open the Cash flow tab">Cash flow</button></span></span><div><b>Large spending on acquisitions and investments.</b> $24,359M this quarter, against $1,700M in Q2 FY25. The filing names $13.7B invested in OpenAI Series C preferred stock and $10.0B in Anthropic nonvoting preferred stock this quarter, without tying either to this line.<a class="cite" href="#" title="10-Q filed 2026-07-31 · MD&amp;A, Liquidity and Capital Resources · accession 0001018724-26-000026">10-Q, MD&amp;A</a>
+        <span class="fig">Amazon's line: "Acquisitions, net of cash acquired, non-marketable investments, and other, net" · 12.1% of revenue</span>
+        <span class="rule"><b>Rule:</b> flagged when this line exceeds 5% of quarterly revenue; named as the company names it.</span>
+
+        </div></div>
+
+      <div class="item info" data-src="is"><span class="tag">ONE-OFF ITEM<span class="srcs"><button class="srcb" data-go="is" title="Open the P&amp;L tab">P&amp;L</button></span></span><div><b>A non-operating item moved net income.</b> Pre-tax income is $53.4B above operating income, mainly from upward price adjustments on its nonvoting preferred stock in Anthropic and gains on converted Anthropic convertible notes.<a class="cite" href="#" title="10-Q filed 2026-07-31 · MD&amp;A, Other Income (Expense), Net · accession 0001018724-26-000026">10-Q, MD&amp;A</a>
+        <span class="fig">Operating income $27,461M · pre-tax income $80,857M (Q2 FY26)</span>
+        <span class="rule"><b>Rule:</b> flagged when pre-tax income differs from operating income by more than 5% of quarterly revenue ($10.0B here).</span>
+
+        </div></div>
+
+      <div class="item watch" data-src="bs is"><span class="tag">PAYABLES<span class="srcs"><button class="srcb" data-go="bs" title="Open the Balance sheet tab">Balance sheet</button><button class="srcb" data-go="is" title="Open the P&amp;L tab">P&amp;L</button></span></span><div><b>Payables stretching.</b> Payables are up 27% on last year, beyond the ±10% band.
+        <span class="fig">Payables ≈ 140.1 days of cost of revenue, from 110.7 a year ago</span>
+        <span class="rule"><b>Rule:</b> flagged when payables, in days of cost of revenue, move more than 10% on the same quarter last year.</span>
+        </div></div>
+
+      <div class="item good" data-src="is"><span class="tag">COSTS<span class="srcs"><button class="srcb" data-go="is" title="Open the P&amp;L tab">P&amp;L</button></span></span><div><b>Overhead growing slower than sales.</b> SG&amp;A up 1% on last year against revenue up 20%.
+        <span class="fig">SG&amp;A $14,486M, from $14,381M · revenue $200,606M, from $167,702M</span>
+        <span class="rule"><b>Rule:</b> flagged when SG&amp;A growth is more than 10 points away from revenue growth, year on year.</span></div></div>
+
+      <div class="item good" data-src="is"><span class="tag">PROFITS<span class="srcs"><button class="srcb" data-go="is" title="Open the P&amp;L tab">P&amp;L</button></span></span><div><b>Operating profit rising.</b> Operating income is up 43% on last year.
+        <span class="fig">Operating income $27,461M, from $19,171M in Q2 FY25 · margin 13.7%, from 11.4%</span>
+        <span class="rule"><b>Rule:</b> flagged when operating income moves more than 25% on last year; past 50% the Summary calls it fast.</span></div></div>
+
+      <div class="item act" data-src="all"><span class="tag">TERMS<span class="srcs"><span class="srcb fixed">All statements</span></span></span><div><span class="pill ok">Net 30 ✓</span><span class="pill no">Net 45 ✕</span><span class="pill no">Net 60 ✕</span> <b>Offer Net 30 and hold it; expect pressure for longer terms.</b> T&amp;M monthly. Payables ≈ 140.1 days of cost of revenue, up 27% on last year.
+        <span class="rule"><b>Rule:</b> baseline Net 30; ceiling Net 45, offered only when risk is Strong; Net 60 never approved.</span></div></div>
+    </div>
+  </div>
+
+  <div class="actions"><button>Copy brief</button><button>Download image</button><span class="foot">Paste-ready text, or the whole board as a picture with the period, source, rules and notes on it.</span></div>
+
+  <div class="fn">
+    <p><b>Data.</b> Source: AMAZON COM INC filings, XBRL via SEC EDGAR. Statement tabs show standard lines as filed; nothing is estimated or plugged, and missing stays missing. Free cash flow = operating cash flow − capital expenditures, as filed in XBRL (tag shown per cell); may differ from a company's own non-GAAP figure. Equity includes noncontrolling interest, everywhere it is used.</p>
+    <p><b>Verdict rules.</b> Risk is Strong with Z'' safe (&gt; 2.6), no red flags and payables not rising more than 10%; Weak with Z'' in distress (&lt; 1.1), any red flag, a grey zone with rising payables, or under 4 quarters of runway (under 8 caps at Neutral); Neutral otherwise. A distress score reads as grey for a profitable, cash-generating company: Z'' penalises accumulated deficits and buyback-driven negative equity. Opportunity is high when revenue is up more than 2% and R&amp;D is not down; spending cuts set it low for NexCore.</p>
+    <p><b>Explanations.</b> Triggers: a non-operating swing past 5% of quarterly revenue; an income tax charge more than 5% of quarterly revenue away from 21% of pre-tax income; net income and operating income with opposite signs; spending cuts; payables past the band; any red flag; acquisitions and investments past 5% of quarterly revenue. Daily call cap: 50.</p>
+    <p><b>Limits.</b> Red-flag window: trailing 12 months from today. Going concern: not checked (see Financial health).</p>
+  </div>
+</div>
+
+<p class="sitefoot">Earnings Lens — a self-serve counterparty assessment from SEC EDGAR filings. Not investment advice.</p>
+
+<div class="ann">Notes for the build (v1.5). (1) Statement tabs sit beside Key financials and share its Quarterly / Annual toggle: five quarters side by side, no change columns (comparisons stay on Key financials). Bold rows are totals; indented rows sit inside the total above; lines needn't add up to totals and nothing is plugged. Operating expenses are shown line by line as the company presents them: its own lines, labels and order, read from each filing's income statement, including lines on the company's own tags (Amazon's Fulfillment and Technology and infrastructure). Totals keep standard names, since captions change between filings ("Net sales" vs "Total net sales"). A line filed only in the 10-K has no derivable Q4 and shows MISSING; that column's lines then won't add to its total. A line whose company tag changes between filings is joined only when both tags report the same value in a shared period. Two derived rows only: after-tax items (hidden when zero) and net new debt. Statement lines are extracted once per filing and stored; the tab loads after the verdict, so it never slows the board. (2) Two new findings, BORROWING and ACQUISITIONS AND INVESTMENTS, after heavy investment; a third, RETURNS (buybacks plus dividends over four quarters above free cash flow over the same quarters, and above zero), doesn't fire on AMZN. Asset sales dropped. All three are display only: no effect on risk and not used in the Summary. (3) Signs follow the money on every statement: inflows and income positive; costs, tax and outflows negative (capex, acquisitions, investment purchases, debt repaid, buybacks, dividends), so columns add down. XBRL files payments as positive amounts; the sign is applied for display only, never to the stored value. Red is kept for figures negative against their nature (a loss, negative free cash flow, a non-operating loss); net new debt below zero means net repayment and stays plain; ordinary costs and payments show the minus in plain type, so red still means something. (4) The fiscal year sits next to the company name and in the board's identity line, taken from EDGAR's fiscal year end and the filer's own 10-K period ends, so FY26 or Q4 is never read against the calendar year. (5) Each statement figure carries its change on the previous quarter (or fiscal year) in small type beneath it, using the Key financials rules: % only when both figures are positive, otherwise the change in dollars, never coloured; none for the oldest column or when either figure is missing. (6) What stands out gets filter chips (All, P&amp;L, Balance sheet, Cash flow, each with its count) and every finding carries small tags for the statements it reads, which open that tab. A finding reading two statements shows under both (payables: balance sheet and P&amp;L; borrowing: cash flow and balance sheet). Terms and any red flag stay visible under every filter: a filter must never hide a reason to escalate. Red flags are tagged Filings, cash burn Cash flow and Balance sheet, spending cuts P&amp;L or Filings, margin and losses P&amp;L, returns Cash flow. (7) No separate "From the filing" box: Claude's explanation is the finding's own closing sentence, followed by a small citation (form and section; hover or tap for filing date, section and accession, with the passages relied on). A sentence that fails the verbatim check is dropped, and so is the finding's explanation when the filing doesn't give one: the finding then ends at its rule-based sentence. With Claude off, every finding still reads complete. (8) One-off figures line shows pre-tax income; payables days carry one decimal so the change matches the figures shown.</div>
+</div><script>
+const D = {
+AMZN:{
+ name:'AMAZON COM INC (AMZN)',
+ q:[['Q2 FY26','Jun 30, 2026'],['Q1 FY26','Mar 31, 2026'],['Q4 FY25','Dec 31, 2025'],['Q3 FY25','Sep 30, 2025'],['Q2 FY25','Jun 30, 2025']],
+ a:[['FY25','Dec 31, 2025'],['FY24','Dec 31, 2024'],['FY23','Dec 31, 2023']],
+ fnq:'† Derived. Q4 FY25 (Oct–Dec 2025) = FY25 annual − Q1 to Q3. Gross profit, SG&A, operating expenses, after-tax items, total liabilities, free cash flow and net new debt are computed from filed lines, so every column of them is derived.',
+ fna:'† Computed from filed annual lines. Annual figures are as filed in the 10-K.',
+ extra:"Acquisitions: AMZN's 10-Ks tag this line with the company's own tag, which company facts doesn't carry, so Q4 FY25 and the annual columns are MISSING.",
+ is:[
+  ['anchor','Revenue','RevenueFromContractWithCustomerExcludingAssessedTax',[200606,181519,[213386,'a9'],180169,167702],[716924,637959,574785]],
+  ['line','Cost of sales','CostOfGoodsAndServicesSold',[95778,87463,[109959,'a9'],88670,80809],[356414,326288,304739]],
+  ['anchor','Gross profit','Revenue − cost of sales',[[104828,'f'],[94056,'f'],[103427,'f'],[91499,'f'],[86893,'f']],[[360510,'f'],[311671,'f'],[270046,'f']]],
+  ['line','Fulfillment',"amzn:FulfillmentExpense (company's own tag, read from the filing)",[29633,27289,[30826,'a9'],27679,25976],[109074,98505,90619]],
+  ['line','Technology and infrastructure',"amzn:TechnologyAndInfrastructureExpense (company's own tag, read from the filing)",[33158,29567,[29399,'a9'],28962,27166],[108521,88544,85622]],
+  ['line','Sales and marketing','MarketingExpense',[11698,10314,[14264,'a9'],11686,11416],[47129,43907,44370]],
+  ['line','General and administrative','GeneralAndAdministrativeExpense',[2788,2587,[2704,'a9'],2875,2965],[11172,11359,11816]],
+  ['line','Other operating expense (income), net','OtherOperatingIncomeExpenseNet',[-90,-447,[-1257,'a9'],-2875,-199],[-4639,-763,-767]],
+  ['anchor','Operating income','OperatingIncomeLoss',[27461,23852,[24977,'a9'],17422,19171],[79975,68593,36852]],
+  ['line','Non-operating income, total','NonoperatingIncomeExpense (equals pre-tax − operating income in every period)',[53396,15982,[1628,'a9'],10748,1686],[17336,21,705]],
+  ['of','of which interest expense','InterestExpenseNonoperating',[1314,800,[679,'a9'],538,516],[2274,2406,3182]],
+  ['of','of which other non-operating line','OtherNonoperatingIncomeExpense',[53415,15647,[1177,'a9'],10186,1117],[15229,-2250,938]],
+  ['anchor','Pre-tax income','IncomeLossFromContinuingOperationsBeforeIncomeTaxesMinorityInterestAndIncomeLossFromEquityMethodInvestments',[80857,39834,[26605,'a9'],28170,20857],[97311,68614,37557]],
+  ['line','Income tax','IncomeTaxExpenseBenefit',[18199,9560,[4946,'a9'],6910,2678],[19087,9265,7120]],
+  ['line','After-tax items','Net income − (pre-tax income − income tax)',[[-11,'c'],[-19,'c'],[-467,'c'],[-73,'c'],[-15,'c']],[[-554,'c'],[-101,'c'],[-12,'c']]],
+  ['anchor','Net income','NetIncomeLoss',[62647,30255,[21192,'a9'],21187,18164],[77670,59248,30425]]
+ ],
+ bs:[
+  ['line','Cash','CashAndCashEquivalentsAtCarryingValue',[78213,101816,86810,66922,57741],[86810,78779,73387]],
+  ['line','Short-term investments','MarketableSecuritiesCurrent',[44775,41273,36219,27275,35439],[36219,22423,13393]],
+  ['line','Receivables','AccountsReceivableNetCurrent',[88092,75532,67729,61175,57415],[67729,55451,52253]],
+  ['line','Inventory','InventoryNet',[38184,36534,38325,41494,40825],[38325,34214,33318]],
+  ['anchor','Total current assets','AssetsCurrent',[249264,255155,229083,196866,191420],[229083,190867,172351]],
+  ['line','Property and equipment','PropertyPlantAndEquipmentAndFinanceLeaseRightOfUseAssetAfterAccumulatedDepreciationAndAmortization',[446046,397458,357025,324435,297616],[357025,252665,204177]],
+  ['line','Goodwill','Goodwill',[23504,23449,23273,23260,23155],[23273,23074,22789]],
+  ['line','Intangibles','IntangibleAssetsNetExcludingGoodwill',['np','np',9197,'np','np'],[9197,8602,7687]],
+  ['anchor','Total assets','Assets',[1095689,916630,818042,727921,682170],[818042,624894,527854]],
+  ['line','Payables','AccountsPayableCurrent',[147440,124749,121909,106032,98285],[121909,94363,84981]],
+  ['line','Short-term borrowings','ShortTermBorrowings',[325,152,455,220,173],[455,151,147]],
+  ['line','Current portion of long-term debt','LongTermDebtCurrent',[3330,2832,2748,3997,5005],[2748,5017,8494]],
+  ['anchor','Total current liabilities','LiabilitiesCurrent',[241274,216756,218005,195196,186921],[218005,179431,164917]],
+  ['line','Long-term debt, incl. the part due within a year','LongTermDebt',[132995,122632,68836,55097,56082],[68836,58000,67182]],
+  ['line','Operating lease liabilities','OperatingLeaseLiability',[96320,91617,89252,86233,84991],[89252,79596,75639]],
+  ['anchor','Total liabilities','Total assets − total equity',[[544069,'f'],[474716,'f'],[406977,'f'],[358290,'f'],[348395,'f']],[[406977,'f'],[338924,'f'],[325979,'f']]],
+  ['anchor','Total equity','StockholdersEquity (incl. noncontrolling interest)',[551620,441914,411065,369631,333775],[411065,285970,201875]]
+ ],
+ cf:[
+  ['anchor','Operating cash flow','NetCashProvidedByUsedInOperatingActivities',[45387,26032,[54459,'a9'],35525,32515],[139514,115877,84946]],
+  ['of','of which stock-based compensation (non-cash)','ShareBasedCompensation',[6038,4032,[4397,'a9'],4847,6534],[19467,22011,24023]],
+  ['line','Capital expenditures','PaymentsToAcquireProductiveAssets',[54208,44203,[39522,'a9'],35095,32183],[131819,82999,52729]],
+  ['anchor','Free cash flow','Operating cash flow − capital expenditures',[[-8821,'c'],[-18171,'c'],[14937,'c'],[430,'c'],[332,'c']],[[7695,'c'],[32878,'c'],[32217,'c']]],
+  ['sec','Investing'],
+  ['line','Acquisitions, net of cash acquired, non-marketable investments, and other','PaymentsToAcquireBusinessesNetOfCashAcquired (company label)',[24359,15408,'ext',786,1700],['ext','ext','ext']],
+  ['line','Investment purchases','PaymentsToAcquireMarketableSecurities',[26006,23256,[16214,'a9'],7426,17797],[54770,26005,1488]],
+  ['line','Investment sales and maturities','ProceedsFromSaleAndMaturityOfMarketableSecurities',[24196,17686,[8841,'a9'],16367,11441],[44386,16403,5627]],
+  ['sec','Financing'],
+  ['line','Long-term debt raised','ProceedsFromIssuanceOfLongTermDebt',[13557,53441,[14927,'a9'],0,0],[15673,0,0]],
+  ['line','Short-term debt raised','ProceedsFromShortTermDebt',[9368,6018,[2189,'a9'],3223,2093],[9320,5142,18129]],
+  ['line','Long-term debt repaid','RepaymentsOfLongTermDebt',[2752,0,[1262,'a9'],1008,2751],[5021,9182,3676]],
+  ['line','Short-term debt repaid','RepaymentsOfShortTermDebt',[9573,6109,[3126,'a9'],1826,1392],[8426,5060,25677]],
+  ['drv','Net new debt','All debt raised − all debt repaid',[[10600,'c'],[53350,'c'],[12728,'c'],[389,'c'],[-2050,'c']],[[11546,'c'],[-9100,'c'],[-11224,'c']]],
+  ['line','Buybacks','PaymentsForRepurchaseOfCommonStock',['np','np','np','np','np'],['np',0,0]],
+  ['line','Dividends','—',['nf','nf','nf','nf','nf'],['nf','nf','nf']]
+ ]
+}
+};
+const M={d:'as filed',a9:'annual − Q1 to Q3',f:'formula',c:'computed',sp:'spliced'};
+const R={nf:'not filed',np:'not filed for this period',ext:"filed under the company's own tag"};
+let tab='kf',view='q';
+const NEG=new Set(['Cost of sales','Fulfillment','Technology and infrastructure','Sales and marketing','General and administrative','of which interest expense','Income tax','Capital expenditures','Acquisitions, net of cash acquired, non-marketable investments, and other','Investment purchases','Long-term debt repaid','Short-term debt repaid','Buybacks','Dividends']);
+const KF='<div style="overflow-x:auto"><table class="minitable"><tr><th>$ millions</th><th>Q2 FY26</th><th>Q1 FY26</th><th>Change</th><th>Q2 FY25</th><th>Change</th></tr><tr><td>R&amp;D (engineering spend)</td><td class="miss">MISSING</td><td class="miss">MISSING</td><td class="miss">—</td><td class="miss">MISSING</td><td class="miss">—</td></tr></table></div><p class="finfn">Key financials unchanged from the live app (one row shown).</p>';
+const fmt=(n,plain)=>{const x=Math.abs(n).toLocaleString('en-US');return n<0?(plain?'−'+x:'<span class="neg">−'+x+'</span>'):x;};
+function cell(c,tag,neg,plain){
+  if(typeof c==='string')return '<td class="miss" title="'+R[c]+'">MISSING</td>';
+  let v=c,m='d';if(Array.isArray(c)){v=c[0];m=c[1];}
+  if(neg&&v!==0)v=-v;
+  return '<td title="'+tag.replace(/"/g,'')+' · '+M[m]+'">'+fmt(v,neg||plain)+(m!=='d'?'<span class="dg">†</span>':'')+'</td>';
+}
+const raw=c=>typeof c==='string'?null:(Array.isArray(c)?c[0]:c);
+function chg(cur,prev){
+  const a=raw(cur),b=raw(prev);
+  if(a===null||b===null)return '—';
+  if(a>0&&b>0){const p=(a-b)/b*100;return (p>=0?'+':'−')+Math.abs(p).toFixed(1)+'%';}
+  const d=a-b;return d===0?'0':(d>0?'+':'−')+Math.abs(d).toLocaleString('en-US');
+}
+function render(){
+  const box=document.getElementById('fin');
+  if(tab==='kf'){box.innerHTML=KF;return;}
+  const d=D.AMZN,cols=view==='q'?d.q:d.a;
+  let h='<div style="overflow-x:auto"><table class="minitable"><tr><th>$ millions</th>';
+  cols.forEach(c=>h+='<th>'+c[0]+'<span>'+c[1]+'</span></th>');
+  h+='</tr>';
+  d[tab].forEach(r=>{
+    if(r[0]==='sec'){h+='<tr class="sec"><td colspan="'+(cols.length+1)+'">'+r[1].toUpperCase()+'</td></tr>';return;}
+    const vals=view==='q'?r[3]:r[4];
+    if(r[1]==='After-tax items'&&vals.every(v=>Array.isArray(v)&&v[0]===0))return;
+    const cls=r[0]==='anchor'?'tot':r[0]==='of'?'of':'';
+    h+='<tr class="'+cls+'"><td>'+r[1]+'</td>';
+    if(vals.every(v=>v==='nf'))h+='<td class="nfl" colspan="'+cols.length+'">Not filed</td>';
+    else vals.forEach((v,i)=>{let c=cell(v,r[2],NEG.has(r[1]),(r[1]==='Net new debt'||r[1]==='Other operating expense (income), net'));if(i<vals.length-1)c=c.replace(/<\/td>$/,'<span class="chg">'+chg(v,vals[i+1])+'</span></td>');h+=c;});
+    h+='</tr>';
+  });
+  h+='</table></div><p class="finfn">'+(view==='q'?'† Derived. Q4 FY25 (Oct–Dec 2025) = FY25 annual − Q1 to Q3; gross profit, after-tax items, total liabilities, free cash flow and net new debt are computed from filed lines.':'† Computed from filed annual lines. Annual figures are as filed in the 10-K.')+(tab==='is'?' Operating expense lines are shown as Amazon presents them, with its own labels and order; Fulfillment and Technology and infrastructure are filed under Amazon\'s own tags and read from each filing.':'')+(tab==='cf'?' Acquisitions: the 10-K files this line under Amazon\'s own tag, so Q4 and annual are missing.':'')+' Small figures under each number: change on the '+(view==='q'?'previous quarter':'previous fiscal year')+'. A percentage when both figures are positive; otherwise the change in $ millions. For costs and payments the change is on the amount, so +9.5% means the cost grew. Changes are never coloured.'+' Signs follow the money: revenue, income and cash coming in are positive; costs, tax and cash going out are negative, so each column adds down (indented lines sit inside the total above). Red marks a figure that is negative against its nature, such as a loss or negative free cash flow; an ordinary cost or payment shows its minus in plain type. Hover a figure for its tag and method.</p>';
+  box.innerHTML=h;
+}
+document.getElementById('tabs').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;tab=b.dataset.tab;document.querySelectorAll('#tabs button').forEach(x=>x.setAttribute('aria-selected',x===b));render();});
+document.getElementById('view').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;view=b.dataset.view;document.querySelectorAll('#view button').forEach(x=>x.setAttribute('aria-pressed',x===b));render();});
+render();
+
+document.getElementById('filters').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const f=b.dataset.f;
+  document.querySelectorAll('#filters button').forEach(x=>x.setAttribute('aria-pressed',x===b));
+  document.querySelectorAll('.stand .item').forEach(it=>{const src=it.dataset.src;it.classList.toggle('hide',!(f==='all'||src==='all'||src.split(' ').includes(f)));});});
+document.querySelectorAll('.srcb[data-go]').forEach(b=>b.addEventListener('click',()=>{const t=document.querySelector('#tabs button[data-tab="'+b.dataset.go+'"]');t.click();document.getElementById('tabs').scrollIntoView({behavior:'smooth',block:'start'});}));
+</script>
+</body></html>

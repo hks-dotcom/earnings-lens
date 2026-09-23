@@ -1,0 +1,163 @@
+{
+  "ticker": "RIVN",
+  "cik": "0001874178",
+  "asOf": "2026-09-21",
+  "quarterLabel": "Q2 FY26",
+  "services": {
+    "lens": "Services",
+    "revenue": {
+      "direction": "up",
+      "yoyPct": 27.244819646968534,
+      "qoqPct": 20.05792903692976
+    },
+    "engineeringSpend": {
+      "direction": "up",
+      "yoyPct": 13.658536585365855,
+      "qoqPct": 1.7467248908296942,
+      "intensityCurrentPct": 28.10615199034982,
+      "intensityYearAgoPct": 31.465848042977747
+    },
+    "paymentBehavior": {
+      "state": "rising",
+      "dpoCurrent": 54.69844489519946,
+      "dpoYearAgo": 29.489065606361827,
+      "yoyPctChange": 85.48720948078831
+    },
+    "retrenchment": {
+      "triggered": false,
+      "causes": []
+    },
+    "redFlags": {
+      "findings": [],
+      "windowStart": "2025-09-21",
+      "windowEnd": "2026-09-21",
+      "goingConcernChecked": false
+    },
+    "altmanZPrime": -5.37034807484748,
+    "altmanZone": {
+      "z": -5.37034807484748,
+      "scored": "distress",
+      "zone": "distress",
+      "capped": false,
+      "ttmOperatingIncome": -3533000000,
+      "ttmFreeCashFlow": -3489000000
+    },
+    "cashPosition": {
+      "case": "burn",
+      "latestBurn": 849000000,
+      "averageBurn": 872250000,
+      "burnUsed": 872250000,
+      "burnBasis": "four-quarter average",
+      "cash": 3592000000,
+      "quarters": 6,
+      "operatingCashFlow": -487000000,
+      "liquidityBasis": "cash-and-short-term-investments",
+      "shortTermInvestments": 1718000000,
+      "liquidity": 5310000000
+    },
+    "ladder": {
+      "rung": "Weak",
+      "rule": "Altman Z'' -5.37 is in the distress zone (< 1.1).",
+      "net30": true,
+      "net45": false,
+      "net60": false,
+      "escalateBeforeSigning": true
+    },
+    "opportunity": {
+      "high": true,
+      "rule": "Revenue up (27.2% Y/Y) and R&D up (13.7% Y/Y) -- not down.",
+      "rdNotFiled": false
+    },
+    "risk": {
+      "high": true,
+      "rule": "Ladder is Weak."
+    },
+    "quadrant": "Pursue with guardrails",
+    "dealStructure": {
+      "contractStructure": "T&M monthly",
+      "creditExposure": "Up to about 2 months of our work unpaid at any time: we invoice each month's work at month end, and they have 30 days to pay.",
+      "billingAssumption": "monthly billing in arrears"
+    },
+    "negotiationNote": "Payables ≈ 54.7 days of cost of revenue, up 85% Y/Y. Expect pressure for longer terms; our ceiling is Net 30."
+  },
+  "saas": {
+    "lens": "SaaS",
+    "revenue": {
+      "direction": "up",
+      "yoyPct": 27.244819646968534,
+      "qoqPct": 20.05792903692976
+    },
+    "engineeringSpend": {
+      "direction": "up",
+      "yoyPct": 13.658536585365855,
+      "qoqPct": 1.7467248908296942,
+      "intensityCurrentPct": 28.10615199034982,
+      "intensityYearAgoPct": 31.465848042977747
+    },
+    "paymentBehavior": {
+      "state": "rising",
+      "dpoCurrent": 54.69844489519946,
+      "dpoYearAgo": 29.489065606361827,
+      "yoyPctChange": 85.48720948078831
+    },
+    "retrenchment": {
+      "triggered": false,
+      "causes": []
+    },
+    "redFlags": {
+      "findings": [],
+      "windowStart": "2025-09-21",
+      "windowEnd": "2026-09-21",
+      "goingConcernChecked": false
+    },
+    "altmanZPrime": -5.37034807484748,
+    "altmanZone": {
+      "z": -5.37034807484748,
+      "scored": "distress",
+      "zone": "distress",
+      "capped": false,
+      "ttmOperatingIncome": -3533000000,
+      "ttmFreeCashFlow": -3489000000
+    },
+    "cashPosition": {
+      "case": "burn",
+      "latestBurn": 849000000,
+      "averageBurn": 872250000,
+      "burnUsed": 872250000,
+      "burnBasis": "four-quarter average",
+      "cash": 3592000000,
+      "quarters": 6,
+      "operatingCashFlow": -487000000,
+      "liquidityBasis": "cash-and-short-term-investments",
+      "shortTermInvestments": 1718000000,
+      "liquidity": 5310000000
+    },
+    "ladder": {
+      "rung": "Weak",
+      "rule": "Altman Z'' -5.37 is in the distress zone (< 1.1).",
+      "net30": true,
+      "net45": false,
+      "net60": false,
+      "escalateBeforeSigning": true
+    },
+    "opportunity": {
+      "high": true,
+      "rule": "Revenue up (27.2% Y/Y) and R&D up (13.7% Y/Y) -- not down.",
+      "rdNotFiled": false
+    },
+    "risk": {
+      "high": true,
+      "rule": "Ladder is Weak."
+    },
+    "quadrant": "Pursue with guardrails",
+    "dealStructure": {
+      "creditExposure": "Up to 30 days of the annual fee, until the invoice is paid; nothing owed after that.",
+      "billingAssumption": "annual billing in advance"
+    },
+    "negotiationNote": "Payables ≈ 54.7 days of cost of revenue, up 85% Y/Y. Expect pressure for longer terms; our ceiling is Net 30.",
+    "techInvestment": {
+      "intensityCurrentPct": 28.10615199034982,
+      "intensityYearAgoPct": 31.465848042977747
+    }
+  }
+}

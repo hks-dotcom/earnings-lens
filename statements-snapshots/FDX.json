@@ -1,0 +1,3212 @@
+{
+  "ticker": "FDX",
+  "quarters": [
+    {
+      "label": "Q4 FY26",
+      "periodEnd": "2026-05-31",
+      "accessionNumber": "0001048911-26-000105",
+      "form": "10-K"
+    },
+    {
+      "label": "Q3 FY26",
+      "periodEnd": "2026-02-28",
+      "accessionNumber": "0001048911-26-000011",
+      "form": "10-Q"
+    },
+    {
+      "label": "Q2 FY26",
+      "periodEnd": "2025-11-30",
+      "accessionNumber": "0001048911-25-000078",
+      "form": "10-Q"
+    },
+    {
+      "label": "Q1 FY26",
+      "periodEnd": "2025-08-31",
+      "accessionNumber": "0001048911-25-000044",
+      "form": "10-Q"
+    },
+    {
+      "label": "Q4 FY25",
+      "periodEnd": "2025-05-31",
+      "accessionNumber": "0001048911-25-000011",
+      "form": "10-K"
+    }
+  ],
+  "years": [
+    {
+      "label": "FY26",
+      "periodEnd": "2026-05-31",
+      "accessionNumber": "0001048911-26-000105",
+      "form": "10-K"
+    },
+    {
+      "label": "FY25",
+      "periodEnd": "2025-05-31",
+      "accessionNumber": "0001048911-25-000011",
+      "form": "10-K"
+    },
+    {
+      "label": "FY24",
+      "periodEnd": "2024-05-31",
+      "accessionNumber": "0000950170-24-083577",
+      "form": "10-K"
+    }
+  ],
+  "acquisitionsCaption": null,
+  "joins": [
+    {
+      "from": "fdx:BusinessOptimizationCosts",
+      "to": "",
+      "joined": false,
+      "reason": "no current line reports a shared period with it"
+    }
+  ],
+  "tabs": {
+    "income": [
+      {
+        "key": "revenue",
+        "label": "Revenue",
+        "kind": "total",
+        "concept": "RevenueFromContractWithCustomerExcludingAssessedTax",
+        "flags": [],
+        "cells": [
+          {
+            "value": 25007000000,
+            "concept": "RevenueFromContractWithCustomerExcludingAssessedTax",
+            "method": "annual-minus-9mo",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 24000000000,
+            "concept": "RevenueFromContractWithCustomerExcludingAssessedTax",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 23469000000,
+            "concept": "RevenueFromContractWithCustomerExcludingAssessedTax",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 22244000000,
+            "concept": "RevenueFromContractWithCustomerExcludingAssessedTax",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 22220000000,
+            "concept": "RevenueFromContractWithCustomerExcludingAssessedTax",
+            "method": "annual-minus-9mo",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 94720000000,
+            "concept": "RevenueFromContractWithCustomerExcludingAssessedTax",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 87926000000,
+            "concept": "RevenueFromContractWithCustomerExcludingAssessedTax",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 87693000000,
+            "concept": "RevenueFromContractWithCustomerExcludingAssessedTax",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          }
+        ]
+      },
+      {
+        "key": "line:us-gaap:LaborAndRelatedExpense",
+        "label": "Salaries and employee benefits",
+        "kind": "line",
+        "concept": "us-gaap:LaborAndRelatedExpense",
+        "flags": [
+          "sign:-1:calc"
+        ],
+        "cells": [
+          {
+            "value": 8568000000,
+            "concept": "us-gaap:LaborAndRelatedExpense",
+            "method": "annual-minus-9mo",
+            "derived": true,
+            "source": "filing"
+          },
+          {
+            "value": 8819000000,
+            "concept": "us-gaap:LaborAndRelatedExpense",
+            "method": "direct",
+            "derived": false,
+            "source": "filing"
+          },
+          {
+            "value": 8395000000,
+            "concept": "us-gaap:LaborAndRelatedExpense",
+            "method": "direct",
+            "derived": false,
+            "source": "filing"
+          },
+          {
+            "value": 8062000000,
+            "concept": "us-gaap:LaborAndRelatedExpense",
+            "method": "direct",
+            "derived": false,
+            "source": "filing"
+          },
+          {
+            "value": 7689000000,
+            "concept": "us-gaap:LaborAndRelatedExpense",
+            "method": "annual-minus-9mo",
+            "derived": true,
+            "source": "filing"
+          },
+          {
+            "value": 33844000000,
+            "concept": "us-gaap:LaborAndRelatedExpense",
+            "method": "direct",
+            "derived": false,
+            "source": "filing"
+          },
+          {
+            "value": 31232000000,
+            "concept": "us-gaap:LaborAndRelatedExpense",
+            "method": "direct",
+            "derived": false,
+            "source": "filing"
+          },
+          {
+            "value": 30961000000,
+            "concept": "us-gaap:LaborAndRelatedExpense",
+            "method": "direct",
+            "derived": false,
+            "source": "filing"
+          }
+        ]
+      },
+      {
+        "key": "line:fdx:PurchasedTransportationCosts",
+        "label": "Purchased transportation",
+        "kind": "line",
+        "concept": "fdx:PurchasedTransportationCosts",
+        "flags": [
+          "sign:-1:calc",
+          "companyTag"
+        ],
+        "cells": [
+          {
+            "value": 6163000000,
+            "concept": "fdx:PurchasedTransportationCosts",
+            "method": "annual-minus-9mo",
+            "derived": true,
+            "source": "filing",
+            "companyTag": true
+          },
+          {
+            "value": 6084000000,
+            "concept": "fdx:PurchasedTransportationCosts",
+            "method": "direct",
+            "derived": false,
+            "source": "filing",
+            "companyTag": true
+          },
+          {
+            "value": 5885000000,
+            "concept": "fdx:PurchasedTransportationCosts",
+            "method": "direct",
+            "derived": false,
+            "source": "filing",
+            "companyTag": true
+          },
+          {
+            "value": 5488000000,
+            "concept": "fdx:PurchasedTransportationCosts",
+            "method": "direct",
+            "derived": false,
+            "source": "filing",
+            "companyTag": true
+          },
+          {
+            "value": 5359000000,
+            "concept": "fdx:PurchasedTransportationCosts",
+            "method": "annual-minus-9mo",
+            "derived": true,
+            "source": "filing",
+            "companyTag": true
+          },
+          {
+            "value": 23620000000,
+            "concept": "fdx:PurchasedTransportationCosts",
+            "method": "direct",
+            "derived": false,
+            "source": "filing",
+            "companyTag": true
+          },
+          {
+            "value": 21768000000,
+            "concept": "fdx:PurchasedTransportationCosts",
+            "method": "direct",
+            "derived": false,
+            "source": "filing",
+            "companyTag": true
+          },
+          {
+            "value": 20921000000,
+            "concept": "fdx:PurchasedTransportationCosts",
+            "method": "direct",
+            "derived": false,
+            "source": "filing",
+            "companyTag": true
+          }
+        ]
+      },
+      {
+        "key": "line:fdx:RentalsAndLandingFees",
+        "label": "Rentals and landing fees",
+        "kind": "line",
+        "concept": "fdx:RentalsAndLandingFees",
+        "flags": [
+          "sign:-1:calc",
+          "companyTag"
+        ],
+        "cells": [
+          {
+            "value": 1245000000,
+            "concept": "fdx:RentalsAndLandingFees",
+            "method": "annual-minus-9mo",
+            "derived": true,
+            "source": "filing",
+            "companyTag": true
+          },
+          {
+            "value": 1235000000,
+            "concept": "fdx:RentalsAndLandingFees",
+            "method": "direct",
+            "derived": false,
+            "source": "filing",
+            "companyTag": true
+          },
+          {
+            "value": 1211000000,
+            "concept": "fdx:RentalsAndLandingFees",
+            "method": "direct",
+            "derived": false,
+            "source": "filing",
+            "companyTag": true
+          },
+          {
+            "value": 1192000000,
+            "concept": "fdx:RentalsAndLandingFees",
+            "method": "direct",
+            "derived": false,
+            "source": "filing",
+            "companyTag": true
+          },
+          {
+            "value": 1140000000,
+            "concept": "fdx:RentalsAndLandingFees",
+            "method": "annual-minus-9mo",
+            "derived": true,
+            "source": "filing",
+            "companyTag": true
+          },
+          {
+            "value": 4883000000,
+            "concept": "fdx:RentalsAndLandingFees",
+            "method": "direct",
+            "derived": false,
+            "source": "filing",
+            "companyTag": true
+          },
+          {
+            "value": 4647000000,
+            "concept": "fdx:RentalsAndLandingFees",
+            "method": "direct",
+            "derived": false,
+            "source": "filing",
+            "companyTag": true
+          },
+          {
+            "value": 4571000000,
+            "concept": "fdx:RentalsAndLandingFees",
+            "method": "direct",
+            "derived": false,
+            "source": "filing",
+            "companyTag": true
+          }
+        ]
+      },
+      {
+        "key": "line:us-gaap:DepreciationDepletionAndAmortization",
+        "label": "Depreciation and amortization",
+        "kind": "line",
+        "concept": "us-gaap:DepreciationDepletionAndAmortization",
+        "flags": [
+          "sign:-1:calc"
+        ],
+        "cells": [
+          {
+            "value": 1097000000,
+            "concept": "us-gaap:DepreciationDepletionAndAmortization",
+            "method": "annual-minus-9mo",
+            "derived": true,
+            "source": "filing"
+          },
+          {
+            "value": 1112000000,
+            "concept": "us-gaap:DepreciationDepletionAndAmortization",
+            "method": "direct",
+            "derived": false,
+            "source": "filing"
+          },
+          {
+            "value": 1068000000,
+            "concept": "us-gaap:DepreciationDepletionAndAmortization",
+            "method": "direct",
+            "derived": false,
+            "source": "filing"
+          },
+          {
+            "value": 1092000000,
+            "concept": "us-gaap:DepreciationDepletionAndAmortization",
+            "method": "direct",
+            "derived": false,
+            "source": "filing"
+          },
+          {
+            "value": 1057000000,
+            "concept": "us-gaap:DepreciationDepletionAndAmortization",
+            "method": "annual-minus-9mo",
+            "derived": true,
+            "source": "filing"
+          },
+          {
+            "value": 4369000000,
+            "concept": "us-gaap:DepreciationDepletionAndAmortization",
+            "method": "direct",
+            "derived": false,
+            "source": "filing"
+          },
+          {
+            "value": 4264000000,
+            "concept": "us-gaap:DepreciationDepletionAndAmortization",
+            "method": "direct",
+            "derived": false,
+            "source": "filing"
+          },
+          {
+            "value": 4287000000,
+            "concept": "us-gaap:DepreciationDepletionAndAmortization",
+            "method": "direct",
+            "derived": false,
+            "source": "filing"
+          }
+        ]
+      },
+      {
+        "key": "line:us-gaap:FuelCosts",
+        "label": "Fuel",
+        "kind": "line",
+        "concept": "us-gaap:FuelCosts",
+        "flags": [
+          "sign:-1:calc"
+        ],
+        "cells": [
+          {
+            "value": 1434000000,
+            "concept": "us-gaap:FuelCosts",
+            "method": "annual-minus-9mo",
+            "derived": true,
+            "source": "filing"
+          },
+          {
+            "value": 856000000,
+            "concept": "us-gaap:FuelCosts",
+            "method": "direct",
+            "derived": false,
+            "source": "filing"
+          },
+          {
+            "value": 889000000,
+            "concept": "us-gaap:FuelCosts",
+            "method": "direct",
+            "derived": false,
+            "source": "filing"
+          },
+          {
+            "value": 873000000,
+            "concept": "us-gaap:FuelCosts",
+            "method": "direct",
+            "derived": false,
+            "source": "filing"
+          },
+          {
+            "value": 864000000,
+            "concept": "us-gaap:FuelCosts",
+            "method": "annual-minus-9mo",
+            "derived": true,
+            "source": "filing"
+          },
+          {
+            "value": 4052000000,
+            "concept": "us-gaap:FuelCosts",
+            "method": "direct",
+            "derived": false,
+            "source": "filing"
+          },
+          {
+            "value": 3775000000,
+            "concept": "us-gaap:FuelCosts",
+            "method": "direct",
+            "derived": false,
+            "source": "filing"
+          },
+          {
+            "value": 4710000000,
+            "concept": "us-gaap:FuelCosts",
+            "method": "direct",
+            "derived": false,
+            "source": "filing"
+          }
+        ]
+      },
+      {
+        "key": "line:us-gaap:CostOfPropertyRepairsAndMaintenance",
+        "label": "Maintenance and repairs",
+        "kind": "line",
+        "concept": "us-gaap:CostOfPropertyRepairsAndMaintenance",
+        "flags": [
+          "sign:-1:calc"
+        ],
+        "cells": [
+          {
+            "value": 827000000,
+            "concept": "us-gaap:CostOfPropertyRepairsAndMaintenance",
+            "method": "annual-minus-9mo",
+            "derived": true,
+            "source": "filing"
+          },
+          {
+            "value": 771000000,
+            "concept": "us-gaap:CostOfPropertyRepairsAndMaintenance",
+            "method": "direct",
+            "derived": false,
+            "source": "filing"
+          },
+          {
+            "value": 889000000,
+            "concept": "us-gaap:CostOfPropertyRepairsAndMaintenance",
+            "method": "direct",
+            "derived": false,
+            "source": "filing"
+          },
+          {
+            "value": 843000000,
+            "concept": "us-gaap:CostOfPropertyRepairsAndMaintenance",
+            "method": "direct",
+            "derived": false,
+            "source": "filing"
+          },
+          {
+            "value": 802000000,
+            "concept": "us-gaap:CostOfPropertyRepairsAndMaintenance",
+            "method": "annual-minus-9mo",
+            "derived": true,
+            "source": "filing"
+          },
+          {
+            "value": 3330000000,
+            "concept": "us-gaap:CostOfPropertyRepairsAndMaintenance",
+            "method": "direct",
+            "derived": false,
+            "source": "filing"
+          },
+          {
+            "value": 3245000000,
+            "concept": "us-gaap:CostOfPropertyRepairsAndMaintenance",
+            "method": "direct",
+            "derived": false,
+            "source": "filing"
+          },
+          {
+            "value": 3291000000,
+            "concept": "us-gaap:CostOfPropertyRepairsAndMaintenance",
+            "method": "direct",
+            "derived": false,
+            "source": "filing"
+          }
+        ]
+      },
+      {
+        "key": "line:fdx:SeparationAndOtherCosts",
+        "label": "Separation and other costs",
+        "kind": "line",
+        "concept": "fdx:SeparationAndOtherCosts",
+        "flags": [
+          "sign:-1:calc",
+          "companyTag"
+        ],
+        "cells": [
+          {
+            "value": 311000000,
+            "concept": "fdx:SeparationAndOtherCosts",
+            "method": "annual-minus-9mo",
+            "derived": true,
+            "source": "filing",
+            "companyTag": true
+          },
+          {
+            "value": 202000000,
+            "concept": "fdx:SeparationAndOtherCosts",
+            "method": "direct",
+            "derived": false,
+            "source": "filing",
+            "companyTag": true
+          },
+          {
+            "value": 213000000,
+            "concept": "fdx:SeparationAndOtherCosts",
+            "method": "direct",
+            "derived": false,
+            "source": "filing",
+            "companyTag": true
+          },
+          {
+            "value": 45000000,
+            "concept": "fdx:SeparationAndOtherCosts",
+            "method": "direct",
+            "derived": false,
+            "source": "filing",
+            "companyTag": true
+          },
+          {
+            "value": 33000000,
+            "concept": "fdx:SeparationAndOtherCosts",
+            "method": "annual-minus-9mo",
+            "derived": true,
+            "source": "filing",
+            "companyTag": true
+          },
+          {
+            "value": 771000000,
+            "concept": "fdx:SeparationAndOtherCosts",
+            "method": "direct",
+            "derived": false,
+            "source": "filing",
+            "companyTag": true
+          },
+          {
+            "value": 38000000,
+            "concept": "fdx:SeparationAndOtherCosts",
+            "method": "direct",
+            "derived": false,
+            "source": "filing",
+            "companyTag": true
+          },
+          {
+            "value": 0,
+            "concept": "fdx:SeparationAndOtherCosts",
+            "method": "direct",
+            "derived": false,
+            "source": "filing",
+            "companyTag": true
+          }
+        ]
+      },
+      {
+        "key": "line:fdx:BusinessOptimizationCosts",
+        "label": "Business optimization costs",
+        "kind": "line",
+        "concept": "fdx:BusinessOptimizationCosts",
+        "flags": [
+          "sign:-1:default",
+          "companyTag"
+        ],
+        "cells": [
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "value": 65000000,
+            "concept": "fdx:BusinessOptimizationCosts",
+            "method": "direct",
+            "derived": false,
+            "source": "filing",
+            "companyTag": true
+          },
+          {
+            "value": 30000000,
+            "concept": "fdx:BusinessOptimizationCosts",
+            "method": "direct",
+            "derived": false,
+            "source": "filing",
+            "companyTag": true
+          },
+          {
+            "value": 67000000,
+            "concept": "fdx:BusinessOptimizationCosts",
+            "method": "direct",
+            "derived": false,
+            "source": "filing",
+            "companyTag": true
+          },
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "missing": "not filed for this period"
+          }
+        ]
+      },
+      {
+        "key": "line:fdx:BusinessOptimizationAndRealignmentCosts",
+        "label": "Business optimization and realignment costs",
+        "kind": "line",
+        "concept": "fdx:BusinessOptimizationAndRealignmentCosts",
+        "flags": [
+          "sign:-1:calc",
+          "companyTag"
+        ],
+        "cells": [
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "value": 366000000,
+            "concept": "fdx:BusinessOptimizationAndRealignmentCosts",
+            "method": "direct",
+            "derived": false,
+            "source": "filing",
+            "companyTag": true
+          },
+          {
+            "value": 756000000,
+            "concept": "fdx:BusinessOptimizationAndRealignmentCosts",
+            "method": "direct",
+            "derived": false,
+            "source": "filing",
+            "companyTag": true
+          },
+          {
+            "value": 582000000,
+            "concept": "fdx:BusinessOptimizationAndRealignmentCosts",
+            "method": "direct",
+            "derived": false,
+            "source": "filing",
+            "companyTag": true
+          }
+        ]
+      },
+      {
+        "key": "line:us-gaap:AssetImpairmentCharges",
+        "label": "Goodwill and other asset impairment charges",
+        "kind": "line",
+        "concept": "us-gaap:AssetImpairmentCharges",
+        "flags": [
+          "sign:-1:calc"
+        ],
+        "cells": [
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "value": 23000000,
+            "concept": "us-gaap:AssetImpairmentCharges",
+            "method": "direct",
+            "derived": false,
+            "source": "filing"
+          },
+          {
+            "value": 21000000,
+            "concept": "us-gaap:AssetImpairmentCharges",
+            "method": "direct",
+            "derived": false,
+            "source": "filing"
+          },
+          {
+            "value": 157000000,
+            "concept": "us-gaap:AssetImpairmentCharges",
+            "method": "direct",
+            "derived": false,
+            "source": "filing"
+          }
+        ]
+      },
+      {
+        "key": "line:us-gaap:OtherCostAndExpenseOperating",
+        "label": "Other",
+        "kind": "line",
+        "concept": "us-gaap:OtherCostAndExpenseOperating",
+        "flags": [
+          "sign:-1:calc"
+        ],
+        "cells": [
+          {
+            "value": 3584000000,
+            "concept": "us-gaap:OtherCostAndExpenseOperating",
+            "method": "annual-minus-9mo",
+            "derived": true,
+            "source": "filing"
+          },
+          {
+            "value": 3508000000,
+            "concept": "us-gaap:OtherCostAndExpenseOperating",
+            "method": "direct",
+            "derived": false,
+            "source": "filing"
+          },
+          {
+            "value": 3511000000,
+            "concept": "us-gaap:OtherCostAndExpenseOperating",
+            "method": "direct",
+            "derived": false,
+            "source": "filing"
+          },
+          {
+            "value": 3396000000,
+            "concept": "us-gaap:OtherCostAndExpenseOperating",
+            "method": "direct",
+            "derived": false,
+            "source": "filing"
+          },
+          {
+            "value": 3377000000,
+            "concept": "us-gaap:OtherCostAndExpenseOperating",
+            "method": "annual-minus-9mo",
+            "derived": true,
+            "source": "filing"
+          },
+          {
+            "value": 13999000000,
+            "concept": "us-gaap:OtherCostAndExpenseOperating",
+            "method": "direct",
+            "derived": false,
+            "source": "filing"
+          },
+          {
+            "value": 13001000000,
+            "concept": "us-gaap:OtherCostAndExpenseOperating",
+            "method": "direct",
+            "derived": false,
+            "source": "filing"
+          },
+          {
+            "value": 12654000000,
+            "concept": "us-gaap:OtherCostAndExpenseOperating",
+            "method": "direct",
+            "derived": false,
+            "source": "filing"
+          }
+        ]
+      },
+      {
+        "key": "operatingIncome",
+        "label": "Operating income",
+        "kind": "total",
+        "concept": "OperatingIncomeLoss",
+        "flags": [],
+        "cells": [
+          {
+            "value": 1551000000,
+            "concept": "OperatingIncomeLoss",
+            "method": "annual-minus-9mo",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 1348000000,
+            "concept": "OperatingIncomeLoss",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 1378000000,
+            "concept": "OperatingIncomeLoss",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 1186000000,
+            "concept": "OperatingIncomeLoss",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 1793000000,
+            "concept": "OperatingIncomeLoss",
+            "method": "annual-minus-9mo",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 5463000000,
+            "concept": "OperatingIncomeLoss",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 5217000000,
+            "concept": "OperatingIncomeLoss",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 5559000000,
+            "concept": "OperatingIncomeLoss",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          }
+        ]
+      },
+      {
+        "key": "nonoperating",
+        "label": "Non-operating income, total",
+        "kind": "line",
+        "concept": "NonoperatingIncomeExpense",
+        "flags": [],
+        "cells": [
+          {
+            "value": 556000000,
+            "concept": "NonoperatingIncomeExpense",
+            "method": "annual-minus-9mo",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": -85000000,
+            "concept": "NonoperatingIncomeExpense",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": -89000000,
+            "concept": "NonoperatingIncomeExpense",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": -52000000,
+            "concept": "NonoperatingIncomeExpense",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 430000000,
+            "concept": "NonoperatingIncomeExpense",
+            "method": "annual-minus-9mo",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 330000000,
+            "concept": "NonoperatingIncomeExpense",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 224000000,
+            "concept": "NonoperatingIncomeExpense",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 277000000,
+            "concept": "NonoperatingIncomeExpense",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          }
+        ]
+      },
+      {
+        "key": "interestExpense",
+        "label": "of which interest expense",
+        "kind": "of",
+        "concept": "InterestExpenseNonoperating",
+        "flags": [],
+        "cells": [
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "value": 970000000,
+            "concept": "InterestExpenseNonoperating",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 789000000,
+            "concept": "InterestExpenseNonoperating",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 745000000,
+            "concept": "InterestExpenseNonoperating",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          }
+        ]
+      },
+      {
+        "key": "otherNonoperating",
+        "label": "of which other non-operating line",
+        "kind": "of",
+        "concept": "OtherNonoperatingIncomeExpense",
+        "flags": [],
+        "cells": [
+          {
+            "value": -10000000,
+            "concept": "OtherNonoperatingIncomeExpense",
+            "method": "annual-minus-9mo",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": -6000000,
+            "concept": "OtherNonoperatingIncomeExpense",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": -13000000,
+            "concept": "OtherNonoperatingIncomeExpense",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 7000000,
+            "concept": "OtherNonoperatingIncomeExpense",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": -10000000,
+            "concept": "OtherNonoperatingIncomeExpense",
+            "method": "annual-minus-9mo",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": -22000000,
+            "concept": "OtherNonoperatingIncomeExpense",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": -63000000,
+            "concept": "OtherNonoperatingIncomeExpense",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": -70000000,
+            "concept": "OtherNonoperatingIncomeExpense",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          }
+        ]
+      },
+      {
+        "key": "pretaxIncome",
+        "label": "Pre-tax income",
+        "kind": "total",
+        "concept": "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
+        "flags": [],
+        "cells": [
+          {
+            "value": 2107000000,
+            "concept": "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
+            "method": "annual-minus-9mo",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 1263000000,
+            "concept": "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 1289000000,
+            "concept": "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 1134000000,
+            "concept": "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 2223000000,
+            "concept": "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
+            "method": "annual-minus-9mo",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 5793000000,
+            "concept": "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 5441000000,
+            "concept": "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 5836000000,
+            "concept": "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          }
+        ]
+      },
+      {
+        "key": "incomeTax",
+        "label": "Income tax",
+        "kind": "line",
+        "concept": "IncomeTaxExpenseBenefit",
+        "flags": [],
+        "cells": [
+          {
+            "value": 510000000,
+            "concept": "IncomeTaxExpenseBenefit",
+            "method": "annual-minus-9mo",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 207000000,
+            "concept": "IncomeTaxExpenseBenefit",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 333000000,
+            "concept": "IncomeTaxExpenseBenefit",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 310000000,
+            "concept": "IncomeTaxExpenseBenefit",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 575000000,
+            "concept": "IncomeTaxExpenseBenefit",
+            "method": "annual-minus-9mo",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 1360000000,
+            "concept": "IncomeTaxExpenseBenefit",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 1349000000,
+            "concept": "IncomeTaxExpenseBenefit",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 1505000000,
+            "concept": "IncomeTaxExpenseBenefit",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          }
+        ]
+      },
+      {
+        "key": "afterTaxItems",
+        "label": "After-tax items",
+        "kind": "line",
+        "concept": null,
+        "flags": [
+          "hidden"
+        ],
+        "cells": [
+          {
+            "value": 0,
+            "concept": "NetIncomeLoss-(IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest-IncomeTaxExpenseBenefit)",
+            "method": "computed-difference",
+            "derived": true,
+            "source": "company-facts",
+            "components": [
+              "NetIncomeLoss",
+              "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
+              "IncomeTaxExpenseBenefit"
+            ]
+          },
+          {
+            "value": 0,
+            "concept": "NetIncomeLoss-(IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest-IncomeTaxExpenseBenefit)",
+            "method": "computed-difference",
+            "derived": true,
+            "source": "company-facts",
+            "components": [
+              "NetIncomeLoss",
+              "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
+              "IncomeTaxExpenseBenefit"
+            ]
+          },
+          {
+            "value": 0,
+            "concept": "NetIncomeLoss-(IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest-IncomeTaxExpenseBenefit)",
+            "method": "computed-difference",
+            "derived": true,
+            "source": "company-facts",
+            "components": [
+              "NetIncomeLoss",
+              "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
+              "IncomeTaxExpenseBenefit"
+            ]
+          },
+          {
+            "value": 0,
+            "concept": "NetIncomeLoss-(IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest-IncomeTaxExpenseBenefit)",
+            "method": "computed-difference",
+            "derived": true,
+            "source": "company-facts",
+            "components": [
+              "NetIncomeLoss",
+              "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
+              "IncomeTaxExpenseBenefit"
+            ]
+          },
+          {
+            "value": 0,
+            "concept": "NetIncomeLoss-(IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest-IncomeTaxExpenseBenefit)",
+            "method": "computed-difference",
+            "derived": true,
+            "source": "company-facts",
+            "components": [
+              "NetIncomeLoss",
+              "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
+              "IncomeTaxExpenseBenefit"
+            ]
+          },
+          {
+            "value": 0,
+            "concept": "NetIncomeLoss-(IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest-IncomeTaxExpenseBenefit)",
+            "method": "computed-difference",
+            "derived": true,
+            "source": "company-facts",
+            "components": [
+              "NetIncomeLoss",
+              "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
+              "IncomeTaxExpenseBenefit"
+            ]
+          },
+          {
+            "value": 0,
+            "concept": "NetIncomeLoss-(IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest-IncomeTaxExpenseBenefit)",
+            "method": "computed-difference",
+            "derived": true,
+            "source": "company-facts",
+            "components": [
+              "NetIncomeLoss",
+              "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
+              "IncomeTaxExpenseBenefit"
+            ]
+          },
+          {
+            "value": 0,
+            "concept": "NetIncomeLoss-(IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest-IncomeTaxExpenseBenefit)",
+            "method": "computed-difference",
+            "derived": true,
+            "source": "company-facts",
+            "components": [
+              "NetIncomeLoss",
+              "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
+              "IncomeTaxExpenseBenefit"
+            ]
+          }
+        ]
+      },
+      {
+        "key": "netIncome",
+        "label": "Net income",
+        "kind": "total",
+        "concept": "NetIncomeLoss",
+        "flags": [],
+        "cells": [
+          {
+            "value": 1597000000,
+            "concept": "NetIncomeLoss",
+            "method": "annual-minus-9mo",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 1056000000,
+            "concept": "NetIncomeLoss",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 956000000,
+            "concept": "NetIncomeLoss",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 824000000,
+            "concept": "NetIncomeLoss",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 1648000000,
+            "concept": "NetIncomeLoss",
+            "method": "annual-minus-9mo",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 4433000000,
+            "concept": "NetIncomeLoss",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 4092000000,
+            "concept": "NetIncomeLoss",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 4331000000,
+            "concept": "NetIncomeLoss",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          }
+        ]
+      }
+    ],
+    "balance": [
+      {
+        "key": "cash",
+        "label": "Cash",
+        "kind": "line",
+        "concept": "CashAndCashEquivalentsAtCarryingValue",
+        "flags": [],
+        "cells": [
+          {
+            "value": 13311000000,
+            "concept": "CashAndCashEquivalentsAtCarryingValue",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 8008000000,
+            "concept": "CashAndCashEquivalentsAtCarryingValue",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 6570000000,
+            "concept": "CashAndCashEquivalentsAtCarryingValue",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 6166000000,
+            "concept": "CashAndCashEquivalentsAtCarryingValue",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 5502000000,
+            "concept": "CashAndCashEquivalentsAtCarryingValue",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 13311000000,
+            "concept": "CashAndCashEquivalentsAtCarryingValue",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 5502000000,
+            "concept": "CashAndCashEquivalentsAtCarryingValue",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 6501000000,
+            "concept": "CashAndCashEquivalentsAtCarryingValue",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          }
+        ]
+      },
+      {
+        "key": "shortTermInvestments",
+        "label": "Short-term investments",
+        "kind": "line",
+        "concept": null,
+        "flags": [
+          "notFiled"
+        ],
+        "cells": [
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "missing": "not filed for this period"
+          }
+        ]
+      },
+      {
+        "key": "receivables",
+        "label": "Receivables",
+        "kind": "line",
+        "concept": "ReceivablesNetCurrent",
+        "flags": [],
+        "cells": [
+          {
+            "value": 12672000000,
+            "concept": "ReceivablesNetCurrent",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 11807000000,
+            "concept": "ReceivablesNetCurrent",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 12159000000,
+            "concept": "ReceivablesNetCurrent",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 11516000000,
+            "concept": "ReceivablesNetCurrent",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 11368000000,
+            "concept": "ReceivablesNetCurrent",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 12672000000,
+            "concept": "ReceivablesNetCurrent",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 11368000000,
+            "concept": "ReceivablesNetCurrent",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 10087000000,
+            "concept": "ReceivablesNetCurrent",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          }
+        ]
+      },
+      {
+        "key": "inventory",
+        "label": "Inventory",
+        "kind": "line",
+        "concept": null,
+        "flags": [
+          "notFiled"
+        ],
+        "cells": [
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "missing": "not filed for this period"
+          }
+        ]
+      },
+      {
+        "key": "currentAssets",
+        "label": "Total current assets",
+        "kind": "total",
+        "concept": "AssetsCurrent",
+        "flags": [],
+        "cells": [
+          {
+            "value": 27903000000,
+            "concept": "AssetsCurrent",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 25477000000,
+            "concept": "AssetsCurrent",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 20653000000,
+            "concept": "AssetsCurrent",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 19344000000,
+            "concept": "AssetsCurrent",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 18386000000,
+            "concept": "AssetsCurrent",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 27903000000,
+            "concept": "AssetsCurrent",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 18386000000,
+            "concept": "AssetsCurrent",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 18207000000,
+            "concept": "AssetsCurrent",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          }
+        ]
+      },
+      {
+        "key": "ppe",
+        "label": "Property and equipment",
+        "kind": "line",
+        "concept": "PropertyPlantAndEquipmentAndFinanceLeaseRightOfUseAssetAfterAccumulatedDepreciationAndAmortization",
+        "flags": [],
+        "cells": [
+          {
+            "value": 42044000000,
+            "concept": "PropertyPlantAndEquipmentAndFinanceLeaseRightOfUseAssetAfterAccumulatedDepreciationAndAmortization",
+            "method": "spliced",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 41539000000,
+            "concept": "PropertyPlantAndEquipmentNet",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 41322000000,
+            "concept": "PropertyPlantAndEquipmentNet",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 41384000000,
+            "concept": "PropertyPlantAndEquipmentNet",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 41642000000,
+            "concept": "PropertyPlantAndEquipmentNet",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 42044000000,
+            "concept": "PropertyPlantAndEquipmentAndFinanceLeaseRightOfUseAssetAfterAccumulatedDepreciationAndAmortization",
+            "method": "spliced",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 41642000000,
+            "concept": "PropertyPlantAndEquipmentNet",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 41491000000,
+            "concept": "PropertyPlantAndEquipmentNet",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          }
+        ]
+      },
+      {
+        "key": "goodwill",
+        "label": "Goodwill",
+        "kind": "line",
+        "concept": "Goodwill",
+        "flags": [],
+        "cells": [
+          {
+            "value": 6733000000,
+            "concept": "Goodwill",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 6758000000,
+            "concept": "Goodwill",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 6626000000,
+            "concept": "Goodwill",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 6672000000,
+            "concept": "Goodwill",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 6603000000,
+            "concept": "Goodwill",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 6733000000,
+            "concept": "Goodwill",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 6603000000,
+            "concept": "Goodwill",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 6423000000,
+            "concept": "Goodwill",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          }
+        ]
+      },
+      {
+        "key": "intangibles",
+        "label": "Intangibles",
+        "kind": "line",
+        "concept": "FiniteLivedIntangibleAssetsNet",
+        "flags": [],
+        "cells": [
+          {
+            "value": 153000000,
+            "concept": "FiniteLivedIntangibleAssetsNet",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "value": 205000000,
+            "concept": "FiniteLivedIntangibleAssetsNet",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 153000000,
+            "concept": "FiniteLivedIntangibleAssetsNet",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 205000000,
+            "concept": "FiniteLivedIntangibleAssetsNet",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 181000000,
+            "concept": "FiniteLivedIntangibleAssetsNet",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          }
+        ]
+      },
+      {
+        "key": "totalAssets",
+        "label": "Total assets",
+        "kind": "total",
+        "concept": "Assets",
+        "flags": [],
+        "cells": [
+          {
+            "value": 98937000000,
+            "concept": "Assets",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 94733000000,
+            "concept": "Assets",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 89181000000,
+            "concept": "Assets",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 88416000000,
+            "concept": "Assets",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 87627000000,
+            "concept": "Assets",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 98937000000,
+            "concept": "Assets",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 87627000000,
+            "concept": "Assets",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 87007000000,
+            "concept": "Assets",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          }
+        ]
+      },
+      {
+        "key": "payables",
+        "label": "Payables",
+        "kind": "line",
+        "concept": "AccountsPayableCurrent",
+        "flags": [],
+        "cells": [
+          {
+            "value": 4327000000,
+            "concept": "AccountsPayableCurrent",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 4154000000,
+            "concept": "AccountsPayableCurrent",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 4664000000,
+            "concept": "AccountsPayableCurrent",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 4223000000,
+            "concept": "AccountsPayableCurrent",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 3692000000,
+            "concept": "AccountsPayableCurrent",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 4327000000,
+            "concept": "AccountsPayableCurrent",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 3692000000,
+            "concept": "AccountsPayableCurrent",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 3189000000,
+            "concept": "AccountsPayableCurrent",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          }
+        ]
+      },
+      {
+        "key": "shortTermBorrowings",
+        "label": "Short-term borrowings",
+        "kind": "line",
+        "concept": "ShortTermBorrowings",
+        "flags": [],
+        "cells": [
+          {
+            "value": 745000000,
+            "concept": "ShortTermBorrowings",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "value": 0,
+            "concept": "ShortTermBorrowings",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 745000000,
+            "concept": "ShortTermBorrowings",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 0,
+            "concept": "ShortTermBorrowings",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "missing": "not filed for this period"
+          }
+        ]
+      },
+      {
+        "key": "currentPortionLongTermDebt",
+        "label": "Current portion of long-term debt",
+        "kind": "line",
+        "concept": "LongTermDebtAndCapitalLeaseObligationsCurrent",
+        "flags": [],
+        "cells": [
+          {
+            "value": 1676000000,
+            "concept": "LongTermDebtAndCapitalLeaseObligationsCurrent",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 2422000000,
+            "concept": "LongTermDebtAndCapitalLeaseObligationsCurrent",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 901000000,
+            "concept": "LongTermDebtAndCapitalLeaseObligationsCurrent",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 883000000,
+            "concept": "LongTermDebtAndCapitalLeaseObligationsCurrent",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 1428000000,
+            "concept": "LongTermDebtAndCapitalLeaseObligationsCurrent",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 1676000000,
+            "concept": "LongTermDebtAndCapitalLeaseObligationsCurrent",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 1428000000,
+            "concept": "LongTermDebtAndCapitalLeaseObligationsCurrent",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 68000000,
+            "concept": "LongTermDebtAndCapitalLeaseObligationsCurrent",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          }
+        ]
+      },
+      {
+        "key": "currentLiabilities",
+        "label": "Total current liabilities",
+        "kind": "total",
+        "concept": "LiabilitiesCurrent",
+        "flags": [],
+        "cells": [
+          {
+            "value": 18912000000,
+            "concept": "LiabilitiesCurrent",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 17287000000,
+            "concept": "LiabilitiesCurrent",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 16214000000,
+            "concept": "LiabilitiesCurrent",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 15524000000,
+            "concept": "LiabilitiesCurrent",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 15411000000,
+            "concept": "LiabilitiesCurrent",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 18912000000,
+            "concept": "LiabilitiesCurrent",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 15411000000,
+            "concept": "LiabilitiesCurrent",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 13355000000,
+            "concept": "LiabilitiesCurrent",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          }
+        ]
+      },
+      {
+        "key": "longTermDebt",
+        "label": "Long-term debt, incl. the part due within a year",
+        "kind": "line",
+        "concept": "LongTermDebt",
+        "flags": [],
+        "cells": [
+          {
+            "value": 23455000000,
+            "concept": "LongTermDebt",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "value": 19899000000,
+            "concept": "LongTermDebt",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 23455000000,
+            "concept": "LongTermDebt",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 19899000000,
+            "concept": "LongTermDebt",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 19772000000,
+            "concept": "LongTermDebt",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          }
+        ]
+      },
+      {
+        "key": "operatingLeaseLiabilities",
+        "label": "Operating lease liabilities",
+        "kind": "line",
+        "concept": "OperatingLeaseLiability",
+        "flags": [],
+        "cells": [
+          {
+            "value": 17229000000,
+            "concept": "OperatingLeaseLiability",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 16769000000,
+            "concept": "OperatingLeaseLiability",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 16571000000,
+            "concept": "OperatingLeaseLiability",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 16732000000,
+            "concept": "OperatingLeaseLiability",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 16837000000,
+            "concept": "OperatingLeaseLiability",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 17229000000,
+            "concept": "OperatingLeaseLiability",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 16837000000,
+            "concept": "OperatingLeaseLiability",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 17516000000,
+            "concept": "OperatingLeaseLiability",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          }
+        ]
+      },
+      {
+        "key": "totalLiabilities",
+        "label": "Total liabilities",
+        "kind": "total",
+        "concept": "Assets-StockholdersEquity",
+        "flags": [],
+        "cells": [
+          {
+            "value": 67290000000,
+            "concept": "Assets-StockholdersEquity",
+            "method": "computed-difference",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 64929000000,
+            "concept": "Assets-StockholdersEquity",
+            "method": "computed-difference",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 61041000000,
+            "concept": "Assets-StockholdersEquity",
+            "method": "computed-difference",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 60645000000,
+            "concept": "Assets-StockholdersEquity",
+            "method": "computed-difference",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 59553000000,
+            "concept": "Assets-StockholdersEquity",
+            "method": "computed-difference",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 67290000000,
+            "concept": "Assets-StockholdersEquity",
+            "method": "computed-difference",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 59553000000,
+            "concept": "Assets-StockholdersEquity",
+            "method": "computed-difference",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 59425000000,
+            "concept": "Assets-StockholdersEquity",
+            "method": "computed-difference",
+            "derived": true,
+            "source": "company-facts"
+          }
+        ]
+      },
+      {
+        "key": "totalEquity",
+        "label": "Total equity",
+        "kind": "total",
+        "concept": "StockholdersEquity",
+        "flags": [],
+        "cells": [
+          {
+            "value": 31647000000,
+            "concept": "StockholdersEquity",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 29804000000,
+            "concept": "StockholdersEquity",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 28140000000,
+            "concept": "StockholdersEquity",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 27771000000,
+            "concept": "StockholdersEquity",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 28074000000,
+            "concept": "StockholdersEquity",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 31647000000,
+            "concept": "StockholdersEquity",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 28074000000,
+            "concept": "StockholdersEquity",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 27582000000,
+            "concept": "StockholdersEquity",
+            "method": "instant",
+            "derived": false,
+            "source": "company-facts"
+          }
+        ]
+      }
+    ],
+    "cashFlow": [
+      {
+        "key": "operatingCashFlow",
+        "label": "Operating cash flow",
+        "kind": "total",
+        "concept": "NetCashProvidedByUsedInOperatingActivities",
+        "flags": [],
+        "cells": [
+          {
+            "value": 3265000000,
+            "concept": "NetCashProvidedByUsedInOperatingActivities",
+            "method": "annual-minus-9mo",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 1993000000,
+            "concept": "NetCashProvidedByUsedInOperatingActivities",
+            "method": "ytd-subtraction",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 1951000000,
+            "concept": "NetCashProvidedByUsedInOperatingActivities",
+            "method": "ytd-subtraction",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 1716000000,
+            "concept": "NetCashProvidedByUsedInOperatingActivities",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 2519000000,
+            "concept": "NetCashProvidedByUsedInOperatingActivities",
+            "method": "annual-minus-9mo",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 8925000000,
+            "concept": "NetCashProvidedByUsedInOperatingActivities",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 7036000000,
+            "concept": "NetCashProvidedByUsedInOperatingActivities",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 8312000000,
+            "concept": "NetCashProvidedByUsedInOperatingActivities",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          }
+        ]
+      },
+      {
+        "key": "shareBasedCompensation",
+        "label": "of which stock-based compensation (non-cash)",
+        "kind": "of",
+        "concept": "ShareBasedCompensation",
+        "flags": [],
+        "cells": [
+          {
+            "value": 41000000,
+            "concept": "ShareBasedCompensation",
+            "method": "annual-minus-9mo",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 37000000,
+            "concept": "ShareBasedCompensation",
+            "method": "ytd-subtraction",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 43000000,
+            "concept": "ShareBasedCompensation",
+            "method": "ytd-subtraction",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 56000000,
+            "concept": "ShareBasedCompensation",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 38000000,
+            "concept": "ShareBasedCompensation",
+            "method": "annual-minus-9mo",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 177000000,
+            "concept": "ShareBasedCompensation",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 154000000,
+            "concept": "ShareBasedCompensation",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 163000000,
+            "concept": "ShareBasedCompensation",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          }
+        ]
+      },
+      {
+        "key": "capitalExpenditures",
+        "label": "Capital expenditures",
+        "kind": "line",
+        "concept": "PaymentsToAcquireProductiveAssets",
+        "flags": [],
+        "cells": [
+          {
+            "value": 1474000000,
+            "concept": "PaymentsToAcquireProductiveAssets",
+            "method": "annual-minus-9mo",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 955000000,
+            "concept": "PaymentsToAcquireProductiveAssets",
+            "method": "ytd-subtraction",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 757000000,
+            "concept": "PaymentsToAcquireProductiveAssets",
+            "method": "ytd-subtraction",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 623000000,
+            "concept": "PaymentsToAcquireProductiveAssets",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 1473000000,
+            "concept": "PaymentsToAcquireProductiveAssets",
+            "method": "annual-minus-9mo",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 3809000000,
+            "concept": "PaymentsToAcquireProductiveAssets",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 4055000000,
+            "concept": "PaymentsToAcquireProductiveAssets",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 5176000000,
+            "concept": "PaymentsToAcquireProductiveAssets",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          }
+        ]
+      },
+      {
+        "key": "freeCashFlow",
+        "label": "Free cash flow",
+        "kind": "total",
+        "concept": "NetCashProvidedByUsedInOperatingActivities-PaymentsToAcquireProductiveAssets",
+        "flags": [],
+        "cells": [
+          {
+            "value": 1791000000,
+            "concept": "NetCashProvidedByUsedInOperatingActivities-PaymentsToAcquireProductiveAssets",
+            "method": "computed-difference",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 1038000000,
+            "concept": "NetCashProvidedByUsedInOperatingActivities-PaymentsToAcquireProductiveAssets",
+            "method": "computed-difference",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 1194000000,
+            "concept": "NetCashProvidedByUsedInOperatingActivities-PaymentsToAcquireProductiveAssets",
+            "method": "computed-difference",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 1093000000,
+            "concept": "NetCashProvidedByUsedInOperatingActivities-PaymentsToAcquireProductiveAssets",
+            "method": "computed-difference",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 1046000000,
+            "concept": "NetCashProvidedByUsedInOperatingActivities-PaymentsToAcquireProductiveAssets",
+            "method": "computed-difference",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 5116000000,
+            "concept": "NetCashProvidedByUsedInOperatingActivities-PaymentsToAcquireProductiveAssets",
+            "method": "computed-difference",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 2981000000,
+            "concept": "NetCashProvidedByUsedInOperatingActivities-PaymentsToAcquireProductiveAssets",
+            "method": "computed-difference",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 3136000000,
+            "concept": "NetCashProvidedByUsedInOperatingActivities-PaymentsToAcquireProductiveAssets",
+            "method": "computed-difference",
+            "derived": true,
+            "source": "company-facts"
+          }
+        ]
+      },
+      {
+        "key": "section:investing",
+        "label": "Investing",
+        "kind": "section",
+        "concept": null,
+        "flags": [],
+        "cells": []
+      },
+      {
+        "key": "acquisitions",
+        "label": "Acquisitions",
+        "kind": "line",
+        "concept": null,
+        "flags": [],
+        "cells": [
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "missing": "not filed for this period"
+          }
+        ]
+      },
+      {
+        "key": "investmentPurchases",
+        "label": "Investment purchases",
+        "kind": "line",
+        "concept": "PaymentsToAcquireInvestments",
+        "flags": [],
+        "cells": [
+          {
+            "value": 255000000,
+            "concept": "PaymentsToAcquireInvestments",
+            "method": "annual-minus-9mo",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 101000000,
+            "concept": "PaymentsToAcquireInvestments",
+            "method": "ytd-subtraction",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 292000000,
+            "concept": "PaymentsToAcquireInvestments",
+            "method": "ytd-subtraction",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 34000000,
+            "concept": "PaymentsToAcquireInvestments",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 65000000,
+            "concept": "PaymentsToAcquireInvestments",
+            "method": "annual-minus-9mo",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 682000000,
+            "concept": "PaymentsToAcquireInvestments",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 262000000,
+            "concept": "PaymentsToAcquireInvestments",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 176000000,
+            "concept": "PaymentsToAcquireInvestments",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          }
+        ]
+      },
+      {
+        "key": "investmentSales",
+        "label": "Investment sales and maturities",
+        "kind": "line",
+        "concept": "ProceedsFromSaleOfShortTermInvestments",
+        "flags": [],
+        "cells": [
+          {
+            "value": 229000000,
+            "concept": "ProceedsFromSaleOfShortTermInvestments",
+            "method": "spliced-ytd",
+            "derived": true,
+            "source": "company-facts",
+            "splicedWith": "ProceedsFromSaleMaturityAndCollectionsOfInvestments"
+          },
+          {
+            "value": 77000000,
+            "concept": "ProceedsFromSaleMaturityAndCollectionsOfInvestments",
+            "method": "ytd-subtraction",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 147000000,
+            "concept": "ProceedsFromSaleMaturityAndCollectionsOfInvestments",
+            "method": "ytd-subtraction",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 30000000,
+            "concept": "ProceedsFromSaleMaturityAndCollectionsOfInvestments",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 33000000,
+            "concept": "ProceedsFromSaleOfShortTermInvestments",
+            "method": "spliced-ytd",
+            "derived": true,
+            "source": "company-facts",
+            "splicedWith": "ProceedsFromSaleMaturityAndCollectionsOfInvestments"
+          },
+          {
+            "value": 483000000,
+            "concept": "ProceedsFromSaleOfShortTermInvestments",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 110000000,
+            "concept": "ProceedsFromSaleOfShortTermInvestments",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 38000000,
+            "concept": "ProceedsFromSaleOfShortTermInvestments",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          }
+        ]
+      },
+      {
+        "key": "section:financing",
+        "label": "Financing",
+        "kind": "section",
+        "concept": null,
+        "flags": [],
+        "cells": []
+      },
+      {
+        "key": "debt:ProceedsFromIssuanceOfDebt",
+        "label": "Debt raised",
+        "kind": "line",
+        "concept": "ProceedsFromIssuanceOfDebt",
+        "flags": [
+          "debt:proceeds"
+        ],
+        "cells": [
+          {
+            "value": 600000000,
+            "concept": "ProceedsFromIssuanceOfDebt",
+            "method": "annual-minus-9mo",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 3692000000,
+            "concept": "ProceedsFromIssuanceOfDebt",
+            "method": "ytd-subtraction",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 0,
+            "concept": "ProceedsFromIssuanceOfDebt",
+            "method": "ytd-subtraction",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 997000000,
+            "concept": "ProceedsFromIssuanceOfDebt",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 0,
+            "concept": "ProceedsFromIssuanceOfDebt",
+            "method": "annual-minus-9mo",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 5289000000,
+            "concept": "ProceedsFromIssuanceOfDebt",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 0,
+            "concept": "ProceedsFromIssuanceOfDebt",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 0,
+            "concept": "ProceedsFromIssuanceOfDebt",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          }
+        ]
+      },
+      {
+        "key": "debt:RepaymentsOfLongTermDebtAndCapitalSecurities",
+        "label": "Long-term debt and capital securities repaid",
+        "kind": "line",
+        "concept": "RepaymentsOfLongTermDebtAndCapitalSecurities",
+        "flags": [
+          "debt:repayment"
+        ],
+        "cells": [
+          {
+            "value": 1335000000,
+            "concept": "RepaymentsOfLongTermDebtAndCapitalSecurities",
+            "method": "annual-minus-9mo",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 67000000,
+            "concept": "RepaymentsOfLongTermDebtAndCapitalSecurities",
+            "method": "ytd-subtraction",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 22000000,
+            "concept": "RepaymentsOfLongTermDebtAndCapitalSecurities",
+            "method": "ytd-subtraction",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 625000000,
+            "concept": "RepaymentsOfLongTermDebtAndCapitalSecurities",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 68000000,
+            "concept": "RepaymentsOfLongTermDebtAndCapitalSecurities",
+            "method": "annual-minus-9mo",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 2049000000,
+            "concept": "RepaymentsOfLongTermDebtAndCapitalSecurities",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 157000000,
+            "concept": "RepaymentsOfLongTermDebtAndCapitalSecurities",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 147000000,
+            "concept": "RepaymentsOfLongTermDebtAndCapitalSecurities",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          }
+        ]
+      },
+      {
+        "key": "debt:ProceedsFromRepaymentsOfShortTermDebt",
+        "label": "Short-term debt, net",
+        "kind": "line",
+        "concept": "ProceedsFromRepaymentsOfShortTermDebt",
+        "flags": [
+          "debt:net"
+        ],
+        "cells": [
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "value": 742000000,
+            "concept": "ProceedsFromRepaymentsOfShortTermDebt",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 0,
+            "concept": "ProceedsFromRepaymentsOfShortTermDebt",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 0,
+            "concept": "ProceedsFromRepaymentsOfShortTermDebt",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          }
+        ]
+      },
+      {
+        "key": "netNewDebt",
+        "label": "Net new debt",
+        "kind": "line",
+        "concept": null,
+        "flags": [],
+        "cells": [
+          {
+            "missing": "depends on a missing figure"
+          },
+          {
+            "missing": "depends on a missing figure"
+          },
+          {
+            "missing": "depends on a missing figure"
+          },
+          {
+            "missing": "depends on a missing figure"
+          },
+          {
+            "missing": "depends on a missing figure"
+          },
+          {
+            "value": 3982000000,
+            "concept": "net new debt",
+            "method": "computed-sum",
+            "derived": true,
+            "source": "company-facts",
+            "components": [
+              "ProceedsFromIssuanceOfDebt",
+              "RepaymentsOfLongTermDebtAndCapitalSecurities",
+              "ProceedsFromRepaymentsOfShortTermDebt"
+            ]
+          },
+          {
+            "value": -157000000,
+            "concept": "net new debt",
+            "method": "computed-sum",
+            "derived": true,
+            "source": "company-facts",
+            "components": [
+              "ProceedsFromIssuanceOfDebt",
+              "RepaymentsOfLongTermDebtAndCapitalSecurities",
+              "ProceedsFromRepaymentsOfShortTermDebt"
+            ]
+          },
+          {
+            "value": -147000000,
+            "concept": "net new debt",
+            "method": "computed-sum",
+            "derived": true,
+            "source": "company-facts",
+            "components": [
+              "ProceedsFromIssuanceOfDebt",
+              "RepaymentsOfLongTermDebtAndCapitalSecurities",
+              "ProceedsFromRepaymentsOfShortTermDebt"
+            ]
+          }
+        ]
+      },
+      {
+        "key": "buybacks",
+        "label": "Buybacks",
+        "kind": "line",
+        "concept": "PaymentsForRepurchaseOfCommonStock",
+        "flags": [
+          "filedEver:true"
+        ],
+        "cells": [
+          {
+            "value": 0,
+            "concept": "PaymentsForRepurchaseOfCommonStock",
+            "method": "annual-minus-9mo",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 0,
+            "concept": "PaymentsForRepurchaseOfCommonStock",
+            "method": "ytd-subtraction",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 296000000,
+            "concept": "PaymentsForRepurchaseOfCommonStock",
+            "method": "ytd-subtraction",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 500000000,
+            "concept": "PaymentsForRepurchaseOfCommonStock",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 500000000,
+            "concept": "PaymentsForRepurchaseOfCommonStock",
+            "method": "annual-minus-9mo",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 796000000,
+            "concept": "PaymentsForRepurchaseOfCommonStock",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 3017000000,
+            "concept": "PaymentsForRepurchaseOfCommonStock",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 2500000000,
+            "concept": "PaymentsForRepurchaseOfCommonStock",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          }
+        ]
+      },
+      {
+        "key": "dividends",
+        "label": "Dividends",
+        "kind": "line",
+        "concept": "PaymentsOfDividends",
+        "flags": [
+          "filedEver:true"
+        ],
+        "cells": [
+          {
+            "value": 346000000,
+            "concept": "PaymentsOfDividends",
+            "method": "annual-minus-9mo",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 341000000,
+            "concept": "PaymentsOfDividends",
+            "method": "ytd-subtraction",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 342000000,
+            "concept": "PaymentsOfDividends",
+            "method": "ytd-subtraction",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 345000000,
+            "concept": "PaymentsOfDividends",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 331000000,
+            "concept": "PaymentsOfDividends",
+            "method": "annual-minus-9mo",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 1374000000,
+            "concept": "PaymentsOfDividends",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 1339000000,
+            "concept": "PaymentsOfDividends",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 1259000000,
+            "concept": "PaymentsOfDividends",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          }
+        ]
+      }
+    ]
+  }
+}

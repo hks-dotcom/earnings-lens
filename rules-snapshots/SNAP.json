@@ -1,0 +1,147 @@
+{
+  "ticker": "SNAP",
+  "cik": "0001564408",
+  "asOf": "2026-09-21",
+  "quarterLabel": "Q2 FY26",
+  "services": {
+    "lens": "Services",
+    "revenue": {
+      "direction": "up",
+      "yoyPct": 18.890425524004968,
+      "qoqPct": 4.59199458918845
+    },
+    "engineeringSpend": {
+      "direction": "up",
+      "yoyPct": 22.278689449049793,
+      "qoqPct": 13.338183886129091,
+      "intensityCurrentPct": 33.90208712608498,
+      "intensityYearAgoPct": 32.962682072672926
+    },
+    "paymentBehavior": {
+      "state": "rising",
+      "dpoCurrent": 24.173516398781228,
+      "dpoYearAgo": 16.276101161276102,
+      "yoyPctChange": 48.52154185607151
+    },
+    "retrenchment": {
+      "triggered": true,
+      "causes": [
+        "restructuring filing (8-K Item 2.05) filed 15 Apr 2026"
+      ]
+    },
+    "redFlags": {
+      "findings": [],
+      "windowStart": "2025-09-21",
+      "windowEnd": "2026-09-21",
+      "goingConcernChecked": false
+    },
+    "altmanZPrime": -3.949568826648355,
+    "altmanZone": {
+      "z": -3.949568826648355,
+      "scored": "distress",
+      "zone": "distress",
+      "capped": false,
+      "ttmOperatingIncome": -323815000,
+      "ttmFreeCashFlow": 705545000
+    },
+    "cashPosition": {
+      "case": "none"
+    },
+    "ladder": {
+      "rung": "Weak",
+      "rule": "Altman Z'' -3.95 is in the distress zone (< 1.1).",
+      "net30": true,
+      "net45": false,
+      "net60": false,
+      "escalateBeforeSigning": true
+    },
+    "opportunity": {
+      "high": true,
+      "rule": "Revenue up (18.9% Y/Y) and R&D up (22.3% Y/Y) -- not down.",
+      "rdNotFiled": false
+    },
+    "risk": {
+      "high": true,
+      "rule": "Ladder is Weak and retrenchment is present."
+    },
+    "quadrant": "Pursue with guardrails",
+    "dealStructure": {
+      "contractStructure": "T&M monthly",
+      "creditExposure": "Up to about 2 months of our work unpaid at any time: we invoice each month's work at month end, and they have 30 days to pay.",
+      "billingAssumption": "monthly billing in arrears"
+    },
+    "negotiationNote": "Payables ≈ 24.2 days of cost of revenue, up 49% Y/Y. Expect pressure for longer terms; our ceiling is Net 30."
+  },
+  "saas": {
+    "lens": "SaaS",
+    "revenue": {
+      "direction": "up",
+      "yoyPct": 18.890425524004968,
+      "qoqPct": 4.59199458918845
+    },
+    "engineeringSpend": {
+      "direction": "up",
+      "yoyPct": 22.278689449049793,
+      "qoqPct": 13.338183886129091,
+      "intensityCurrentPct": 33.90208712608498,
+      "intensityYearAgoPct": 32.962682072672926
+    },
+    "paymentBehavior": {
+      "state": "rising",
+      "dpoCurrent": 24.173516398781228,
+      "dpoYearAgo": 16.276101161276102,
+      "yoyPctChange": 48.52154185607151
+    },
+    "retrenchment": {
+      "triggered": true,
+      "causes": [
+        "restructuring filing (8-K Item 2.05) filed 15 Apr 2026"
+      ]
+    },
+    "redFlags": {
+      "findings": [],
+      "windowStart": "2025-09-21",
+      "windowEnd": "2026-09-21",
+      "goingConcernChecked": false
+    },
+    "altmanZPrime": -3.949568826648355,
+    "altmanZone": {
+      "z": -3.949568826648355,
+      "scored": "distress",
+      "zone": "distress",
+      "capped": false,
+      "ttmOperatingIncome": -323815000,
+      "ttmFreeCashFlow": 705545000
+    },
+    "cashPosition": {
+      "case": "none"
+    },
+    "ladder": {
+      "rung": "Weak",
+      "rule": "Altman Z'' -3.95 is in the distress zone (< 1.1).",
+      "net30": true,
+      "net45": false,
+      "net60": false,
+      "escalateBeforeSigning": true
+    },
+    "opportunity": {
+      "high": false,
+      "rule": "Retrenchment present (restructuring filing (8-K Item 2.05) filed 15 Apr 2026) -- the SaaS lens sets opportunity to low regardless of revenue/R&D.",
+      "rdNotFiled": false
+    },
+    "risk": {
+      "high": true,
+      "rule": "Ladder is Weak and retrenchment is present."
+    },
+    "quadrant": "Limit exposure",
+    "dealStructure": {
+      "creditExposure": "Up to 30 days of the annual fee, until the invoice is paid; nothing owed after that.",
+      "billingAssumption": "annual billing in advance"
+    },
+    "negotiationNote": "Payables ≈ 24.2 days of cost of revenue, up 49% Y/Y. Expect pressure for longer terms; our ceiling is Net 30.",
+    "techInvestment": {
+      "intensityCurrentPct": 33.90208712608498,
+      "intensityYearAgoPct": 32.962682072672926
+    }
+  }
+}

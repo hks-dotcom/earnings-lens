@@ -1,0 +1,128 @@
+{
+  "ticker": "TGT",
+  "cik": "0000027419",
+  "asOf": "2026-09-21",
+  "quarterLabel": "Q2 FY26",
+  "services": {
+    "lens": "Services",
+    "revenue": {
+      "direction": "up",
+      "yoyPct": 5.267541945975963,
+      "qoqPct": 4.307668120897693
+    },
+    "engineeringSpend": {},
+    "paymentBehavior": {
+      "state": "rising",
+      "dpoCurrent": 68.78634323694826,
+      "dpoYearAgo": 61.09193989834106,
+      "yoyPctChange": 12.594792948809497
+    },
+    "retrenchment": {
+      "triggered": false,
+      "causes": []
+    },
+    "redFlags": {
+      "findings": [],
+      "windowStart": "2025-09-21",
+      "windowEnd": "2026-09-21",
+      "goingConcernChecked": false
+    },
+    "altmanZPrime": 1.645496434685377,
+    "altmanZone": {
+      "z": 1.645496434685377,
+      "scored": "grey",
+      "zone": "grey",
+      "capped": false,
+      "ttmOperatingIncome": 6023000000,
+      "ttmFreeCashFlow": 4456000000
+    },
+    "cashPosition": {
+      "case": "none"
+    },
+    "ladder": {
+      "rung": "Weak",
+      "rule": "Altman Z'' 1.65 is grey-zone and DPO is up 13% Y/Y (beyond the band) -- the grey-zone-plus-rising-DPO exception.",
+      "net30": true,
+      "net45": false,
+      "net60": false,
+      "escalateBeforeSigning": true
+    },
+    "opportunity": {
+      "high": true,
+      "rule": "R&D not filed. Revenue up (5.3% Y/Y) decides opportunity alone.",
+      "rdNotFiled": true
+    },
+    "risk": {
+      "high": true,
+      "rule": "Ladder is Weak."
+    },
+    "quadrant": "Pursue with guardrails",
+    "dealStructure": {
+      "contractStructure": "T&M monthly",
+      "creditExposure": "Up to about 2 months of our work unpaid at any time: we invoice each month's work at month end, and they have 30 days to pay.",
+      "billingAssumption": "monthly billing in arrears"
+    },
+    "negotiationNote": "Payables ≈ 68.8 days of cost of revenue, up 13% Y/Y. Expect pressure for longer terms; our ceiling is Net 30."
+  },
+  "saas": {
+    "lens": "SaaS",
+    "revenue": {
+      "direction": "up",
+      "yoyPct": 5.267541945975963,
+      "qoqPct": 4.307668120897693
+    },
+    "engineeringSpend": {},
+    "paymentBehavior": {
+      "state": "rising",
+      "dpoCurrent": 68.78634323694826,
+      "dpoYearAgo": 61.09193989834106,
+      "yoyPctChange": 12.594792948809497
+    },
+    "retrenchment": {
+      "triggered": false,
+      "causes": []
+    },
+    "redFlags": {
+      "findings": [],
+      "windowStart": "2025-09-21",
+      "windowEnd": "2026-09-21",
+      "goingConcernChecked": false
+    },
+    "altmanZPrime": 1.645496434685377,
+    "altmanZone": {
+      "z": 1.645496434685377,
+      "scored": "grey",
+      "zone": "grey",
+      "capped": false,
+      "ttmOperatingIncome": 6023000000,
+      "ttmFreeCashFlow": 4456000000
+    },
+    "cashPosition": {
+      "case": "none"
+    },
+    "ladder": {
+      "rung": "Weak",
+      "rule": "Altman Z'' 1.65 is grey-zone and DPO is up 13% Y/Y (beyond the band) -- the grey-zone-plus-rising-DPO exception.",
+      "net30": true,
+      "net45": false,
+      "net60": false,
+      "escalateBeforeSigning": true
+    },
+    "opportunity": {
+      "high": true,
+      "rule": "R&D not filed. Revenue up (5.3% Y/Y) decides opportunity alone.",
+      "rdNotFiled": true
+    },
+    "risk": {
+      "high": true,
+      "rule": "Ladder is Weak."
+    },
+    "quadrant": "Pursue with guardrails",
+    "dealStructure": {
+      "creditExposure": "Up to 30 days of the annual fee, until the invoice is paid; nothing owed after that.",
+      "billingAssumption": "annual billing in advance"
+    },
+    "negotiationNote": "Payables ≈ 68.8 days of cost of revenue, up 13% Y/Y. Expect pressure for longer terms; our ceiling is Net 30.",
+    "techInvestment": {}
+  }
+}

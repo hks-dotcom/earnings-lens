@@ -1,0 +1,143 @@
+{
+  "ticker": "NVDA",
+  "cik": "0001045810",
+  "asOf": "2026-09-21",
+  "quarterLabel": "Q2 FY27",
+  "services": {
+    "lens": "Services",
+    "revenue": {
+      "direction": "up",
+      "yoyPct": 105.85114348672529,
+      "qoqPct": 17.896220057587453
+    },
+    "engineeringSpend": {
+      "direction": "up",
+      "yoyPct": 64.39058494523421,
+      "qoqPct": 11.59626641354216,
+      "intensityCurrentPct": 7.331040001662839,
+      "intensityYearAgoPct": 9.17998416875254
+    },
+    "paymentBehavior": {
+      "state": "falling",
+      "dpoCurrent": 56.9113750571037,
+      "dpoYearAgo": 63.98944918541505,
+      "yoyPctChange": -11.061314354811852
+    },
+    "retrenchment": {
+      "triggered": false,
+      "causes": []
+    },
+    "redFlags": {
+      "findings": [],
+      "windowStart": "2025-09-21",
+      "windowEnd": "2026-09-21",
+      "goingConcernChecked": false
+    },
+    "altmanZPrime": 12.172557056833169,
+    "altmanZone": {
+      "z": 12.172557056833169,
+      "scored": "safe",
+      "zone": "safe",
+      "capped": false,
+      "ttmOperatingIncome": 197579000000,
+      "ttmFreeCashFlow": 127006000000
+    },
+    "cashPosition": {
+      "case": "none"
+    },
+    "ladder": {
+      "rung": "Strong",
+      "rule": "Altman Z'' 12.17 is safe (> 2.6), no red flags, and DPO falling Y/Y (-11%, within/below the band).",
+      "net30": true,
+      "net45": true,
+      "net60": false,
+      "escalateBeforeSigning": false
+    },
+    "opportunity": {
+      "high": true,
+      "rule": "Revenue up (105.9% Y/Y) and R&D up (64.4% Y/Y) -- not down.",
+      "rdNotFiled": false
+    },
+    "risk": {
+      "high": false,
+      "rule": "Ladder is Strong and no retrenchment."
+    },
+    "quadrant": "Pursue",
+    "dealStructure": {
+      "contractStructure": "Milestone acceptable",
+      "creditExposure": "Up to about 2½ months of our work unpaid at any time: we invoice each month's work at month end, and they have 45 days to pay.",
+      "billingAssumption": "monthly billing in arrears"
+    },
+    "negotiationNote": "Payables ≈ 56.9 days of cost of revenue, down 11% Y/Y. Expect pressure for longer terms; our ceiling is Net 45."
+  },
+  "saas": {
+    "lens": "SaaS",
+    "revenue": {
+      "direction": "up",
+      "yoyPct": 105.85114348672529,
+      "qoqPct": 17.896220057587453
+    },
+    "engineeringSpend": {
+      "direction": "up",
+      "yoyPct": 64.39058494523421,
+      "qoqPct": 11.59626641354216,
+      "intensityCurrentPct": 7.331040001662839,
+      "intensityYearAgoPct": 9.17998416875254
+    },
+    "paymentBehavior": {
+      "state": "falling",
+      "dpoCurrent": 56.9113750571037,
+      "dpoYearAgo": 63.98944918541505,
+      "yoyPctChange": -11.061314354811852
+    },
+    "retrenchment": {
+      "triggered": false,
+      "causes": []
+    },
+    "redFlags": {
+      "findings": [],
+      "windowStart": "2025-09-21",
+      "windowEnd": "2026-09-21",
+      "goingConcernChecked": false
+    },
+    "altmanZPrime": 12.172557056833169,
+    "altmanZone": {
+      "z": 12.172557056833169,
+      "scored": "safe",
+      "zone": "safe",
+      "capped": false,
+      "ttmOperatingIncome": 197579000000,
+      "ttmFreeCashFlow": 127006000000
+    },
+    "cashPosition": {
+      "case": "none"
+    },
+    "ladder": {
+      "rung": "Strong",
+      "rule": "Altman Z'' 12.17 is safe (> 2.6), no red flags, and DPO falling Y/Y (-11%, within/below the band).",
+      "net30": true,
+      "net45": true,
+      "net60": false,
+      "escalateBeforeSigning": false
+    },
+    "opportunity": {
+      "high": true,
+      "rule": "Revenue up (105.9% Y/Y) and R&D up (64.4% Y/Y) -- not down.",
+      "rdNotFiled": false
+    },
+    "risk": {
+      "high": false,
+      "rule": "Ladder is Strong and no retrenchment."
+    },
+    "quadrant": "Pursue",
+    "dealStructure": {
+      "creditExposure": "Up to 45 days of the annual fee, until the invoice is paid; nothing owed after that.",
+      "billingAssumption": "annual billing in advance"
+    },
+    "negotiationNote": "Payables ≈ 56.9 days of cost of revenue, down 11% Y/Y. Expect pressure for longer terms; our ceiling is Net 45.",
+    "techInvestment": {
+      "intensityCurrentPct": 7.331040001662839,
+      "intensityYearAgoPct": 9.17998416875254
+    }
+  }
+}

@@ -1,0 +1,494 @@
+:root {
+  --bg-page: #e9e6df;
+  --bg-card: #f6f4ef;
+  --bg-white: #ffffff;
+  --border-subtle: #ece9e2;
+  --border-medium: #b8b3a8;
+  --border-card: #d6d2c8;
+  --text-primary: #1c1b19;
+  --text-secondary: #55524c;
+  --text-tertiary: #6b675f;
+
+  --core-strong: #1f6f5c;
+  --core-tint-bg: #e8f2ee;
+  --nova-strong: #3b4ba8;
+  --nova-tint-bg: #eceef8;
+
+  --qoq-tint-bg: #eef1f6;
+  --qoq-tint-text: #3f4a5c;
+  --yoy-tint-bg: #f4efe6;
+  --yoy-tint-text: #6a5a3e;
+
+  /* "What stands out" tones: amber for a watch item, green (--core-strong) for good news, blue (--nova-strong) for terms, slate for a one-off item. */
+  --watch-strong: #b06a00;
+  --info-strong: #5b6770;
+
+  --neutral-tint-bg: #f1efea;
+  --bad-tint-bg: #f6e6e3;
+  --bad-text: #9b3b2e;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  background: var(--bg-page);
+  color: var(--text-primary);
+  font-family: var(--font-ibm-plex-sans), system-ui, sans-serif;
+}
+
+.font-serif {
+  font-family: var(--font-fraunces), Georgia, serif;
+}
+
+.font-mono {
+  font-family: var(--font-ibm-plex-mono), monospace;
+}
+
+.hsub {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  line-height: 1.35;
+  overflow-wrap: break-word;
+}
+
+.table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/*
+ * Sideways-scroll cue for the key-financials table (see ScrollHint.tsx).
+ * At phone width the table is wider than the card, so the year-ago columns
+ * and the trend line sit off-screen with nothing to say so. The fades sit
+ * over the card's own white background; the cue line sits under the table.
+ * Both are toggled by data-visible from the scroll position.
+ */
+.scroll-fade {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 28px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+
+.scroll-fade[data-visible="true"] {
+  opacity: 1;
+}
+
+.scroll-fade-left {
+  left: 0;
+  background: linear-gradient(to right, var(--bg-white), rgba(255, 255, 255, 0));
+}
+
+.scroll-fade-right {
+  right: 0;
+  background: linear-gradient(to left, var(--bg-white), rgba(255, 255, 255, 0));
+}
+
+.scroll-cue {
+  display: none;
+  padding-top: 6px;
+  text-align: right;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--text-tertiary);
+}
+
+.scroll-cue[data-visible="true"] {
+  display: block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-fade {
+    transition: none;
+  }
+}
+
+/* Tooltip: opens on hover, tap (click toggles), and keyboard focus. */
+.tip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 15px;
+  height: 15px;
+  margin-left: 5px;
+  border: 1px solid #9c978c;
+  border-radius: 50%;
+  font-size: 10px;
+  font-weight: 600;
+  font-style: normal;
+  color: var(--text-tertiary);
+  cursor: help;
+  vertical-align: 1px;
+  outline: none;
+  background: none;
+  padding: 0;
+  font-family: inherit;
+}
+.tip:hover,
+.tip:focus-visible {
+  border-color: var(--text-primary);
+  color: var(--text-primary);
+}
+/*
+ * "The box is wide enough for the Z'' formula and never wider than 80% of
+ * the screen." The Z'' formula is the longest string any tip carries, so
+ * it sets the width: at 360px it wraps to about three lines instead of the
+ * seven it took at 240px. 80vw is the hard ceiling, so on a phone the box
+ * still leaves the page edge visible and never sits under the viewport.
+ */
+.tipbox {
+  display: none;
+  position: absolute;
+  top: 22px;
+  left: -8px;
+  z-index: 10;
+  width: 360px;
+  max-width: 80vw;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--text-primary);
+  color: #f4f2ee;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+  white-space: normal;
+  text-align: left;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+}
+.tipbox-formula,
+.tipbox-explanation {
+  display: block;
+}
+/* Formula first, then a gap, then the plain-English explanation. */
+.tipbox-explanation {
+  margin-top: 7px;
+}
+.tipbox-term {
+  font-weight: 600;
+  color: #ffffff;
+}
+.tip.tip-right .tipbox {
+  left: auto;
+  right: -8px;
+}
+.tip:hover .tipbox,
+.tip:focus-visible .tipbox,
+.tip[data-open="true"] .tipbox {
+  display: block;
+}
+
+/*
+ * On a phone the 80vw cap already governs, so the fixed width only needs
+ * to stop being larger than the screen; the cap does the rest.
+ */
+@media (max-width: 480px) {
+  .tipbox {
+    width: 80vw;
+  }
+}
+
+.health-tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px 0;
+}
+
+.health-tile {
+  min-width: 0;
+}
+
+/*
+ * While "Download image" is capturing, hide the board's own buttons: they
+ * are controls, not content, and a picture of a button invites a click
+ * that can't happen. Everything else on the board stays in the image.
+ */
+[data-capturing="true"] .board-actions {
+  display: none !important;
+}
+
+/* An open citation is a control's state, not content: never in the picture. */
+[data-capturing="true"] .cite-box {
+  display: none !important;
+}
+
+/* Company search results: ticker or company name, up to 8 matches. */
+.search-results {
+  position: absolute;
+  top: 48px;
+  left: 0;
+  z-index: 20;
+  width: 320px;
+  max-width: 86vw;
+  margin: 0;
+  padding: 4px;
+  list-style: none;
+  background: var(--bg-white);
+  border: 1px solid var(--border-medium);
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.14);
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.search-result {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+/* Hover and keyboard highlight are the same state, so a mouse user and a
+   keyboard user are looking at the same row. */
+.search-result[data-highlighted="true"] {
+  background: var(--core-tint-bg);
+}
+
+.search-result-name {
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.search-result-ticker {
+  flex: none;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-tertiary);
+}
+
+.search-empty {
+  padding: 10px;
+  font-size: 13px;
+  color: var(--text-tertiary);
+}
+
+/*
+ * The lens board's top row: the verdict and its matrix on the left, the
+ * Summary beside them. Below 760px the two stack -- verdict and matrix at
+ * full width, then the Summary -- and the matrix scales down to fit.
+ *
+ * Every column is minmax(0, ...), never a bare 1fr. A bare 1fr is
+ * minmax(auto, 1fr), and "auto" there means "no narrower than the widest
+ * thing inside": the 330px matrix. On a 375px phone that held the column
+ * open past the board's border and dragged the Summary out with it, and
+ * because html and body clip horizontal overflow, the page never showed a
+ * scrollbar to give it away.
+ */
+.lens-top {
+  display: grid;
+  grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
+  gap: 28px;
+  align-items: start;
+}
+
+/*
+ * The verdict hero: the quadrant in large serif type, then risk,
+ * opportunity and terms in one line. The rule under it separates the
+ * verdict from the reasoning that follows.
+ */
+.verdict-hero {
+  font-size: 36px;
+  font-weight: 600;
+  line-height: 1.15;
+  padding: 4px 0 14px;
+  border-bottom: 1px solid var(--border-subtle);
+  overflow-wrap: break-word;
+}
+
+.verdict-hero-sub {
+  font-family: var(--font-ibm-plex-sans), system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-tertiary);
+  margin-top: 6px;
+}
+
+@media (max-width: 760px) {
+  .verdict-hero {
+    font-size: 28px;
+  }
+}
+
+.why-box {
+  background: var(--neutral-tint-bg);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+
+.why-box p {
+  margin: 0 0 6px;
+  font-size: 14.5px;
+  line-height: 1.5;
+}
+
+.why-box p:last-child {
+  margin-bottom: 0;
+}
+
+/* The board's footnotes: data, verdict rules, explanations, limits. */
+.board-footnotes {
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 12px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text-tertiary);
+}
+
+.board-footnotes p {
+  margin: 0 0 5px;
+}
+
+.board-footnotes b {
+  font-weight: 600;
+}
+
+@media (max-width: 760px) {
+  .lens-top {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+    align-items: start;
+  }
+}
+
+/*
+ * One "What stands out" row: the tag in its own column, everything else in
+ * the next. The coloured bar is set per item (tone) as an inline style.
+ */
+.stand-item {
+  display: grid;
+  grid-template-columns: 110px minmax(0, 1fr);
+  gap: 14px;
+  align-items: baseline;
+  padding: 12px 0 12px 14px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+@media (max-width: 640px) {
+  .stand-item {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+}
+
+/*
+ * A finding's text column. Positioned so an open citation box is laid out
+ * across the column's width, under the line it was opened from, rather
+ * than from the citation itself -- which can sit anywhere on the line and
+ * would push a fixed-width box past the board's edge on a phone.
+ */
+.stand-text {
+  position: relative;
+  min-width: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  overflow-wrap: break-word;
+}
+
+.stand-figures {
+  display: block;
+  margin-top: 3px;
+  font-size: 13px;
+  color: var(--text-tertiary);
+}
+
+.stand-rule {
+  display: block;
+  margin-top: 5px;
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+
+.stand-rule b {
+  font-weight: 600;
+}
+
+/* The citation after an explanation: "10-Q, MD&A". */
+.cite {
+  margin-left: 6px;
+  padding: 0;
+  border: 0;
+  border-bottom: 1px dotted var(--border-medium);
+  background: none;
+  font-family: inherit;
+  font-size: 11px;
+  line-height: 1.2;
+  color: var(--text-tertiary);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.cite:hover,
+.cite:focus-visible {
+  color: var(--core-strong);
+  border-bottom-color: var(--core-strong);
+  outline: none;
+}
+
+.cite-box {
+  display: none;
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  max-width: 560px;
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--text-primary);
+  color: #f4f2ee;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+  white-space: normal;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+}
+
+.cite-box-term {
+  display: block;
+  margin-top: 7px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.cite-box-quote {
+  display: block;
+  margin-top: 4px;
+  padding-left: 8px;
+  border-left: 2px solid #6b675f;
+  font-style: italic;
+}
+
+.cite-wrap[data-open="true"] .cite-box,
+.cite:focus-visible + .cite-box {
+  display: block;
+}
+
+/* Hover only where there is a real pointer: on a touch screen :hover
+   sticks after a tap, and the box could then never be tapped shut. */
+@media (hover: hover) {
+  .cite-wrap:hover .cite-box {
+    display: block;
+  }
+}

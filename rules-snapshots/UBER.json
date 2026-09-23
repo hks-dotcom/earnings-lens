@@ -1,0 +1,137 @@
+{
+  "ticker": "UBER",
+  "cik": "0001543151",
+  "asOf": "2026-09-21",
+  "quarterLabel": "Q2 FY26",
+  "services": {
+    "lens": "Services",
+    "revenue": {
+      "direction": "up",
+      "yoyPct": 12.172950754881038,
+      "qoqPct": 7.483147769446338
+    },
+    "engineeringSpend": {
+      "direction": "up",
+      "yoyPct": 24.166666666666668,
+      "qoqPct": 9.674027339642482,
+      "intensityCurrentPct": 7.34972870128955,
+      "intensityYearAgoPct": 6.639791320844202
+    },
+    "paymentBehavior": {
+      "state": "missing"
+    },
+    "retrenchment": {
+      "triggered": false,
+      "causes": []
+    },
+    "redFlags": {
+      "findings": [],
+      "windowStart": "2025-09-21",
+      "windowEnd": "2026-09-21",
+      "goingConcernChecked": false
+    },
+    "altmanZPrime": 0.8490932173569562,
+    "altmanZone": {
+      "z": 0.8490932173569562,
+      "scored": "distress",
+      "zone": "grey",
+      "capped": true,
+      "ttmOperatingIncome": 6700000000,
+      "ttmFreeCashFlow": 10116000000
+    },
+    "cashPosition": {
+      "case": "none"
+    },
+    "ladder": {
+      "rung": "Neutral",
+      "rule": "Altman Z'' 0.85 is grey-zone (not safe), and DPO is not rising beyond the band. Z'' is in distress, but the company is profitable and cash-generative, so it's treated as grey zone.",
+      "net30": true,
+      "net45": false,
+      "net60": false,
+      "escalateBeforeSigning": false
+    },
+    "opportunity": {
+      "high": true,
+      "rule": "Revenue up (12.2% Y/Y) and R&D up (24.2% Y/Y) -- not down.",
+      "rdNotFiled": false
+    },
+    "risk": {
+      "high": true,
+      "rule": "Ladder is Neutral."
+    },
+    "quadrant": "Pursue with guardrails",
+    "dealStructure": {
+      "contractStructure": "T&M monthly",
+      "creditExposure": "Up to about 2 months of our work unpaid at any time: we invoice each month's work at month end, and they have 30 days to pay.",
+      "billingAssumption": "monthly billing in arrears"
+    },
+    "negotiationNote": "Payables day count unavailable. Expect pressure for longer terms; our ceiling is Net 30."
+  },
+  "saas": {
+    "lens": "SaaS",
+    "revenue": {
+      "direction": "up",
+      "yoyPct": 12.172950754881038,
+      "qoqPct": 7.483147769446338
+    },
+    "engineeringSpend": {
+      "direction": "up",
+      "yoyPct": 24.166666666666668,
+      "qoqPct": 9.674027339642482,
+      "intensityCurrentPct": 7.34972870128955,
+      "intensityYearAgoPct": 6.639791320844202
+    },
+    "paymentBehavior": {
+      "state": "missing"
+    },
+    "retrenchment": {
+      "triggered": false,
+      "causes": []
+    },
+    "redFlags": {
+      "findings": [],
+      "windowStart": "2025-09-21",
+      "windowEnd": "2026-09-21",
+      "goingConcernChecked": false
+    },
+    "altmanZPrime": 0.8490932173569562,
+    "altmanZone": {
+      "z": 0.8490932173569562,
+      "scored": "distress",
+      "zone": "grey",
+      "capped": true,
+      "ttmOperatingIncome": 6700000000,
+      "ttmFreeCashFlow": 10116000000
+    },
+    "cashPosition": {
+      "case": "none"
+    },
+    "ladder": {
+      "rung": "Neutral",
+      "rule": "Altman Z'' 0.85 is grey-zone (not safe), and DPO is not rising beyond the band. Z'' is in distress, but the company is profitable and cash-generative, so it's treated as grey zone.",
+      "net30": true,
+      "net45": false,
+      "net60": false,
+      "escalateBeforeSigning": false
+    },
+    "opportunity": {
+      "high": true,
+      "rule": "Revenue up (12.2% Y/Y) and R&D up (24.2% Y/Y) -- not down.",
+      "rdNotFiled": false
+    },
+    "risk": {
+      "high": true,
+      "rule": "Ladder is Neutral."
+    },
+    "quadrant": "Pursue with guardrails",
+    "dealStructure": {
+      "creditExposure": "Up to 30 days of the annual fee, until the invoice is paid; nothing owed after that.",
+      "billingAssumption": "annual billing in advance"
+    },
+    "negotiationNote": "Payables day count unavailable. Expect pressure for longer terms; our ceiling is Net 30.",
+    "techInvestment": {
+      "intensityCurrentPct": 7.34972870128955,
+      "intensityYearAgoPct": 6.639791320844202
+    }
+  }
+}

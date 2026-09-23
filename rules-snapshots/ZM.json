@@ -1,0 +1,143 @@
+{
+  "ticker": "ZM",
+  "cik": "0001585521",
+  "asOf": "2026-09-21",
+  "quarterLabel": "Q2 FY27",
+  "services": {
+    "lens": "Services",
+    "revenue": {
+      "direction": "up",
+      "yoyPct": 4.928415160031777,
+      "qoqPct": 3.0840044358138705
+    },
+    "engineeringSpend": {
+      "direction": "up",
+      "yoyPct": 17.462108918996158,
+      "qoqPct": 6.392864350710319,
+      "intensityCurrentPct": 18.98635862190998,
+      "intensityYearAgoPct": 16.96043548163161
+    },
+    "paymentBehavior": {
+      "state": "rising",
+      "dpoCurrent": 4.529956602518836,
+      "dpoYearAgo": 3.913195321508978,
+      "yoyPctChange": 15.761065582896252
+    },
+    "retrenchment": {
+      "triggered": false,
+      "causes": []
+    },
+    "redFlags": {
+      "findings": [],
+      "windowStart": "2025-09-21",
+      "windowEnd": "2026-09-21",
+      "goingConcernChecked": false
+    },
+    "altmanZPrime": 10.52208832775046,
+    "altmanZone": {
+      "z": 10.52208832775046,
+      "scored": "safe",
+      "zone": "safe",
+      "capped": false,
+      "ttmOperatingIncome": 1185095000,
+      "ttmFreeCashFlow": 1925657000
+    },
+    "cashPosition": {
+      "case": "none"
+    },
+    "ladder": {
+      "rung": "Neutral",
+      "rule": "Altman Z'' 10.52 is safe, but DPO is up 16% Y/Y (beyond the band) -- safe balance sheet, slower payer.",
+      "net30": true,
+      "net45": false,
+      "net60": false,
+      "escalateBeforeSigning": false
+    },
+    "opportunity": {
+      "high": true,
+      "rule": "Revenue up (4.9% Y/Y) and R&D up (17.5% Y/Y) -- not down.",
+      "rdNotFiled": false
+    },
+    "risk": {
+      "high": true,
+      "rule": "Ladder is Neutral."
+    },
+    "quadrant": "Pursue with guardrails",
+    "dealStructure": {
+      "contractStructure": "T&M monthly",
+      "creditExposure": "Up to about 2 months of our work unpaid at any time: we invoice each month's work at month end, and they have 30 days to pay.",
+      "billingAssumption": "monthly billing in arrears"
+    },
+    "negotiationNote": "Payables ≈ 4.5 days of cost of revenue, up 16% Y/Y. Expect pressure for longer terms; our ceiling is Net 30."
+  },
+  "saas": {
+    "lens": "SaaS",
+    "revenue": {
+      "direction": "up",
+      "yoyPct": 4.928415160031777,
+      "qoqPct": 3.0840044358138705
+    },
+    "engineeringSpend": {
+      "direction": "up",
+      "yoyPct": 17.462108918996158,
+      "qoqPct": 6.392864350710319,
+      "intensityCurrentPct": 18.98635862190998,
+      "intensityYearAgoPct": 16.96043548163161
+    },
+    "paymentBehavior": {
+      "state": "rising",
+      "dpoCurrent": 4.529956602518836,
+      "dpoYearAgo": 3.913195321508978,
+      "yoyPctChange": 15.761065582896252
+    },
+    "retrenchment": {
+      "triggered": false,
+      "causes": []
+    },
+    "redFlags": {
+      "findings": [],
+      "windowStart": "2025-09-21",
+      "windowEnd": "2026-09-21",
+      "goingConcernChecked": false
+    },
+    "altmanZPrime": 10.52208832775046,
+    "altmanZone": {
+      "z": 10.52208832775046,
+      "scored": "safe",
+      "zone": "safe",
+      "capped": false,
+      "ttmOperatingIncome": 1185095000,
+      "ttmFreeCashFlow": 1925657000
+    },
+    "cashPosition": {
+      "case": "none"
+    },
+    "ladder": {
+      "rung": "Neutral",
+      "rule": "Altman Z'' 10.52 is safe, but DPO is up 16% Y/Y (beyond the band) -- safe balance sheet, slower payer.",
+      "net30": true,
+      "net45": false,
+      "net60": false,
+      "escalateBeforeSigning": false
+    },
+    "opportunity": {
+      "high": true,
+      "rule": "Revenue up (4.9% Y/Y) and R&D up (17.5% Y/Y) -- not down.",
+      "rdNotFiled": false
+    },
+    "risk": {
+      "high": true,
+      "rule": "Ladder is Neutral."
+    },
+    "quadrant": "Pursue with guardrails",
+    "dealStructure": {
+      "creditExposure": "Up to 30 days of the annual fee, until the invoice is paid; nothing owed after that.",
+      "billingAssumption": "annual billing in advance"
+    },
+    "negotiationNote": "Payables ≈ 4.5 days of cost of revenue, up 16% Y/Y. Expect pressure for longer terms; our ceiling is Net 30.",
+    "techInvestment": {
+      "intensityCurrentPct": 18.98635862190998,
+      "intensityYearAgoPct": 16.96043548163161
+    }
+  }
+}

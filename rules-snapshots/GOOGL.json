@@ -1,0 +1,151 @@
+{
+  "ticker": "GOOGL",
+  "cik": "0001652044",
+  "asOf": "2026-09-21",
+  "quarterLabel": "Q2 FY26",
+  "services": {
+    "lens": "Services",
+    "revenue": {
+      "direction": "up",
+      "yoyPct": 24.23362508814867,
+      "qoqPct": 9.008517143481109
+    },
+    "engineeringSpend": {
+      "direction": "up",
+      "yoyPct": 31.945249130938585,
+      "qoqPct": 6.969234382339126,
+      "intensityCurrentPct": 15.208354202143646,
+      "intensityYearAgoPct": 14.31949226365786
+    },
+    "paymentBehavior": {
+      "state": "rising",
+      "dpoCurrent": 40.12532921228479,
+      "dpoYearAgo": 19.456876456876458,
+      "yoyPctChange": 106.22698253348717
+    },
+    "retrenchment": {
+      "triggered": false,
+      "causes": []
+    },
+    "redFlags": {
+      "findings": [],
+      "windowStart": "2025-09-21",
+      "windowEnd": "2026-09-21",
+      "goingConcernChecked": false
+    },
+    "altmanZPrime": 6.756387537663925,
+    "altmanZone": {
+      "z": 6.756387537663925,
+      "scored": "safe",
+      "zone": "safe",
+      "capped": false,
+      "ttmOperatingIncome": 147628000000,
+      "ttmFreeCashFlow": 53273000000
+    },
+    "cashPosition": {
+      "case": "heavy-investment",
+      "capitalExpenditure": 44924000000,
+      "operatingCashFlow": 39069000000,
+      "capitalExpenditureYearAgo": 22446000000,
+      "operatingCashFlowYearAgo": 27747000000
+    },
+    "ladder": {
+      "rung": "Neutral",
+      "rule": "Altman Z'' 6.76 is safe, but DPO is up 106% Y/Y (beyond the band) -- safe balance sheet, slower payer.",
+      "net30": true,
+      "net45": false,
+      "net60": false,
+      "escalateBeforeSigning": false
+    },
+    "opportunity": {
+      "high": true,
+      "rule": "Revenue up (24.2% Y/Y) and R&D up (31.9% Y/Y) -- not down.",
+      "rdNotFiled": false
+    },
+    "risk": {
+      "high": true,
+      "rule": "Ladder is Neutral."
+    },
+    "quadrant": "Pursue with guardrails",
+    "dealStructure": {
+      "contractStructure": "T&M monthly",
+      "creditExposure": "Up to about 2 months of our work unpaid at any time: we invoice each month's work at month end, and they have 30 days to pay.",
+      "billingAssumption": "monthly billing in arrears"
+    },
+    "negotiationNote": "Payables ≈ 40.1 days of cost of revenue, up 106% Y/Y. Expect pressure for longer terms; our ceiling is Net 30."
+  },
+  "saas": {
+    "lens": "SaaS",
+    "revenue": {
+      "direction": "up",
+      "yoyPct": 24.23362508814867,
+      "qoqPct": 9.008517143481109
+    },
+    "engineeringSpend": {
+      "direction": "up",
+      "yoyPct": 31.945249130938585,
+      "qoqPct": 6.969234382339126,
+      "intensityCurrentPct": 15.208354202143646,
+      "intensityYearAgoPct": 14.31949226365786
+    },
+    "paymentBehavior": {
+      "state": "rising",
+      "dpoCurrent": 40.12532921228479,
+      "dpoYearAgo": 19.456876456876458,
+      "yoyPctChange": 106.22698253348717
+    },
+    "retrenchment": {
+      "triggered": false,
+      "causes": []
+    },
+    "redFlags": {
+      "findings": [],
+      "windowStart": "2025-09-21",
+      "windowEnd": "2026-09-21",
+      "goingConcernChecked": false
+    },
+    "altmanZPrime": 6.756387537663925,
+    "altmanZone": {
+      "z": 6.756387537663925,
+      "scored": "safe",
+      "zone": "safe",
+      "capped": false,
+      "ttmOperatingIncome": 147628000000,
+      "ttmFreeCashFlow": 53273000000
+    },
+    "cashPosition": {
+      "case": "heavy-investment",
+      "capitalExpenditure": 44924000000,
+      "operatingCashFlow": 39069000000,
+      "capitalExpenditureYearAgo": 22446000000,
+      "operatingCashFlowYearAgo": 27747000000
+    },
+    "ladder": {
+      "rung": "Neutral",
+      "rule": "Altman Z'' 6.76 is safe, but DPO is up 106% Y/Y (beyond the band) -- safe balance sheet, slower payer.",
+      "net30": true,
+      "net45": false,
+      "net60": false,
+      "escalateBeforeSigning": false
+    },
+    "opportunity": {
+      "high": true,
+      "rule": "Revenue up (24.2% Y/Y) and R&D up (31.9% Y/Y) -- not down.",
+      "rdNotFiled": false
+    },
+    "risk": {
+      "high": true,
+      "rule": "Ladder is Neutral."
+    },
+    "quadrant": "Pursue with guardrails",
+    "dealStructure": {
+      "creditExposure": "Up to 30 days of the annual fee, until the invoice is paid; nothing owed after that.",
+      "billingAssumption": "annual billing in advance"
+    },
+    "negotiationNote": "Payables ≈ 40.1 days of cost of revenue, up 106% Y/Y. Expect pressure for longer terms; our ceiling is Net 30.",
+    "techInvestment": {
+      "intensityCurrentPct": 15.208354202143646,
+      "intensityYearAgoPct": 14.31949226365786
+    }
+  }
+}

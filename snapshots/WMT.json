@@ -1,0 +1,779 @@
+{
+  "ticker": "WMT",
+  "cik": "0000104169",
+  "quarters": [
+    {
+      "label": "Q2 FY27",
+      "periodEnd": "2026-07-31",
+      "form": "10-Q",
+      "accessionNumber": "0000104169-26-000154",
+      "filingDate": "2026-08-28"
+    },
+    {
+      "label": "Q1 FY27",
+      "periodEnd": "2026-04-30",
+      "form": "10-Q",
+      "accessionNumber": "0000104169-26-000102",
+      "filingDate": "2026-05-29"
+    },
+    {
+      "label": "Q4 FY26",
+      "periodEnd": "2026-01-31",
+      "form": "10-K",
+      "accessionNumber": "0000104169-26-000055",
+      "filingDate": "2026-03-13"
+    },
+    {
+      "label": "Q3 FY26",
+      "periodEnd": "2025-10-31",
+      "form": "10-Q",
+      "accessionNumber": "0000104169-25-000191",
+      "filingDate": "2025-12-03"
+    },
+    {
+      "label": "Q2 FY26",
+      "periodEnd": "2025-07-31",
+      "form": "10-Q",
+      "accessionNumber": "0000104169-25-000137",
+      "filingDate": "2025-08-29"
+    }
+  ],
+  "rows": {
+    "revenue": [
+      {
+        "value": 187937000000,
+        "concept": "Revenues",
+        "method": "direct",
+        "derived": false
+      },
+      {
+        "value": 177751000000,
+        "concept": "Revenues",
+        "method": "direct",
+        "derived": false
+      },
+      {
+        "value": 190656000000,
+        "concept": "Revenues",
+        "method": "annual-minus-9mo",
+        "derived": true
+      },
+      {
+        "value": 179496000000,
+        "concept": "Revenues",
+        "method": "direct",
+        "derived": false
+      },
+      {
+        "value": 177402000000,
+        "concept": "Revenues",
+        "method": "direct",
+        "derived": false
+      }
+    ],
+    "costOfRevenue": [
+      {
+        "value": 138804000000,
+        "concept": "CostOfRevenue",
+        "method": "direct",
+        "derived": false
+      },
+      {
+        "value": 133058000000,
+        "concept": "CostOfRevenue",
+        "method": "direct",
+        "derived": false
+      },
+      {
+        "value": 143615000000,
+        "concept": "CostOfRevenue",
+        "method": "annual-minus-9mo",
+        "derived": true
+      },
+      {
+        "value": 134706000000,
+        "concept": "CostOfRevenue",
+        "method": "direct",
+        "derived": false
+      },
+      {
+        "value": 132771000000,
+        "concept": "CostOfRevenue",
+        "method": "direct",
+        "derived": false
+      }
+    ],
+    "grossProfit": [
+      {
+        "value": 49133000000,
+        "concept": "Revenues-CostOfRevenue",
+        "method": "computed-difference",
+        "derived": true
+      },
+      {
+        "value": 44693000000,
+        "concept": "Revenues-CostOfRevenue",
+        "method": "computed-difference",
+        "derived": true
+      },
+      {
+        "value": 47041000000,
+        "concept": "Revenues-CostOfRevenue",
+        "method": "computed-difference",
+        "derived": true
+      },
+      {
+        "value": 44790000000,
+        "concept": "Revenues-CostOfRevenue",
+        "method": "computed-difference",
+        "derived": true
+      },
+      {
+        "value": 44631000000,
+        "concept": "Revenues-CostOfRevenue",
+        "method": "computed-difference",
+        "derived": true
+      }
+    ],
+    "researchAndDevelopment": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "sga": [
+      {
+        "value": 39750000000,
+        "concept": "SellingGeneralAndAdministrativeExpense",
+        "method": "direct",
+        "derived": false
+      },
+      {
+        "value": 37200000000,
+        "concept": "SellingGeneralAndAdministrativeExpense",
+        "method": "direct",
+        "derived": false
+      },
+      {
+        "value": 38333000000,
+        "concept": "SellingGeneralAndAdministrativeExpense",
+        "method": "annual-minus-9mo",
+        "derived": true
+      },
+      {
+        "value": 38094000000,
+        "concept": "SellingGeneralAndAdministrativeExpense",
+        "method": "direct",
+        "derived": false
+      },
+      {
+        "value": 37345000000,
+        "concept": "SellingGeneralAndAdministrativeExpense",
+        "method": "direct",
+        "derived": false
+      }
+    ],
+    "operatingIncome": [
+      {
+        "value": 9383000000,
+        "concept": "OperatingIncomeLoss",
+        "method": "direct",
+        "derived": false
+      },
+      {
+        "value": 7493000000,
+        "concept": "OperatingIncomeLoss",
+        "method": "direct",
+        "derived": false
+      },
+      {
+        "value": 8708000000,
+        "concept": "OperatingIncomeLoss",
+        "method": "annual-minus-9mo",
+        "derived": true
+      },
+      {
+        "value": 6696000000,
+        "concept": "OperatingIncomeLoss",
+        "method": "direct",
+        "derived": false
+      },
+      {
+        "value": 7286000000,
+        "concept": "OperatingIncomeLoss",
+        "method": "direct",
+        "derived": false
+      }
+    ],
+    "netIncome": [
+      {
+        "value": 6366000000,
+        "concept": "NetIncomeLoss",
+        "method": "direct",
+        "derived": false
+      },
+      {
+        "value": 5330000000,
+        "concept": "NetIncomeLoss",
+        "method": "direct",
+        "derived": false
+      },
+      {
+        "value": 4237000000,
+        "concept": "NetIncomeLoss",
+        "method": "annual-minus-9mo",
+        "derived": true
+      },
+      {
+        "value": 6143000000,
+        "concept": "NetIncomeLoss",
+        "method": "direct",
+        "derived": false
+      },
+      {
+        "value": 7026000000,
+        "concept": "NetIncomeLoss",
+        "method": "direct",
+        "derived": false
+      }
+    ],
+    "operatingCashFlow": [
+      {
+        "value": 14972000000,
+        "concept": "NetCashProvidedByUsedInOperatingActivities",
+        "method": "ytd-subtraction",
+        "derived": true
+      },
+      {
+        "value": 4738000000,
+        "concept": "NetCashProvidedByUsedInOperatingActivities",
+        "method": "direct",
+        "derived": false
+      },
+      {
+        "value": 14113000000,
+        "concept": "NetCashProvidedByUsedInOperatingActivities",
+        "method": "annual-minus-9mo",
+        "derived": true
+      },
+      {
+        "value": 9100000000,
+        "concept": "NetCashProvidedByUsedInOperatingActivities",
+        "method": "ytd-subtraction",
+        "derived": true
+      },
+      {
+        "value": 12941000000,
+        "concept": "NetCashProvidedByUsedInOperatingActivities",
+        "method": "ytd-subtraction",
+        "derived": true
+      }
+    ],
+    "capitalExpenditures": [
+      {
+        "value": 7497000000,
+        "concept": "PaymentsToAcquirePropertyPlantAndEquipment",
+        "method": "ytd-subtraction",
+        "derived": true
+      },
+      {
+        "value": 6684000000,
+        "concept": "PaymentsToAcquirePropertyPlantAndEquipment",
+        "method": "direct",
+        "derived": false
+      },
+      {
+        "value": 8015000000,
+        "concept": "PaymentsToAcquirePropertyPlantAndEquipment",
+        "method": "annual-minus-9mo",
+        "derived": true
+      },
+      {
+        "value": 7218000000,
+        "concept": "PaymentsToAcquirePropertyPlantAndEquipment",
+        "method": "ytd-subtraction",
+        "derived": true
+      },
+      {
+        "value": 6423000000,
+        "concept": "PaymentsToAcquirePropertyPlantAndEquipment",
+        "method": "ytd-subtraction",
+        "derived": true
+      }
+    ],
+    "freeCashFlow": [
+      {
+        "value": 7475000000,
+        "concept": "NetCashProvidedByUsedInOperatingActivities-PaymentsToAcquirePropertyPlantAndEquipment",
+        "method": "computed-difference",
+        "derived": true
+      },
+      {
+        "value": -1946000000,
+        "concept": "NetCashProvidedByUsedInOperatingActivities-PaymentsToAcquirePropertyPlantAndEquipment",
+        "method": "computed-difference",
+        "derived": true
+      },
+      {
+        "value": 6098000000,
+        "concept": "NetCashProvidedByUsedInOperatingActivities-PaymentsToAcquirePropertyPlantAndEquipment",
+        "method": "computed-difference",
+        "derived": true
+      },
+      {
+        "value": 1882000000,
+        "concept": "NetCashProvidedByUsedInOperatingActivities-PaymentsToAcquirePropertyPlantAndEquipment",
+        "method": "computed-difference",
+        "derived": true
+      },
+      {
+        "value": 6518000000,
+        "concept": "NetCashProvidedByUsedInOperatingActivities-PaymentsToAcquirePropertyPlantAndEquipment",
+        "method": "computed-difference",
+        "derived": true
+      }
+    ],
+    "cash": [
+      {
+        "value": 11529000000,
+        "concept": "CashAndCashEquivalentsAtCarryingValue",
+        "method": "instant",
+        "derived": false
+      },
+      {
+        "value": 10729000000,
+        "concept": "CashAndCashEquivalentsAtCarryingValue",
+        "method": "instant",
+        "derived": false
+      },
+      {
+        "value": 10727000000,
+        "concept": "CashAndCashEquivalentsAtCarryingValue",
+        "method": "instant",
+        "derived": false
+      },
+      {
+        "value": 10582000000,
+        "concept": "CashAndCashEquivalentsAtCarryingValue",
+        "method": "instant",
+        "derived": false
+      },
+      {
+        "value": 9431000000,
+        "concept": "CashAndCashEquivalentsAtCarryingValue",
+        "method": "instant",
+        "derived": false
+      }
+    ],
+    "accountsReceivable": [
+      {
+        "value": 11075000000,
+        "concept": "ReceivablesNetCurrent",
+        "method": "instant",
+        "derived": false
+      },
+      {
+        "value": 10662000000,
+        "concept": "ReceivablesNetCurrent",
+        "method": "instant",
+        "derived": false
+      },
+      {
+        "value": 11172000000,
+        "concept": "ReceivablesNetCurrent",
+        "method": "instant",
+        "derived": false
+      },
+      {
+        "value": 12115000000,
+        "concept": "ReceivablesNetCurrent",
+        "method": "instant",
+        "derived": false
+      },
+      {
+        "value": 10518000000,
+        "concept": "ReceivablesNetCurrent",
+        "method": "instant",
+        "derived": false
+      }
+    ],
+    "accountsPayable": [
+      {
+        "value": 64318000000,
+        "concept": "AccountsPayableCurrent",
+        "method": "instant",
+        "derived": false
+      },
+      {
+        "value": 62876000000,
+        "concept": "AccountsPayableCurrent",
+        "method": "instant",
+        "derived": false
+      },
+      {
+        "value": 63061000000,
+        "concept": "AccountsPayableCurrent",
+        "method": "instant",
+        "derived": false
+      },
+      {
+        "value": 67156000000,
+        "concept": "AccountsPayableCurrent",
+        "method": "instant",
+        "derived": false
+      },
+      {
+        "value": 60086000000,
+        "concept": "AccountsPayableCurrent",
+        "method": "instant",
+        "derived": false
+      }
+    ],
+    "currentAssets": [
+      {
+        "value": 88703000000,
+        "concept": "AssetsCurrent",
+        "method": "instant",
+        "derived": false
+      },
+      {
+        "value": 88394000000,
+        "concept": "AssetsCurrent",
+        "method": "instant",
+        "derived": false
+      },
+      {
+        "value": 84874000000,
+        "concept": "AssetsCurrent",
+        "method": "instant",
+        "derived": false
+      },
+      {
+        "value": 92920000000,
+        "concept": "AssetsCurrent",
+        "method": "instant",
+        "derived": false
+      },
+      {
+        "value": 82033000000,
+        "concept": "AssetsCurrent",
+        "method": "instant",
+        "derived": false
+      }
+    ],
+    "currentLiabilities": [
+      {
+        "value": 115630000000,
+        "concept": "LiabilitiesCurrent",
+        "method": "instant",
+        "derived": false
+      },
+      {
+        "value": 114583000000,
+        "concept": "LiabilitiesCurrent",
+        "method": "instant",
+        "derived": false
+      },
+      {
+        "value": 107469000000,
+        "concept": "LiabilitiesCurrent",
+        "method": "instant",
+        "derived": false
+      },
+      {
+        "value": 115732000000,
+        "concept": "LiabilitiesCurrent",
+        "method": "instant",
+        "derived": false
+      },
+      {
+        "value": 103566000000,
+        "concept": "LiabilitiesCurrent",
+        "method": "instant",
+        "derived": false
+      }
+    ],
+    "totalAssets": [
+      {
+        "value": 293914000000,
+        "concept": "Assets",
+        "method": "instant",
+        "derived": false
+      },
+      {
+        "value": 289607000000,
+        "concept": "Assets",
+        "method": "instant",
+        "derived": false
+      },
+      {
+        "value": 284668000000,
+        "concept": "Assets",
+        "method": "instant",
+        "derived": false
+      },
+      {
+        "value": 288655000000,
+        "concept": "Assets",
+        "method": "instant",
+        "derived": false
+      },
+      {
+        "value": 270837000000,
+        "concept": "Assets",
+        "method": "instant",
+        "derived": false
+      }
+    ],
+    "totalLiabilities": [
+      {
+        "value": 189408000000,
+        "concept": "Assets-StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
+        "method": "computed-difference",
+        "derived": true
+      },
+      {
+        "value": 188925000000,
+        "concept": "Assets-StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
+        "method": "computed-difference",
+        "derived": true
+      },
+      {
+        "value": 178781000000,
+        "concept": "Assets-StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
+        "method": "computed-difference",
+        "derived": true
+      },
+      {
+        "value": 186449000000,
+        "concept": "Assets-StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
+        "method": "computed-difference",
+        "derived": true
+      },
+      {
+        "value": 174287000000,
+        "concept": "Assets-StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
+        "method": "computed-difference",
+        "derived": true
+      }
+    ],
+    "equity": [
+      {
+        "value": 104506000000,
+        "concept": "StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
+        "method": "instant",
+        "derived": false
+      },
+      {
+        "value": 100682000000,
+        "concept": "StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
+        "method": "instant",
+        "derived": false
+      },
+      {
+        "value": 105887000000,
+        "concept": "StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
+        "method": "instant",
+        "derived": false
+      },
+      {
+        "value": 102206000000,
+        "concept": "StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
+        "method": "instant",
+        "derived": false
+      },
+      {
+        "value": 96550000000,
+        "concept": "StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
+        "method": "instant",
+        "derived": false
+      }
+    ],
+    "retainedEarnings": [
+      {
+        "value": 103601000000,
+        "concept": "RetainedEarningsAccumulatedDeficit",
+        "method": "instant",
+        "derived": false
+      },
+      {
+        "value": 100241000000,
+        "concept": "RetainedEarningsAccumulatedDeficit",
+        "method": "instant",
+        "derived": false
+      },
+      {
+        "value": 104774000000,
+        "concept": "RetainedEarningsAccumulatedDeficit",
+        "method": "instant",
+        "derived": false
+      },
+      {
+        "value": 101558000000,
+        "concept": "RetainedEarningsAccumulatedDeficit",
+        "method": "instant",
+        "derived": false
+      },
+      {
+        "value": 96328000000,
+        "concept": "RetainedEarningsAccumulatedDeficit",
+        "method": "instant",
+        "derived": false
+      }
+    ],
+    "longTermDebt": [
+      {
+        "value": 39932000000,
+        "concept": "LongTermDebtNoncurrent+LongTermDebtCurrent",
+        "method": "computed-sum",
+        "derived": true
+      },
+      {
+        "value": 40783000000,
+        "concept": "LongTermDebtNoncurrent+LongTermDebtCurrent",
+        "method": "computed-sum",
+        "derived": true
+      },
+      {
+        "value": 38166000000,
+        "concept": "LongTermDebtNoncurrent+LongTermDebtCurrent",
+        "method": "computed-sum",
+        "derived": true
+      },
+      {
+        "value": 37968000000,
+        "concept": "LongTermDebtNoncurrent+LongTermDebtCurrent",
+        "method": "computed-sum",
+        "derived": true
+      },
+      {
+        "value": 39651000000,
+        "concept": "LongTermDebtNoncurrent+LongTermDebtCurrent",
+        "method": "computed-sum",
+        "derived": true
+      }
+    ]
+  },
+  "annual": {
+    "years": [
+      {
+        "label": "FY26",
+        "periodEnd": "2026-01-31"
+      },
+      {
+        "label": "FY25",
+        "periodEnd": "2025-01-31"
+      },
+      {
+        "label": "FY24",
+        "periodEnd": "2024-01-31"
+      }
+    ],
+    "rows": {
+      "revenue": [
+        {
+          "value": 713163000000,
+          "concept": "Revenues"
+        },
+        {
+          "value": 680985000000,
+          "concept": "Revenues"
+        },
+        {
+          "value": 648125000000,
+          "concept": "Revenues"
+        }
+      ],
+      "grossProfit": [
+        {
+          "value": 177768000000,
+          "concept": "Revenues-CostOfRevenue"
+        },
+        {
+          "value": 169232000000,
+          "concept": "Revenues-CostOfRevenue"
+        },
+        {
+          "value": 157983000000,
+          "concept": "Revenues-CostOfRevenue"
+        }
+      ],
+      "researchAndDevelopment": [
+        null,
+        null,
+        null
+      ],
+      "sga": [
+        {
+          "value": 147943000000,
+          "concept": "SellingGeneralAndAdministrativeExpense"
+        },
+        {
+          "value": 139884000000,
+          "concept": "SellingGeneralAndAdministrativeExpense"
+        },
+        {
+          "value": 130971000000,
+          "concept": "SellingGeneralAndAdministrativeExpense"
+        }
+      ],
+      "operatingIncome": [
+        {
+          "value": 29825000000,
+          "concept": "OperatingIncomeLoss"
+        },
+        {
+          "value": 29348000000,
+          "concept": "OperatingIncomeLoss"
+        },
+        {
+          "value": 27012000000,
+          "concept": "OperatingIncomeLoss"
+        }
+      ],
+      "netIncome": [
+        {
+          "value": 21893000000,
+          "concept": "NetIncomeLoss"
+        },
+        {
+          "value": 19436000000,
+          "concept": "NetIncomeLoss"
+        },
+        {
+          "value": 15511000000,
+          "concept": "NetIncomeLoss"
+        }
+      ],
+      "freeCashFlow": [
+        {
+          "value": 14923000000,
+          "concept": "NetCashProvidedByUsedInOperatingActivities-PaymentsToAcquirePropertyPlantAndEquipment"
+        },
+        {
+          "value": 12660000000,
+          "concept": "NetCashProvidedByUsedInOperatingActivities-PaymentsToAcquirePropertyPlantAndEquipment"
+        },
+        {
+          "value": 15120000000,
+          "concept": "NetCashProvidedByUsedInOperatingActivities-PaymentsToAcquirePropertyPlantAndEquipment"
+        }
+      ],
+      "cash": [
+        {
+          "value": 10727000000,
+          "concept": "CashAndCashEquivalentsAtCarryingValue"
+        },
+        {
+          "value": 9037000000,
+          "concept": "CashAndCashEquivalentsAtCarryingValue"
+        },
+        {
+          "value": 9867000000,
+          "concept": "CashAndCashEquivalentsAtCarryingValue"
+        }
+      ]
+    }
+  }
+}

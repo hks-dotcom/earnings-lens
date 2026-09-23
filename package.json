@@ -1,0 +1,50 @@
+{
+  "name": "earnings-lens",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "db:apply": "tsx --env-file-if-exists=.env.local scripts/apply-schema.ts",
+    "test:verify": "tsx --env-file-if-exists=.env.local scripts/test-verify.ts",
+    "explain-report": "tsx --env-file-if-exists=.env.local scripts/explain-report.ts",
+    "audit-explanations": "tsx --env-file-if-exists=.env.local scripts/audit-explanations.ts",
+    "test:deadlines": "tsx --env-file-if-exists=.env.local scripts/test-deadlines.ts",
+    "test:runway": "tsx --env-file-if-exists=.env.local scripts/test-runway.ts",
+    "test:ladder": "tsx --env-file-if-exists=.env.local scripts/test-ladder.ts",
+    "test:periods": "tsx --env-file-if-exists=.env.local scripts/test-periods.ts",
+    "test:oneoff": "tsx --env-file-if-exists=.env.local scripts/test-oneoff.ts",
+    "test:resolution": "tsx --env-file-if-exists=.env.local scripts/test-resolution.ts",
+    "test:footing": "tsx --env-file-if-exists=.env.local scripts/test-footing.ts NVDA MSFT WMT UFPT NAII AMZN GOOGL FDX SNAP RIVN UBER TGT ZM",
+    "test:statements-snapshot": "tsx --env-file-if-exists=.env.local scripts/diff-statements-snapshot.ts NVDA MSFT WMT UFPT NAII AMZN GOOGL FDX SNAP RIVN UBER TGT ZM",
+    "test:snapshot": "tsx --env-file-if-exists=.env.local scripts/diff-snapshot.ts NVDA MSFT WMT UFPT NAII AMZN GOOGL FDX SNAP RIVN UBER TGT ZM",
+    "test:rules-snapshot": "tsx --env-file-if-exists=.env.local scripts/diff-rules-snapshot.ts 2026-09-21 NVDA MSFT WMT UFPT NAII AMZN GOOGL FDX SNAP RIVN UBER TGT ZM",
+    "snapshot": "tsx --env-file-if-exists=.env.local scripts/snapshot.ts NVDA MSFT WMT UFPT NAII AMZN GOOGL FDX SNAP RIVN UBER TGT ZM",
+    "rules-snapshot": "tsx --env-file-if-exists=.env.local scripts/rules-snapshot.ts 2026-09-21 NVDA MSFT WMT UFPT NAII AMZN GOOGL FDX SNAP RIVN UBER TGT ZM",
+    "statements-snapshot": "tsx --env-file-if-exists=.env.local scripts/statements-snapshot.ts NVDA MSFT WMT UFPT NAII AMZN GOOGL FDX SNAP RIVN UBER TGT ZM",
+    "check": "npm run typecheck && npm run lint && npm run test:deadlines && npm run test:runway && npm run test:ladder && npm run test:periods && npm run test:oneoff && npm run test:resolution && npm run test:verify && npm run test:snapshot && npm run test:rules-snapshot && npm run test:footing && npm run test:statements-snapshot"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.127.0",
+    "@neondatabase/serverless": "^1.1.0",
+    "html-to-image": "^1.11.13",
+    "next": "16.3.5",
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.3.5",
+    "playwright": "^1.63.0",
+    "tailwindcss": "^4",
+    "tsx": "^4.23.15",
+    "typescript": "^5"
+  }
+}

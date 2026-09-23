@@ -1,0 +1,126 @@
+{
+  "ticker": "FDX",
+  "cik": "0001048911",
+  "asOf": "2026-09-21",
+  "quarterLabel": "Q4 FY26",
+  "services": {
+    "lens": "Services",
+    "revenue": {
+      "direction": "up",
+      "yoyPct": 12.542754275427543,
+      "qoqPct": 4.195833333333334
+    },
+    "engineeringSpend": {},
+    "paymentBehavior": {
+      "state": "missing"
+    },
+    "retrenchment": {
+      "triggered": true,
+      "causes": [
+        "restructuring filing (8-K Item 2.05) filed 29 Jan 2026"
+      ]
+    },
+    "redFlags": {
+      "findings": [],
+      "windowStart": "2025-09-21",
+      "windowEnd": "2026-09-21",
+      "goingConcernChecked": false
+    },
+    "altmanZPrime": 2.926029156293414,
+    "altmanZone": {
+      "z": 2.926029156293414,
+      "scored": "safe",
+      "zone": "safe",
+      "capped": false,
+      "ttmOperatingIncome": 5463000000,
+      "ttmFreeCashFlow": 5116000000
+    },
+    "cashPosition": {
+      "case": "none"
+    },
+    "ladder": {
+      "rung": "Strong",
+      "rule": "Altman Z'' 2.93 is safe (> 2.6), no red flags, and DPO unavailable, treated as not rising.",
+      "net30": true,
+      "net45": true,
+      "net60": false,
+      "escalateBeforeSigning": false
+    },
+    "opportunity": {
+      "high": true,
+      "rule": "R&D not filed. Revenue up (12.5% Y/Y) decides opportunity alone.",
+      "rdNotFiled": true
+    },
+    "risk": {
+      "high": true,
+      "rule": "Ladder is Strong, but retrenchment is present (restructuring filing (8-K Item 2.05) filed 29 Jan 2026)."
+    },
+    "quadrant": "Pursue with guardrails",
+    "dealStructure": {
+      "contractStructure": "Milestone acceptable",
+      "creditExposure": "Up to about 2½ months of our work unpaid at any time: we invoice each month's work at month end, and they have 45 days to pay.",
+      "billingAssumption": "monthly billing in arrears"
+    },
+    "negotiationNote": "Payables day count unavailable. Expect pressure for longer terms; our ceiling is Net 45."
+  },
+  "saas": {
+    "lens": "SaaS",
+    "revenue": {
+      "direction": "up",
+      "yoyPct": 12.542754275427543,
+      "qoqPct": 4.195833333333334
+    },
+    "engineeringSpend": {},
+    "paymentBehavior": {
+      "state": "missing"
+    },
+    "retrenchment": {
+      "triggered": true,
+      "causes": [
+        "restructuring filing (8-K Item 2.05) filed 29 Jan 2026"
+      ]
+    },
+    "redFlags": {
+      "findings": [],
+      "windowStart": "2025-09-21",
+      "windowEnd": "2026-09-21",
+      "goingConcernChecked": false
+    },
+    "altmanZPrime": 2.926029156293414,
+    "altmanZone": {
+      "z": 2.926029156293414,
+      "scored": "safe",
+      "zone": "safe",
+      "capped": false,
+      "ttmOperatingIncome": 5463000000,
+      "ttmFreeCashFlow": 5116000000
+    },
+    "cashPosition": {
+      "case": "none"
+    },
+    "ladder": {
+      "rung": "Strong",
+      "rule": "Altman Z'' 2.93 is safe (> 2.6), no red flags, and DPO unavailable, treated as not rising.",
+      "net30": true,
+      "net45": true,
+      "net60": false,
+      "escalateBeforeSigning": false
+    },
+    "opportunity": {
+      "high": false,
+      "rule": "Retrenchment present (restructuring filing (8-K Item 2.05) filed 29 Jan 2026) -- the SaaS lens sets opportunity to low regardless of revenue/R&D.",
+      "rdNotFiled": true
+    },
+    "risk": {
+      "high": true,
+      "rule": "Ladder is Strong, but retrenchment is present (restructuring filing (8-K Item 2.05) filed 29 Jan 2026)."
+    },
+    "quadrant": "Limit exposure",
+    "dealStructure": {
+      "creditExposure": "Up to 45 days of the annual fee, until the invoice is paid; nothing owed after that.",
+      "billingAssumption": "annual billing in advance"
+    },
+    "negotiationNote": "Payables day count unavailable. Expect pressure for longer terms; our ceiling is Net 45.",
+    "techInvestment": {}
+  }
+}

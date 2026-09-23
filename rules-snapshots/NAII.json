@@ -1,0 +1,140 @@
+{
+  "ticker": "NAII",
+  "cik": "0000787253",
+  "asOf": "2026-09-21",
+  "quarterLabel": "Q3 FY26",
+  "services": {
+    "lens": "Services",
+    "revenue": {
+      "direction": "up",
+      "yoyPct": 23.34700688312591,
+      "qoqPct": 1.974421612300618
+    },
+    "engineeringSpend": {},
+    "paymentBehavior": {
+      "state": "stable",
+      "dpoCurrent": 46.55517251203738,
+      "dpoYearAgo": 42.83184855233853,
+      "yoyPctChange": 8.692886451419728
+    },
+    "retrenchment": {
+      "triggered": false,
+      "causes": []
+    },
+    "redFlags": {
+      "findings": [
+        {
+          "type": "late-filing-12b25",
+          "detail": "NT 10-Q filed 18 May 2026; 10-Q filed 19 May 2026.",
+          "date": "2026-05-18"
+        }
+      ],
+      "windowStart": "2025-09-21",
+      "windowEnd": "2026-09-21",
+      "goingConcernChecked": false
+    },
+    "altmanZPrime": 2.54862835093708,
+    "altmanZone": {
+      "z": 2.54862835093708,
+      "scored": "grey",
+      "zone": "grey",
+      "capped": false,
+      "ttmOperatingIncome": -7521000,
+      "ttmFreeCashFlow": -9024000
+    },
+    "cashPosition": {
+      "case": "none"
+    },
+    "ladder": {
+      "rung": "Weak",
+      "rule": "Red-flag filing(s) in the last 12 months: late-filing-12b25.",
+      "net30": true,
+      "net45": false,
+      "net60": false,
+      "escalateBeforeSigning": true
+    },
+    "opportunity": {
+      "high": true,
+      "rule": "R&D not filed. Revenue up (23.3% Y/Y) decides opportunity alone.",
+      "rdNotFiled": true
+    },
+    "risk": {
+      "high": true,
+      "rule": "Ladder is Weak."
+    },
+    "quadrant": "Pursue with guardrails",
+    "dealStructure": {
+      "contractStructure": "T&M monthly",
+      "creditExposure": "Up to about 2 months of our work unpaid at any time: we invoice each month's work at month end, and they have 30 days to pay.",
+      "billingAssumption": "monthly billing in arrears"
+    },
+    "negotiationNote": "Payables ≈ 46.6 days of cost of revenue, up 9% Y/Y. Expect pressure for longer terms; our ceiling is Net 30."
+  },
+  "saas": {
+    "lens": "SaaS",
+    "revenue": {
+      "direction": "up",
+      "yoyPct": 23.34700688312591,
+      "qoqPct": 1.974421612300618
+    },
+    "engineeringSpend": {},
+    "paymentBehavior": {
+      "state": "stable",
+      "dpoCurrent": 46.55517251203738,
+      "dpoYearAgo": 42.83184855233853,
+      "yoyPctChange": 8.692886451419728
+    },
+    "retrenchment": {
+      "triggered": false,
+      "causes": []
+    },
+    "redFlags": {
+      "findings": [
+        {
+          "type": "late-filing-12b25",
+          "detail": "NT 10-Q filed 18 May 2026; 10-Q filed 19 May 2026.",
+          "date": "2026-05-18"
+        }
+      ],
+      "windowStart": "2025-09-21",
+      "windowEnd": "2026-09-21",
+      "goingConcernChecked": false
+    },
+    "altmanZPrime": 2.54862835093708,
+    "altmanZone": {
+      "z": 2.54862835093708,
+      "scored": "grey",
+      "zone": "grey",
+      "capped": false,
+      "ttmOperatingIncome": -7521000,
+      "ttmFreeCashFlow": -9024000
+    },
+    "cashPosition": {
+      "case": "none"
+    },
+    "ladder": {
+      "rung": "Weak",
+      "rule": "Red-flag filing(s) in the last 12 months: late-filing-12b25.",
+      "net30": true,
+      "net45": false,
+      "net60": false,
+      "escalateBeforeSigning": true
+    },
+    "opportunity": {
+      "high": true,
+      "rule": "R&D not filed. Revenue up (23.3% Y/Y) decides opportunity alone.",
+      "rdNotFiled": true
+    },
+    "risk": {
+      "high": true,
+      "rule": "Ladder is Weak."
+    },
+    "quadrant": "Pursue with guardrails",
+    "dealStructure": {
+      "creditExposure": "Up to 30 days of the annual fee, until the invoice is paid; nothing owed after that.",
+      "billingAssumption": "annual billing in advance"
+    },
+    "negotiationNote": "Payables ≈ 46.6 days of cost of revenue, up 9% Y/Y. Expect pressure for longer terms; our ceiling is Net 30.",
+    "techInvestment": {}
+  }
+}

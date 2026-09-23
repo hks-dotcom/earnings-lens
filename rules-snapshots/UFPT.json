@@ -1,0 +1,126 @@
+{
+  "ticker": "UFPT",
+  "cik": "0000914156",
+  "asOf": "2026-09-21",
+  "quarterLabel": "Q2 FY26",
+  "services": {
+    "lens": "Services",
+    "revenue": {
+      "direction": "up",
+      "yoyPct": 15.0738212414669,
+      "qoqPct": 12.815657384469722
+    },
+    "engineeringSpend": {},
+    "paymentBehavior": {
+      "state": "rising",
+      "dpoCurrent": 24.375184890203663,
+      "dpoYearAgo": 19.16332351602204,
+      "yoyPctChange": 27.197064067848665
+    },
+    "retrenchment": {
+      "triggered": false,
+      "causes": []
+    },
+    "redFlags": {
+      "findings": [],
+      "windowStart": "2025-09-21",
+      "windowEnd": "2026-09-21",
+      "goingConcernChecked": false
+    },
+    "altmanZPrime": 6.6432836135939475,
+    "altmanZone": {
+      "z": 6.6432836135939475,
+      "scored": "safe",
+      "zone": "safe",
+      "capped": false,
+      "ttmOperatingIncome": 96349000
+    },
+    "cashPosition": {
+      "case": "none"
+    },
+    "ladder": {
+      "rung": "Neutral",
+      "rule": "Altman Z'' 6.64 is safe, but DPO is up 27% Y/Y (beyond the band) -- safe balance sheet, slower payer.",
+      "net30": true,
+      "net45": false,
+      "net60": false,
+      "escalateBeforeSigning": false
+    },
+    "opportunity": {
+      "high": true,
+      "rule": "R&D not filed. Revenue up (15.1% Y/Y) decides opportunity alone.",
+      "rdNotFiled": true
+    },
+    "risk": {
+      "high": true,
+      "rule": "Ladder is Neutral."
+    },
+    "quadrant": "Pursue with guardrails",
+    "dealStructure": {
+      "contractStructure": "T&M monthly",
+      "creditExposure": "Up to about 2 months of our work unpaid at any time: we invoice each month's work at month end, and they have 30 days to pay.",
+      "billingAssumption": "monthly billing in arrears"
+    },
+    "negotiationNote": "Payables ≈ 24.4 days of cost of revenue, up 27% Y/Y. Expect pressure for longer terms; our ceiling is Net 30."
+  },
+  "saas": {
+    "lens": "SaaS",
+    "revenue": {
+      "direction": "up",
+      "yoyPct": 15.0738212414669,
+      "qoqPct": 12.815657384469722
+    },
+    "engineeringSpend": {},
+    "paymentBehavior": {
+      "state": "rising",
+      "dpoCurrent": 24.375184890203663,
+      "dpoYearAgo": 19.16332351602204,
+      "yoyPctChange": 27.197064067848665
+    },
+    "retrenchment": {
+      "triggered": false,
+      "causes": []
+    },
+    "redFlags": {
+      "findings": [],
+      "windowStart": "2025-09-21",
+      "windowEnd": "2026-09-21",
+      "goingConcernChecked": false
+    },
+    "altmanZPrime": 6.6432836135939475,
+    "altmanZone": {
+      "z": 6.6432836135939475,
+      "scored": "safe",
+      "zone": "safe",
+      "capped": false,
+      "ttmOperatingIncome": 96349000
+    },
+    "cashPosition": {
+      "case": "none"
+    },
+    "ladder": {
+      "rung": "Neutral",
+      "rule": "Altman Z'' 6.64 is safe, but DPO is up 27% Y/Y (beyond the band) -- safe balance sheet, slower payer.",
+      "net30": true,
+      "net45": false,
+      "net60": false,
+      "escalateBeforeSigning": false
+    },
+    "opportunity": {
+      "high": true,
+      "rule": "R&D not filed. Revenue up (15.1% Y/Y) decides opportunity alone.",
+      "rdNotFiled": true
+    },
+    "risk": {
+      "high": true,
+      "rule": "Ladder is Neutral."
+    },
+    "quadrant": "Pursue with guardrails",
+    "dealStructure": {
+      "creditExposure": "Up to 30 days of the annual fee, until the invoice is paid; nothing owed after that.",
+      "billingAssumption": "annual billing in advance"
+    },
+    "negotiationNote": "Payables ≈ 24.4 days of cost of revenue, up 27% Y/Y. Expect pressure for longer terms; our ceiling is Net 30.",
+    "techInvestment": {}
+  }
+}
