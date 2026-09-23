@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Earnings Lens — mock: liquidity vs debt</title>
+<style>
+:root{--ink:#1C1B19;--muted:#6B675F;--line:#ECE9E2;--border:#D6D2C8;--nc:#1F6F5C;--nc-bg:#E4EFEA;--slate:#5B6770}
+*{box-sizing:border-box}
+body{margin:0;font-family:'IBM Plex Sans',system-ui,sans-serif;background:#E9E6DF;color:var(--ink)}
+.wrap{max-width:1180px;margin:0 auto;padding:24px 16px 48px;display:flex;flex-direction:column;gap:16px}
+.note{font-size:12px;color:var(--muted);margin:0}
+.panel{background:#fff;border:1px solid var(--border);border-radius:12px;padding:20px 22px}
+.lbl{font-size:12px;font-weight:600;letter-spacing:.08em;color:var(--muted);margin:0 0 12px}
+.i{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border:1px solid #9C978C;border-radius:50%;font-size:9px;color:var(--muted);margin-left:4px;vertical-align:1px;cursor:help}
+.tiles{display:grid;grid-template-columns:repeat(6,1fr)}
+.tile{padding:0 14px;border-left:1px solid var(--line)}.tile:first-child{border-left:0;padding-left:0}
+.tile .k{font-size:12.5px;color:var(--muted)}.tile .v{font-size:20px;font-weight:600;margin:4px 0}.tile .s{font-size:12px;color:var(--muted);line-height:1.35}
+.ph{background:#FFF6E0;border:1px dashed #D9B45A;border-radius:4px;padding:0 3px;color:#8A5A00}
+.liq{margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
+.liq-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.liq-head .k{font-size:12.5px;color:var(--muted)}
+.liq-head .net{font-size:15px;font-weight:600}
+.liq-head .net span{font-weight:400;color:var(--muted);font-size:13px}
+.pairs{display:grid;grid-template-columns:1fr 1fr;gap:10px 36px}
+.pair h4{margin:0 0 6px;font-size:11.5px;font-weight:600;color:var(--muted)}
+.pair h4 span{font-weight:400}
+.bar{display:grid;grid-template-columns:190px 1fr 74px;align-items:center;gap:10px;font-size:13px;margin:5px 0}
+.bar .name{color:#4A4741}
+.track{height:12px;background:#F3F1EC;border-radius:3px;overflow:hidden}
+.fill{height:100%;border-radius:3px}
+.fill.cash{background:var(--nc)}.fill.debt{background:var(--slate)}
+.bar .amt{text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
+.pair .netl{font-size:12.5px;color:var(--muted);margin-top:4px}
+.parts{font-size:11.5px;color:var(--muted);margin-top:10px;line-height:1.5}
+.seg{font-size:12px;color:var(--muted);margin-top:14px}
+.ann{font-size:12px;color:#8A5A00;background:#FFF6E0;border:1px dashed #D9B45A;border-radius:8px;padding:8px 10px;line-height:1.5;margin:0}
+@media (max-width:760px){.tiles{grid-template-columns:repeat(2,1fr);gap:14px 0}.tile{border-left:0;padding-left:0}.pairs{grid-template-columns:1fr}.bar{grid-template-columns:130px 1fr 64px;font-size:12px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<p class="note">Earnings Lens — mock: liquidity vs debt in Financial health. Amazon.com (AMZN) Q2 FY26. Every figure in the new strip is from the filed balance sheet rows already in the statement tabs.</p>
+
+<section class="panel" aria-label="Financial health">
+  <p class="lbl">FINANCIAL HEALTH</p>
+  <div class="tiles">
+    <div class="tile"><div class="k">Current ratio <span class="i">i</span></div><div class="v">1.0x</div><div class="s">Benchmark: above 1.0x</div></div>
+    <div class="tile"><div class="k">Debt / equity <span class="i">i</span></div><div class="v">0.24</div><div class="s">Benchmark: below 1.0</div></div>
+    <div class="tile"><div class="k">DSO <span class="i">i</span></div><div class="v">40.0 days</div><div class="s">Benchmark: within 45 days</div></div>
+    <div class="tile"><div class="k">DPO <span class="i">i</span></div><div class="v">140.1 days</div><div class="s">Benchmark: within 45 days</div></div>
+    <div class="tile"><div class="k">Altman Z'' <span class="i">i</span></div><div class="v">2.71</div><div class="s">Benchmark: above 2.6</div></div>
+    <div class="tile"><div class="k">Red flags, 12 mo <span class="i">i</span></div><div class="v">0</div></div>
+  </div>
+
+  <div class="liq">
+    <div class="liq-head">
+      <div class="k">Liquidity vs debt <span class="i" title="Cash and short-term investments against borrowings. Debt is long-term debt including the part due within a year, plus short-term borrowings; leases are excluded. Net Debt = debt − cash and short-term investments. The runway uses the same cash and short-term investments.">i</span></div>
+      <div class="net">Net Debt $10.3B <span>· Net Cash $36.9B a year ago</span></div>
+    </div>
+    <div class="pairs">
+      <div class="pair">
+        <h4>Q2 FY26 <span>· Jun 30, 2026</span></h4>
+        <div class="bar"><span class="name">Cash and short-term investments</span><div class="track"><div class="fill cash" style="width:92.3%"></div></div><span class="amt">$123.0B</span></div>
+        <div class="bar"><span class="name">Debt</span><div class="track"><div class="fill debt" style="width:100%"></div></div><span class="amt">$133.3B</span></div>
+      </div>
+      <div class="pair">
+        <h4>Q2 FY25 <span>· Jun 30, 2025</span></h4>
+        <div class="bar"><span class="name">Cash and short-term investments</span><div class="track"><div class="fill cash" style="width:69.9%"></div></div><span class="amt">$93.2B</span></div>
+        <div class="bar"><span class="name">Debt</span><div class="track"><div class="fill debt" style="width:42.2%"></div></div><span class="amt">$56.3B</span></div>
+      </div>
+    </div>
+    <div class="parts">Q2 FY26: cash $78.2B + short-term investments $44.8B · long-term debt, incl. the part due within a year, $133.0B + short-term borrowings $0.3B. Leases excluded.</div>
+  </div>
+
+</section>
+
+<p class="ann"><b>Notes for the build.</b>
+(1) A strip under the six tiles, not a seventh tile: two bars per period (latest quarter and the same quarter last year) on one shared scale, the net figure in the header, the components beneath. Display only: no effect on the ladder, the Summary or the findings.
+(2) Cash and short-term investments = the runway's liquidity, same rule: short-term investments never filed → cash only, labelled "Cash"; filed but missing for the quarter → cash only, and the line says so.
+(3) Debt = long-term debt including the part due within a year + short-term borrowings (the statement tab's rows). Leases excluded, and the hover says so. If either debt row is missing for the quarter, debt and net show MISSING. A company that has never tagged debt shows "No debt tagged" and no net figure.
+(4) Net reads "Net Debt $X" when debt is larger, "Net Cash $X" when liquidity is larger (capital N and D/C, everywhere including the Copy brief). Neutral colours only: teal for cash, slate for debt; nothing red or green.
+(5) Amounts in $B with one decimal (one decimal in $M under $100M quarterly revenue, as elsewhere). The Copy brief gains one line: "Liquidity vs debt: $123.0B vs $133.3B, Net Debt $10.3B (Net Cash $36.9B a year ago)."
+(6) Every tile has two parts: the metric, and one benchmark line. The formula lives only in the (i) hover. Benchmarks are reference points, not rules, declared in the footer: current ratio above 1.0x; debt/equity below 1.0; DSO within 45 days; DPO within 45 days (the terms ceiling, so a company inside it pays suppliers within the longest terms we'd offer); Altman Z'' above 2.6 (the rules' own safe zone). Red flags show the count only, with no benchmark line. The footer adds: "Benchmarks vary by industry: retailers often run a current ratio below 1.0x by design." No colour, no tick or cross against the benchmark. Current ratio, debt/equity and DSO values here are computed from the filed figures for the mock; on the page every value is the app's own. (7) Phone: tiles in two columns, the two periods stacked. (8) The bars keep one shared scale, without saying so on the page. The operating-segments line under the tiles stays exactly as live.</p>
+</div>
+</body>
+</html>
