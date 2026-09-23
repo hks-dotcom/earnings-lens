@@ -14,7 +14,7 @@ import {
   RetrenchmentSignal,
 } from "@/lib/rules/signals";
 import { computeRedFlags, RedFlagsResult } from "@/lib/rules/redFlags";
-import { computeLadder, negotiationNote, LadderResult } from "@/lib/rules/ladder";
+import { computeLadder, ladderForReading, negotiationNote, LadderResult } from "@/lib/rules/ladder";
 import { computeCashPosition, CashPosition } from "@/lib/rules/runway";
 import { computeOpportunity, computeRisk, computeQuadrant, OpportunityResult, RiskResult, Quadrant } from "@/lib/rules/matrix";
 import { computeDealStructure, DealStructureResult, Lens } from "@/lib/rules/dealStructure";
@@ -71,12 +71,15 @@ export function evaluateLens(
   const zPrime = health.altmanZDoublePrime[0];
   const altmanZone = health.altmanZone[0];
   const cashPosition = computeCashPosition(kf);
-  const ladder = computeLadder(altmanZone, redFlags, paymentBehavior, cashPosition);
+  const rungLadder = computeLadder(altmanZone, redFlags, paymentBehavior, cashPosition);
   const opportunity = computeOpportunity(lens, revenue, engineeringSpend, retrenchment);
-  const risk = computeRisk(ladder.rung, retrenchment);
+  const risk = computeRisk(rungLadder.rung, retrenchment);
   const quadrant = computeQuadrant(opportunity.high, risk.high);
-  const dealStructure = computeDealStructure(lens, ladder.rung);
-  const note = negotiationNote(paymentBehavior, ladder.rung);
+  // The terms follow the risk reading, not the bare rung: spending cuts
+  // that raise a low reading to medium take Net 45 away.
+  const ladder = ladderForReading(rungLadder, risk.reading);
+  const dealStructure = computeDealStructure(lens, risk.reading);
+  const note = negotiationNote(paymentBehavior, risk.reading);
 
   const result: LensResult = {
     lens,

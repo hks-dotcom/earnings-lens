@@ -1,6 +1,7 @@
 import { LensResult } from "@/lib/rules/evaluateLens";
 import { KeyFinancials } from "@/lib/xbrl/keyFinancials";
 import { LadderRung } from "@/lib/rules/ladder";
+import { RiskReading } from "@/lib/rules/matrix";
 import {
   ALTMAN_ZONES,
   DPO_BAND_PCT,
@@ -32,26 +33,32 @@ import { restructuringFilingsOf } from "@/lib/rules/explanationTriggers";
  * board's footnote, not here.
  */
 
-/** "Offer Net 30 and hold it": the hero's terms phrase, by rung. */
-export function heroTermsPhrase(rung: LadderRung): string {
-  if (rung === "Strong") return `Offer Net ${PAYMENT_TERMS_BASELINE_DAYS}; Net ${PAYMENT_TERMS_CEILING_DAYS} if pushed`;
-  if (rung === "Neutral") return `Offer Net ${PAYMENT_TERMS_BASELINE_DAYS} and hold it`;
+/** "Offer Net 30 and hold it": the hero's terms phrase, by risk reading. */
+export function heroTermsPhrase(reading: RiskReading): string {
+  if (reading === "low") return `Offer Net ${PAYMENT_TERMS_BASELINE_DAYS}; Net ${PAYMENT_TERMS_CEILING_DAYS} if pushed`;
+  if (reading === "medium") return `Offer Net ${PAYMENT_TERMS_BASELINE_DAYS} and hold it`;
   return `Offer Net ${PAYMENT_TERMS_BASELINE_DAYS} · escalate before signing`;
 }
 
+/** Spending cuts raised the reading: the rung alone would have read low. */
+export function raisedBySpendingCuts(lens: LensResult): boolean {
+  return lens.retrenchment.triggered && lens.risk.reading !== riskWord(lens.ladder.rung);
+}
+
 /**
- * "low", or "low, with spending cuts". Spending cuts don't move the rung or
- * the terms, but they put the company in the higher-risk half of the
- * matrix on their own, so a bare "low" beside that column would leave the
- * reader to work out why.
+ * "low"; "medium, raised by spending cuts" when cuts lifted a low reading;
+ * "high, with spending cuts" when the reading was already medium or high.
+ * Cuts put the company in the higher-risk half of the matrix on their own,
+ * so the reader is told they are there either way.
  */
 function riskLabel(lens: LensResult): string {
-  return `${riskWord(lens.ladder.rung)}${lens.retrenchment.triggered ? ", with spending cuts" : ""}`;
+  if (!lens.retrenchment.triggered) return lens.risk.reading;
+  return `${lens.risk.reading}, ${raisedBySpendingCuts(lens) ? "raised by" : "with"} spending cuts`;
 }
 
 /** "Risk: medium · Opportunity: high · Offer Net 30 and hold it" */
 export function heroSubline(lens: LensResult): string {
-  return `Risk: ${riskLabel(lens)} · Opportunity: ${lens.opportunity.high ? "high" : "low"} · ${heroTermsPhrase(lens.ladder.rung)}`;
+  return `Risk: ${riskLabel(lens)} · Opportunity: ${lens.opportunity.high ? "high" : "low"} · ${heroTermsPhrase(lens.risk.reading)}`;
 }
 
 export interface WhyLine {

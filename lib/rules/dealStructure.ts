@@ -1,4 +1,5 @@
-import { LadderRung, ladderCeilingDays } from "@/lib/rules/ladder";
+import { termsCeilingDays } from "@/lib/rules/ladder";
+import type { RiskReading } from "@/lib/rules/matrix";
 
 export type Lens = "Services" | "SaaS";
 
@@ -38,10 +39,10 @@ function unpaidMonthsLabel(days: number): string {
 }
 
 /**
- * The deal structure, keyed off the ladder's own ceiling (Net 45 only when
- * Strong) rather than a separate terms decision -- the exposure has to
- * describe whatever terms the ladder actually recommends, or the card
- * contradicts itself.
+ * The deal structure, keyed off the terms ceiling for the risk reading (Net
+ * 45 only when the reading is low) rather than a separate terms decision --
+ * the exposure has to describe whatever terms the ladder actually
+ * recommends, or the card contradicts itself.
  *
  * Both exposure sentences are plain English and say the same thing twice
  * over: the amount at risk, and the mechanism that produces it. A reader
@@ -51,12 +52,12 @@ function unpaidMonthsLabel(days: number): string {
  * no headline figure repeated by the sentence after it, and nothing in the
  * STANDARD column to state it a third time.
  */
-export function computeDealStructure(lens: Lens, rung: LadderRung): DealStructureResult {
-  const ceiling = ladderCeilingDays(rung);
+export function computeDealStructure(lens: Lens, reading: RiskReading): DealStructureResult {
+  const ceiling = termsCeilingDays(reading);
 
   if (lens === "Services") {
     return {
-      contractStructure: rung === "Strong" ? "Milestone acceptable" : "T&M monthly",
+      contractStructure: reading === "low" ? "Milestone acceptable" : "T&M monthly",
       creditExposure: `Up to about ${unpaidMonthsLabel(ceiling)} months of our work unpaid at any time: we invoice each month's work at month end, and they have ${ceiling} days to pay.`,
       billingAssumption: "monthly billing in arrears",
     };

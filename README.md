@@ -240,13 +240,16 @@ ticker → SEC EDGAR → rules → verdict, why, Summary, what stands out, terms
 3. **Verdict and why.** The board opens with the verdict in large type and one
    line under it: risk as low, medium or high (the ladder's three rungs, in
    the reader's words: "Risk: low · Opportunity: high · Offer Net 30; Net 45
-   if pushed"), with "with spending cuts" when a restructuring filing or an
-   R&D or SG&A cut puts the company in the higher-risk half of the matrix;
-   high or low opportunity; and the terms. The matrix's axes name the scale
-   ("Counterparty risk →", "lower risk" and "higher risk" under the columns,
-   "Relationship opportunity ↑"), not the company's reading of it, which
-   stays in that line and the Why box. Net 45 is offered only when risk is
-   low. Beside the matrix, "Why this verdict"
+   if pushed"); high or low opportunity; and the terms. A restructuring
+   filing or an R&D or SG&A cut puts the company in the higher-risk half of
+   the matrix, and the risk reading follows it: spending cuts raise a low
+   reading to medium ("Risk: medium, raised by spending cuts", as for FedEx)
+   and leave medium or high as they are ("Risk: high, with spending cuts").
+   The terms follow the reading, not the bare rung: Net 45 is offered only
+   when the reading is low. The matrix's axes name the scale ("Counterparty
+   risk →", "lower risk" and "higher risk" under the columns, "Relationship
+   opportunity ↑"), not the company's reading of it, which stays in that
+   line and the Why box. Beside the matrix, "Why this verdict"
    gives the input that decided each axis, with its figure — payables up
    27%, Z'' 2.71, revenue up 20% — using the rules' own values, and states
    the payables fact rather than a reading of it ("payables are falling:
@@ -264,10 +267,14 @@ ticker → SEC EDGAR → rules → verdict, why, Summary, what stands out, terms
    burning cash, or "investment is currently running ahead of cash from
    operations" when capital spending outruns positive operating cash flow; a
    one-line pointer ("see below") when a one-off tax item or non-operating
-   item moved net income; the one thing to watch; what it means
-   for the relationship; and the terms. The first three form one sentence,
-   joined with "and" or "but". The figures stay in the table, the health
-   tiles and "What stands out".
+   item moved net income; the one thing to watch; what it means for the
+   relationship, following each lens's own opportunity reading -- growth
+   pointing to an expanding customer, or, where spending cuts set
+   opportunity low (NexCore), cuts pointing to a shrinking one; where cuts
+   only move risk (CoreThread), a sentence before it says they "raise the
+   risk" or "add to the risk"; and the terms. The first three form one
+   sentence, joined with "and" or "but". The figures stay in the table, the
+   health tiles and "What stands out".
 5. **What stands out.** Rule-based observations about how the figures relate
    and move, not their levels — a red flag, cash burn with its runway or heavy
    investment with none, borrowing, acquisitions and investments, returns, a

@@ -48,7 +48,7 @@
       "rung": "Strong",
       "rule": "Altman Z'' 2.93 is safe (> 2.6), no red flags, and DPO unavailable, treated as not rising.",
       "net30": true,
-      "net45": true,
+      "net45": false,
       "net60": false,
       "escalateBeforeSigning": false
     },
@@ -59,15 +59,16 @@
     },
     "risk": {
       "high": true,
-      "rule": "Ladder is Strong, but retrenchment is present (restructuring filing (8-K Item 2.05) filed 29 Jan 2026)."
+      "rule": "Ladder is Strong, but retrenchment is present (restructuring filing (8-K Item 2.05) filed 29 Jan 2026).",
+      "reading": "medium"
     },
     "quadrant": "Pursue with guardrails",
     "dealStructure": {
-      "contractStructure": "Milestone acceptable",
-      "creditExposure": "Up to about 2½ months of our work unpaid at any time: we invoice each month's work at month end, and they have 45 days to pay.",
+      "contractStructure": "T&M monthly",
+      "creditExposure": "Up to about 2 months of our work unpaid at any time: we invoice each month's work at month end, and they have 30 days to pay.",
       "billingAssumption": "monthly billing in arrears"
     },
-    "negotiationNote": "Payables day count unavailable. Expect pressure for longer terms; our ceiling is Net 45."
+    "negotiationNote": "Payables day count unavailable. Expect pressure for longer terms; our ceiling is Net 30."
   },
   "saas": {
     "lens": "SaaS",
@@ -114,7 +115,7 @@
       "rung": "Strong",
       "rule": "Altman Z'' 2.93 is safe (> 2.6), no red flags, and DPO unavailable, treated as not rising.",
       "net30": true,
-      "net45": true,
+      "net45": false,
       "net60": false,
       "escalateBeforeSigning": false
     },
@@ -125,14 +126,15 @@
     },
     "risk": {
       "high": true,
-      "rule": "Ladder is Strong, but retrenchment is present (restructuring filing (8-K Item 2.05) filed 29 Jan 2026)."
+      "rule": "Ladder is Strong, but retrenchment is present (restructuring filing (8-K Item 2.05) filed 29 Jan 2026).",
+      "reading": "medium"
     },
     "quadrant": "Limit exposure",
     "dealStructure": {
-      "creditExposure": "Up to 45 days of the annual fee, until the invoice is paid; nothing owed after that.",
+      "creditExposure": "Up to 30 days of the annual fee, until the invoice is paid; nothing owed after that.",
       "billingAssumption": "annual billing in advance"
     },
-    "negotiationNote": "Payables day count unavailable. Expect pressure for longer terms; our ceiling is Net 45.",
+    "negotiationNote": "Payables day count unavailable. Expect pressure for longer terms; our ceiling is Net 30.",
     "techInvestment": {}
   }
 }

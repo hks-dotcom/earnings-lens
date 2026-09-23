@@ -703,13 +703,13 @@ function marginItem(kf: KeyFinancials, health: FinancialHealth): StandOutItem | 
  * does against an annual subscription billed up front, and a reader who is
  * given the days without the billing shape has half the envelope.
  *
- * The Services lens's phrase moves with the rung for the same reason the ladder's
- * ceiling does -- milestones are only acceptable against a counterparty
+ * The Services lens's phrase moves with the risk reading for the same reason the
+ * terms ceiling does -- milestones are only acceptable against a counterparty
  * strong enough to reach them.
  */
 function billingPhrase(lens: LensResult): string {
   if (lens.lens === "SaaS") return "Billed annually in advance.";
-  return lens.ladder.rung === "Strong" ? "T&M monthly; milestones acceptable." : "T&M monthly.";
+  return lens.risk.reading === "low" ? "T&M monthly; milestones acceptable." : "T&M monthly.";
 }
 
 /**

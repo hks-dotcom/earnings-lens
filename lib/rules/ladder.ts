@@ -9,6 +9,7 @@ import { PaymentBehaviorSignal, payablesPctText } from "@/lib/rules/signals";
 import { RedFlagsResult } from "@/lib/rules/redFlags";
 import { CashPosition, runwaySubject } from "@/lib/rules/runway";
 import { AltmanZoneResult, ALTMAN_CAP_NOTE } from "@/lib/metrics/health";
+import type { RiskReading } from "@/lib/rules/matrix";
 
 export type LadderRung = "Strong" | "Neutral" | "Weak";
 
@@ -142,17 +143,27 @@ function weak(rule: string): LadderResult {
   return { rung: "Weak", rule, net30: true, net45: false, net60: false, escalateBeforeSigning: true };
 }
 
-export function ladderCeilingDays(rung: LadderRung): number {
-  return rung === "Strong" ? PAYMENT_TERMS_CEILING_DAYS : PAYMENT_TERMS_BASELINE_DAYS;
+/** The terms ceiling for a risk reading: Net 45 only when the reading is low. */
+export function termsCeilingDays(reading: RiskReading): number {
+  return reading === "low" ? PAYMENT_TERMS_CEILING_DAYS : PAYMENT_TERMS_BASELINE_DAYS;
+}
+
+/**
+ * The ladder's terms under the risk reading: Net 45 is offered only when the
+ * reading is low, so spending cuts that raise a Strong rung's reading to
+ * medium take Net 45 away. The rung and its rule are unchanged.
+ */
+export function ladderForReading(ladder: LadderResult, reading: RiskReading): LadderResult {
+  return { ...ladder, net45: reading === "low" };
 }
 
 /**
  * "Payables ≈ [X] days of cost of revenue, [up/down] [Y]% Y/Y. Expect
- * pressure for longer terms; our ceiling is Net [45 if Strong, 30
- * otherwise]." -- verbatim per the spec.
+ * pressure for longer terms; our ceiling is Net [45 if the risk reading is
+ * low, 30 otherwise]." -- verbatim per the spec.
  */
-export function negotiationNote(paymentBehavior: PaymentBehaviorSignal, rung: LadderRung): string {
-  const ceiling = ladderCeilingDays(rung);
+export function negotiationNote(paymentBehavior: PaymentBehaviorSignal, reading: RiskReading): string {
+  const ceiling = termsCeilingDays(reading);
   if (paymentBehavior.dpoCurrent === undefined || paymentBehavior.yoyPctChange === undefined) {
     return `Payables day count unavailable. Expect pressure for longer terms; our ceiling is Net ${ceiling}.`;
   }

@@ -10,6 +10,7 @@ import {
   nextFilingDue,
 } from "@/lib/metrics/deadlines";
 import { FilingPeriod } from "@/lib/xbrl/periods";
+import { newResultsAnnounced } from "@/lib/present/resultsBanner";
 import { FilingEntry } from "@/lib/edgar/submissions";
 
 let pass = 0;
@@ -151,6 +152,44 @@ const naiiCase = nextFilingDue(fakePeriod("2026-03-31", "Q3", 2026), CATEGORIES.
 check("NAII case: next form 10-K", naiiCase?.form, "10-K");
 check("NAII case: isEstimated (fixed FY)", naiiCase?.isEstimated, false);
 check("NAII case: due date 2026-09-28", naiiCase?.dueDate, "2026-09-28");
+
+console.log("=== New results announced: a results 8-K for a quarter newer than the one shown ===");
+{
+  const f = (form: string, reportDate: string, filingDate: string, items = ""): FilingEntry => ({
+    accessionNumber: `${form}-${filingDate}`,
+    filingDate,
+    reportDate,
+    acceptanceDateTime: "",
+    form,
+    items,
+    primaryDocument: "",
+    primaryDocDescription: "",
+    isXBRL: true,
+  });
+  // FDX: FY26 10-K for May 31, 2026 filed Jul 20; an Item 2.02 8-K the next
+  // day (a fiscal-year change with recast history), before the next period ends Aug 31.
+  const fdx10K = f("10-K", "2026-05-31", "2026-07-20");
+  const fdxDue = { form: "10-Q" as const, estimatedPeriodEnd: "2026-08-31", dueDate: "2026-10-10", isEstimated: false };
+  check("8-K filed before the next period ends: no banner", newResultsAnnounced([f("8-K", "2026-07-21", "2026-07-21", "2.02,9.01")], fdx10K, fdxDue), undefined);
+  check(
+    "8-K filed after the next period ends: banner naming the next form",
+    newResultsAnnounced([f("8-K", "2026-09-18", "2026-09-18", "2.02,9.01")], fdx10K, fdxDue),
+    { date: "2026-09-18", accessionNumber: "8-K-2026-09-18", form: "10-Q" }
+  );
+  // A release after a Q3 10-Q is for the fiscal year: the full figures arrive with the 10-K.
+  const q3 = f("10-Q", "2026-03-31", "2026-05-12");
+  const q3Due = { form: "10-K" as const, estimatedPeriodEnd: "2026-06-30", dueDate: "2026-09-28", isEstimated: false };
+  check("a release after a Q3 10-Q names the 10-K", newResultsAnnounced([f("8-K", "2026-08-05", "2026-08-05", "2.02")], q3, q3Due)?.form, "10-K");
+  check("a release older than the latest 10-Q: no banner", newResultsAnnounced([f("8-K", "2026-05-01", "2026-05-01", "2.02")], q3, q3Due), undefined);
+  check(
+    "no projected period: about 12 weeks after the shown period's end",
+    [
+      newResultsAnnounced([f("8-K", "2026-06-20", "2026-06-20", "2.02")], q3, undefined),
+      newResultsAnnounced([f("8-K", "2026-06-24", "2026-06-24", "2.02")], q3, undefined)?.date,
+    ],
+    [undefined, "2026-06-24"]
+  );
+}
 
 console.log(`\n${pass} passed, ${fail} failed`);
 if (fail > 0) process.exit(1);

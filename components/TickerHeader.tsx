@@ -38,24 +38,29 @@ export function TickerHeader({
         </h1>
         {page && (
           <div style={{ fontSize: 14, color: "var(--text-secondary)" }}>
-            {page.header.newResultsAnnounced ? (
-              <span>
-                New results announced <strong style={{ color: "var(--text-primary)" }}>{formatDate(page.header.newResultsAnnounced.date)}</strong>. Full figures arrive with the 10-Q.
-              </span>
-            ) : (
-              <span>
-                Financials for the quarter ended{" "}
-                <strong style={{ color: "var(--text-primary)" }}>{formatDate(page.header.periodEndDate)}</strong> ({page.header.fiscalQuarterLabel})
-                {due && (
-                  <>
-                    {" "}&middot; Next {due.form} due by{" "}
-                    <strong style={{ color: "var(--text-primary)" }}>
-                      {due.isEstimated ? "~" : ""}
-                      {formatDate(due.dueDate)}
-                    </strong>
-                  </>
-                )}
-              </span>
+            <span>
+              Financials for the quarter ended{" "}
+              <strong style={{ color: "var(--text-primary)" }}>{formatDate(page.header.periodEndDate)}</strong> ({page.header.fiscalQuarterLabel})
+              {due && (
+                <>
+                  {" "}&middot; Next {due.form} due by{" "}
+                  <strong style={{ color: "var(--text-primary)" }}>
+                    {due.isEstimated ? "~" : ""}
+                    {formatDate(due.dueDate)}
+                  </strong>
+                </>
+              )}
+            </span>
+            {/*
+              Results announced for a newer quarter than the one shown: an
+              addition beside the period line, never in place of it.
+            */}
+            {page.header.newResultsAnnounced && (
+              <div style={{ marginTop: 4 }}>
+                New results announced{" "}
+                <strong style={{ color: "var(--text-primary)" }}>{formatDate(page.header.newResultsAnnounced.date)}</strong>. Full
+                figures arrive with the {page.header.newResultsAnnounced.form ?? "next periodic filing"}.
+              </div>
             )}
             {/*
               A filing EDGAR lists but has not published figures for yet.

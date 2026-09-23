@@ -38,6 +38,7 @@ import { loadFilingExtract } from "@/lib/xbrl/statementLoader";
 import { FilingStatementExtract } from "@/lib/xbrl/statementExtract";
 import { LiquidityDebt } from "@/lib/present/liquidityDebt";
 import { loadLiquidityDebt } from "@/lib/present/liquiditySources";
+import { newResultsAnnounced, NewResultsAnnounced } from "@/lib/present/resultsBanner";
 import { FilingEntry } from "@/lib/edgar/submissions";
 import {
   ACQUISITIONS_PCT_OF_REVENUE,
@@ -51,7 +52,7 @@ export interface HeaderLine {
   periodEndDate: string;
   fiscalQuarterLabel: string;
   dueBy: NextFilingDue | undefined;
-  newResultsAnnounced: { date: string } | undefined;
+  newResultsAnnounced: NewResultsAnnounced | undefined;
   /** A periodic filing EDGAR lists but has not published figures for yet. The board shows the last published quarter until it does. */
   awaitingFigures: { form: string; filingDate: string; periodEnd: string } | undefined;
 }
@@ -147,18 +148,16 @@ export async function buildPageData(rawTicker: string, now: Date = new Date()): 
         }
       : undefined;
 
-  // "New results announced" -- a results 8-K (Item 2.02) newer than the latest 10-Q/10-K.
-  const newestResults8K = resultsEightKs(subs)[0];
-  const newResultsAnnounced =
-    newestResults8K && (!latestFiledPeriod || newestResults8K.filingDate > latestFiledPeriod.filing.filingDate)
-      ? { date: newestResults8K.filingDate }
-      : undefined;
+  // "New results announced" -- a results 8-K (Item 2.02) for a quarter
+  // newer than the one shown: filed after the latest 10-Q/10-K and after
+  // the next period ends. See lib/present/resultsBanner.ts.
+  const newResults = newResultsAnnounced(resultsEightKs(subs), latestFiledPeriod?.filing, dueBy);
 
   const header: HeaderLine = {
     periodEndDate: kf.quarters[0]?.periodEnd ?? "",
     fiscalQuarterLabel: kf.quarters[0]?.label ?? "",
     dueBy,
-    newResultsAnnounced,
+    newResultsAnnounced: newResults,
     awaitingFigures,
   };
 

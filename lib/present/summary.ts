@@ -7,7 +7,7 @@ import { buildStandOut, operatingTrajectory, StandOutItem } from "@/lib/present/
 import { financialTriggers } from "@/lib/rules/explanationTriggers";
 import { termsSentence } from "@/lib/present/termsSentence";
 import { chooseUnit } from "@/lib/present/format";
-import { restructuringWords } from "@/lib/present/verdictReasons";
+import { raisedBySpendingCuts, restructuringWords } from "@/lib/present/verdictReasons";
 
 /**
  * The Summary: commentary, templated from the rules' output.
@@ -27,7 +27,8 @@ import { restructuringWords } from "@/lib/present/verdictReasons";
  *   4a. the cash position: runway for a burn, investment ahead of operations for heavy investment
  *   4b. a pointer to the explanation, when a one-off moved net income
  *   4c. the single most important watch item ("The one thing to watch is ...")
- *   5. what it means for the relationship
+ *   4d. spending cuts on the risk side, where they move risk but not opportunity
+ *   5. what it means for the relationship, following the lens's opportunity reading
  *   6. the terms sentence
  *
  * Parts 2, 3 and 4a share one sentence: what the balance sheet is, which
@@ -164,8 +165,8 @@ function oneOffSentence(kf: KeyFinancials): string | undefined {
  *
  * Three kinds are skipped, because another part of this same paragraph
  * already says them: cash burn (part 2's runway), the operating-income
- * move (part 3's trajectory) and spending cuts (part 5, which answers with
- * nothing else whenever they are present). The spec's own worked example
+ * move (part 3's trajectory) and spending cuts (said on the risk side or in
+ * part 5, whichever they affect). The spec's own worked example
  * is the rule here -- a company with cash burn above costs in "What stands
  * out" still has its Summary single out costs -- and a paragraph whose
  * fourth sentence repeats its second has spent a sentence saying nothing.
@@ -185,23 +186,44 @@ function watchClause(standOut: StandOutItem[]): string | undefined {
 }
 
 /**
- * Part 5: what it means for the relationship.
+ * Part 5: what it means for the relationship, following the lens's own
+ * opportunity reading and the reason for it.
  *
- * Retrenchment is checked first and answers on its own: R&D or SG&A
- * falling is exactly the case where revenue growth would otherwise read as
- * an expanding customer. A restructuring filing is named by the latest
- * one, with a count of any earlier ones in the window.
+ * - Opportunity high: the growth wording.
+ * - Opportunity low because of spending cuts -- NexCore, where cuts set it
+ *   low outright, or an R&D cut on a growing company -- the cuts, pointing
+ *   to a shrinking customer.
+ * - Opportunity low otherwise: revenue is not growing, or not filed.
+ *
+ * Where spending cuts only move risk -- CoreThread, unless they set its
+ * opportunity low too -- they go on the risk side, in a sentence of their
+ * own before this one (see riskSideSentence). A restructuring filing is
+ * named by the latest one, with a count of any earlier ones in the window.
  */
-function relationshipSentence(lens: LensResult): string {
-  if (lens.retrenchment.triggered) {
-    const filing = restructuringWords(lens);
-    return filing
-      ? `Spending cuts, including ${filing}, point to a shrinking customer.`
-      : "Spending cuts point to a shrinking customer.";
-  }
+function cutsLowerOpportunity(lens: LensResult): boolean {
+  if (lens.opportunity.high || !lens.retrenchment.triggered) return false;
+  if (lens.lens === "SaaS") return true;
+  return lens.revenue.direction === "up" && lens.engineeringSpend.direction === "down";
+}
 
-  const revenueUp = lens.revenue.direction === "up";
-  if (!revenueUp) {
+function spendingCutsSubject(lens: LensResult): string {
+  const filing = restructuringWords(lens);
+  return filing ? `Spending cuts, including ${filing},` : "Spending cuts";
+}
+
+/**
+ * Spending cuts on the risk side: "…raise the risk." when they lifted a low
+ * reading to medium, "…add to the risk." when it was already medium or high.
+ */
+function riskSideSentence(lens: LensResult): string | undefined {
+  if (!lens.retrenchment.triggered || cutsLowerOpportunity(lens)) return undefined;
+  return `${spendingCutsSubject(lens)} ${raisedBySpendingCuts(lens) ? "raise" : "add to"} the risk.`;
+}
+
+function relationshipSentence(lens: LensResult): string {
+  if (cutsLowerOpportunity(lens)) return `${spendingCutsSubject(lens)} point to a shrinking customer.`;
+
+  if (!lens.opportunity.high) {
     if (lens.revenue.direction === undefined) {
       return "Revenue on last year is not filed, so there is nothing yet to say about the direction of the relationship.";
     }
@@ -242,6 +264,8 @@ export function buildSummary(
   if (oneOff) parts.push(oneOff);
   const watch = watchClause(standOut);
   if (watch) parts.push(watch);
+  const riskSide = riskSideSentence(lens);
+  if (riskSide) parts.push(riskSide);
   parts.push(relationshipSentence(lens));
   parts.push(termsSentence(lens));
 

@@ -23,8 +23,13 @@ import { buildStandOut, listInWords, returnsItem, StandOutItem } from "@/lib/pre
 import { FlowFacts } from "@/lib/present/flowFacts";
 import { MILLIONS } from "@/lib/present/format";
 import { LensResult } from "@/lib/rules/evaluateLens";
+import { computeRisk, riskReading } from "@/lib/rules/matrix";
+import { ladderForReading, LadderResult } from "@/lib/rules/ladder";
+import { computeDealStructure } from "@/lib/rules/dealStructure";
+import { termsSentence } from "@/lib/present/termsSentence";
 import { heroSubline, whyThisVerdict } from "@/lib/present/verdictReasons";
 import { buildSummary } from "@/lib/present/summary";
+import { RetrenchmentSignal } from "@/lib/rules/signals";
 import { FinancialHealth } from "@/lib/metrics/health";
 import {
   componentsLine,
@@ -133,7 +138,7 @@ check("RETURNS: revenue missing, no size test, does not fire", returnsItem(kfWit
 
 function lens(over: Partial<LensResult> & { rung: "Strong" | "Neutral" | "Weak" }): LensResult {
   const { rung, ...rest } = over;
-  return {
+  const base = {
     lens: "Services",
     revenue: { direction: "up", yoyPct: 20, qoqPct: 1 },
     engineeringSpend: { direction: undefined, yoyPct: undefined, qoqPct: undefined, intensityCurrentPct: undefined, intensityYearAgoPct: undefined },
@@ -145,12 +150,15 @@ function lens(over: Partial<LensResult> & { rung: "Strong" | "Neutral" | "Weak" 
     cashPosition: { case: "none", latestBurn: undefined, averageBurn: undefined, burnUsed: undefined, burnBasis: undefined, cash: undefined },
     ladder: { rung, rule: "", net30: true, net45: rung === "Strong", net60: false, escalateBeforeSigning: rung === "Weak" },
     opportunity: { high: true, rule: "", rdNotFiled: true },
-    risk: { high: rung !== "Strong", rule: "" },
+    risk: { high: rung !== "Strong", rule: "" } as LensResult["risk"],
     quadrant: rung === "Strong" ? "Pursue" : "Pursue with guardrails",
     dealStructure: { contractStructure: "T&M monthly", creditExposure: "", billingAssumption: "" },
     negotiationNote: "",
     ...rest,
   } as LensResult;
+  // The reading and the terms the rules would derive from the rung and the cuts.
+  const reading = base.risk.reading ?? riskReading(rung, base.retrenchment);
+  return { ...base, risk: { ...base.risk, reading }, ladder: ladderForReading(base.ladder, reading) };
 }
 
 const HEALTH = { grossMarginPct: [], operatingMarginPct: [] } as unknown as FinancialHealth;
@@ -197,7 +205,7 @@ function cutsLens(filings: { filingDate: string; accessionNumber: string }[], ca
       causes: [...filings.map((f) => `restructuring filing (8-K Item 2.05) filed ${f.filingDate}`), ...causes],
       filings,
     },
-    risk: { high: true, rule: "" },
+    risk: { high: true, rule: "" } as LensResult["risk"],
     quadrant: "Pursue with guardrails",
   });
 }
@@ -238,21 +246,68 @@ check("spending cuts: a filing and an R&D cut", {
   figures: "8-K filed 29 Jan 2026, accession 0000000000-26-000100 · R&D $90M, from $100M in Q2 FY25",
 });
 
+// --- spending cuts raise a low risk reading to medium -------------------------
+const NO_CUTS: RetrenchmentSignal = { triggered: false, causes: [] };
+const CUTS: RetrenchmentSignal = { triggered: true, causes: ["restructuring filing (8-K Item 2.05) filed 29 Jan 2026"] };
+const strongLadder: LadderResult = { rung: "Strong", rule: "", net30: true, net45: true, net60: false, escalateBeforeSigning: false };
+check("reading: Strong without cuts is low, Net 45 offered", [computeRisk("Strong", NO_CUTS).reading, ladderForReading(strongLadder, "low").net45], ["low", true]);
+check("reading: Strong with cuts is medium, no Net 45", [computeRisk("Strong", CUTS).reading, ladderForReading(strongLadder, computeRisk("Strong", CUTS).reading).net45], ["medium", false]);
+check("reading: Neutral and Weak with cuts are unchanged", [computeRisk("Neutral", CUTS).reading, computeRisk("Weak", CUTS).reading, riskReading("Neutral", NO_CUTS), riskReading("Weak", NO_CUTS)], ["medium", "high", "medium", "high"]);
+check("reading: the rung, the axis and its rule don't move", [computeRisk("Strong", CUTS).high, computeRisk("Strong", NO_CUTS).high], [true, false]);
+check(
+  "reading: deal structure and terms follow it",
+  [computeDealStructure("Services", "medium").contractStructure, computeDealStructure("Services", "low").contractStructure, computeDealStructure("SaaS", "medium").creditExposure],
+  ["T&M monthly", "Milestone acceptable", "Up to 30 days of the annual fee, until the invoice is paid; nothing owed after that."]
+);
+
+// FDX's shape: a Strong rung, one restructuring filing, revenue up, R&D not filed.
+const fdxServices = cutsLens(TWO.slice(1));
+const fdxSaaS = lens({ ...fdxServices, lens: "SaaS", rung: "Strong", opportunity: { high: false, rule: "", rdNotFiled: true }, quadrant: "Limit exposure" });
+check("hero: cuts raise low to medium, terms follow", heroSubline(fdxServices), "Risk: medium, raised by spending cuts · Opportunity: high · Offer Net 30 and hold it");
+check("hero: NexCore the same, opportunity low", heroSubline(fdxSaaS), "Risk: medium, raised by spending cuts · Opportunity: low · Offer Net 30 and hold it");
+check("Why: the label says the cuts raised it", whyThisVerdict(fdxServices, kfPlain).risk.label, "Risk: medium, raised by spending cuts.");
+check("terms: Net 30 and hold it, no Net 45", [termsSentence(fdxServices), fdxServices.ladder.net45], ["Offer Net 30 and hold it; expect pressure for longer terms.", false]);
+const fdxTerms = buildStandOut(fdxServices, kfPlain, HEALTH).find((i) => i.kind === "terms");
+check("terms finding: marks and billing phrase", [fdxTerms?.terms?.map((t) => t.ok), fdxTerms?.sentence.split(" ").slice(0, 2).join(" ")], [[true, false, false], "T&M monthly."]);
+// SNAP's shape: a Weak rung with the same cuts.
+const snapLike = lens({ rung: "Weak", retrenchment: fdxServices.retrenchment, risk: { high: true, rule: "" } as LensResult["risk"] });
+check("hero: already high with cuts reads as today", heroSubline(snapLike), "Risk: high, with spending cuts · Opportunity: high · Offer Net 30 · escalate before signing");
+
+// --- the Summary follows each lens ---------------------------------------------
+const tail = (l: LensResult) => buildSummary(l, kfPlain, HEALTH).parts.slice(-3);
+check("Summary, CoreThread: cuts that raise the risk go on the risk side", tail(fdxServices), [
+  "Spending cuts, including a restructuring filing (8-K Item 2.05) on 29 Jan 2026, raise the risk.",
+  "Growth points to an expanding customer; R&D is not filed.",
+  "Offer Net 30 and hold it; expect pressure for longer terms.",
+]);
+check("Summary, NexCore: cuts that set opportunity low point to a shrinking customer", tail(fdxSaaS).slice(-2), [
+  "Spending cuts, including a restructuring filing (8-K Item 2.05) on 29 Jan 2026, point to a shrinking customer.",
+  "Offer Net 30 and hold it; expect pressure for longer terms.",
+]);
+check("Summary, CoreThread: cuts on an already-high reading add to the risk", tail(snapLike).slice(0, 2), [
+  "Spending cuts, including a restructuring filing (8-K Item 2.05) on 29 Jan 2026, add to the risk.",
+  "Growth points to an expanding customer; R&D is not filed.",
+]);
+check("Summary: no cuts, no risk-side sentence", tail(lens({ rung: "Strong" })).slice(-2), [
+  "Growth points to an expanding customer; R&D is not filed.",
+  "Offer Net 30; go to Net 45 only if pushed.",
+]);
+
 check(
   "Why: names the latest filing and counts the earlier one",
   whyThisVerdict(cutsLens(TWO), kfPlain).risk.text.split(". ")[0],
   "A restructuring filing (8-K Item 2.05) on 3 Jun 2026 and 1 earlier put it in the higher-risk half of the matrix"
 );
-check("Why: label with spending cuts", whyThisVerdict(cutsLens(TWO), kfPlain).risk.label, "Risk: low, with spending cuts.");
+check("Why: label with spending cuts that raise the reading", whyThisVerdict(cutsLens(TWO), kfPlain).risk.label, "Risk: medium, raised by spending cuts.");
 check(
   "Summary: names the latest filing and counts the earlier ones",
   buildSummary(cutsLens(THREE), kfPlain, HEALTH).parts.find((p) => p.startsWith("Spending cuts")),
-  "Spending cuts, including a restructuring filing (8-K Item 2.05) on 10 Aug 2026 and 2 earlier, point to a shrinking customer."
+  "Spending cuts, including a restructuring filing (8-K Item 2.05) on 10 Aug 2026 and 2 earlier, raise the risk."
 );
 check(
   "Summary: one filing, no count",
   buildSummary(cutsLens(TWO.slice(1)), kfPlain, HEALTH).parts.find((p) => p.startsWith("Spending cuts")),
-  "Spending cuts, including a restructuring filing (8-K Item 2.05) on 29 Jan 2026, point to a shrinking customer."
+  "Spending cuts, including a restructuring filing (8-K Item 2.05) on 29 Jan 2026, raise the risk."
 );
 
 // --- a zero comparison amount reads "none" ------------------------------------

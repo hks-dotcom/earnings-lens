@@ -1,6 +1,6 @@
 import { LensResult } from "@/lib/rules/evaluateLens";
 import { PageData } from "@/lib/present/buildPageData";
-import { ladderCeilingDays } from "@/lib/rules/ladder";
+import { termsCeilingDays } from "@/lib/rules/ladder";
 import { computeNetIncomeGap } from "@/lib/present/netIncomeGap";
 import { chooseUnit, formatMoneyInline } from "@/lib/present/format";
 import { buildStandOut, paymentTimingCaveat, StandOutItem } from "@/lib/present/standOut";
@@ -59,7 +59,7 @@ export function buildCopyBrief(page: PageData, lens: LensResult): string {
   lines.push("");
   lines.push(`Terms finance will accept:`);
   lines.push(
-    `- Payment terms: Net 30 ${lens.ladder.net30 ? "✓" : "✕"}${lens.ladder.escalateBeforeSigning ? " (escalate before signing)" : ""}, Net 45 ${lens.ladder.net45 ? "✓" : "✕"}, Net 60 ✕ (risk ${riskWord(lens.ladder.rung)}, so the ceiling is Net ${ladderCeilingDays(lens.ladder.rung)}; Net 45 is offered only when risk is ${riskWord("Strong")})`
+    `- Payment terms: Net 30 ${lens.ladder.net30 ? "✓" : "✕"}${lens.ladder.escalateBeforeSigning ? " (escalate before signing)" : ""}, Net 45 ${lens.ladder.net45 ? "✓" : "✕"}, Net 60 ✕ (risk ${lens.risk.reading}, so the ceiling is Net ${termsCeilingDays(lens.risk.reading)}; Net 45 is offered only when risk is ${riskWord("Strong")})`
   );
   lines.push(`- Credit exposure: ${lens.dealStructure.creditExposure} (${lens.dealStructure.billingAssumption})`);
   lines.push(`- ${lens.negotiationNote}`);

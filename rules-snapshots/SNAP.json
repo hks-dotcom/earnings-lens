@@ -68,7 +68,8 @@
     },
     "risk": {
       "high": true,
-      "rule": "Ladder is Weak and retrenchment is present."
+      "rule": "Ladder is Weak and retrenchment is present.",
+      "reading": "high"
     },
     "quadrant": "Pursue with guardrails",
     "dealStructure": {
@@ -143,7 +144,8 @@
     },
     "risk": {
       "high": true,
-      "rule": "Ladder is Weak and retrenchment is present."
+      "rule": "Ladder is Weak and retrenchment is present.",
+      "reading": "high"
     },
     "quadrant": "Limit exposure",
     "dealStructure": {

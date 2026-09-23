@@ -182,10 +182,10 @@ check("9.6% inside a 10% band keeps its decimal", bandPctWords(9.6, 10), "up 9.6
 check("a small move never reads as 0%", bandPctWords(-0.3, 2), "down 0.3%");
 check("a fall", bandPctWords(-11.06, 10), "down 11%");
 
-// --- The hero's terms phrase, by rung ----------------------------------------
-check("Strong terms", heroTermsPhrase("Strong"), "Offer Net 30; Net 45 if pushed");
-check("Neutral terms", heroTermsPhrase("Neutral"), "Offer Net 30 and hold it");
-check("Weak terms", heroTermsPhrase("Weak"), "Offer Net 30 · escalate before signing");
+// --- The hero's terms phrase, by risk reading ---------------------------------
+check("low terms", heroTermsPhrase("low"), "Offer Net 30; Net 45 if pushed");
+check("medium terms", heroTermsPhrase("medium"), "Offer Net 30 and hold it");
+check("high terms", heroTermsPhrase("high"), "Offer Net 30 · escalate before signing");
 
 // --- An explanation never repeats a dollar figure its finding shows ------------
 {

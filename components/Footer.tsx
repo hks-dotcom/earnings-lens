@@ -33,7 +33,8 @@ export function Footer({ page }: { page: PageData }) {
         company in the higher-risk half of the matrix. A distress score reads as grey for a profitable,
         cash-generating company: Z&apos;&apos; penalises accumulated deficits and buyback-driven negative equity.
         Opportunity is high when revenue is up more than {f.growthBandPct}% and R&amp;D is not down; spending cuts set
-        it low for {LENS_NAME.SaaS}. Net {f.paymentCeilingDays} is offered only when risk is low.
+        it low for {LENS_NAME.SaaS}. Spending cuts raise a low risk reading to medium, and Net {f.paymentCeilingDays} is
+        offered only when the reading is low.
       </p>
       <p>
         <b>Display-only findings</b>, shown only when their rule fires; none of them affects risk or the Summary.

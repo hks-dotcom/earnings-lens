@@ -60,7 +60,8 @@
     },
     "risk": {
       "high": false,
-      "rule": "Ladder is Strong and no retrenchment."
+      "rule": "Ladder is Strong and no retrenchment.",
+      "reading": "low"
     },
     "quadrant": "Pursue",
     "dealStructure": {
@@ -127,7 +128,8 @@
     },
     "risk": {
       "high": false,
-      "rule": "Ladder is Strong and no retrenchment."
+      "rule": "Ladder is Strong and no retrenchment.",
+      "reading": "low"
     },
     "quadrant": "Pursue",
     "dealStructure": {

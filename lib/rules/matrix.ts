@@ -53,9 +53,27 @@ export function computeOpportunity(
   };
 }
 
+/** The risk reading a reader sees: low, medium or high. */
+export type RiskReading = "low" | "medium" | "high";
+
 export interface RiskResult {
   high: boolean;
   rule: string;
+  /**
+   * The rung as low / medium / high, with spending cuts raising a low
+   * reading to medium: they put the company in the higher-risk half of the
+   * matrix, so a "low" beside that column would contradict it. Medium and
+   * high stay as they are. The display and the terms -- Net 45, the deal
+   * structure, the negotiation note -- follow the reading; the rung, the
+   * matrix and the quadrant do not change.
+   */
+  reading: RiskReading;
+}
+
+/** Strong → low (medium with spending cuts), Neutral → medium, Weak → high. */
+export function riskReading(ladderRung: LadderRung, retrenchment: RetrenchmentSignal): RiskReading {
+  if (ladderRung === "Strong") return retrenchment.triggered ? "medium" : "low";
+  return ladderRung === "Neutral" ? "medium" : "high";
 }
 
 /** High when the ladder rung is Neutral or Weak, OR retrenchment is present (both lenses). Low only when Strong AND no retrenchment. */
@@ -72,7 +90,7 @@ export function computeRisk(ladderRung: LadderRung, retrenchment: RetrenchmentSi
   } else {
     rule = "Ladder is Strong and no retrenchment.";
   }
-  return { high, rule };
+  return { high, rule, reading: riskReading(ladderRung, retrenchment) };
 }
 
 /**

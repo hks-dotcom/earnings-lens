@@ -54,7 +54,8 @@
     },
     "risk": {
       "high": true,
-      "rule": "Ladder is Weak."
+      "rule": "Ladder is Weak.",
+      "reading": "high"
     },
     "quadrant": "Pursue with guardrails",
     "dealStructure": {
@@ -115,7 +116,8 @@
     },
     "risk": {
       "high": true,
-      "rule": "Ladder is Weak."
+      "rule": "Ladder is Weak.",
+      "reading": "high"
     },
     "quadrant": "Pursue with guardrails",
     "dealStructure": {

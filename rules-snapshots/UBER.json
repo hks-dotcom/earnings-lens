@@ -57,7 +57,8 @@
     },
     "risk": {
       "high": true,
-      "rule": "Ladder is Neutral."
+      "rule": "Ladder is Neutral.",
+      "reading": "medium"
     },
     "quadrant": "Pursue with guardrails",
     "dealStructure": {
@@ -121,7 +122,8 @@
     },
     "risk": {
       "high": true,
-      "rule": "Ladder is Neutral."
+      "rule": "Ladder is Neutral.",
+      "reading": "medium"
     },
     "quadrant": "Pursue with guardrails",
     "dealStructure": {
