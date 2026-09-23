@@ -15,7 +15,13 @@
 import { CompanyFacts, FactPoint } from "@/lib/edgar/companyFacts";
 import { FilingEntry } from "@/lib/edgar/submissions";
 import { FilingPeriod, FiscalPeriodLabel } from "@/lib/xbrl/periods";
-import { resolveDurationSeries, resolveInstantSeries, tagsAgree } from "@/lib/xbrl/keyFinancials";
+import {
+  NEGATIVE_DERIVED_QUARTER,
+  resolveDurationSeries,
+  resolveInstantSeries,
+  tagsAgree,
+  wholeRowFallback,
+} from "@/lib/xbrl/keyFinancials";
 
 let pass = 0;
 let fail = 0;
@@ -184,6 +190,48 @@ console.log("\n=== Cross-tag year-to-date subtraction ===");
     "tags disagree in the most recent shared period -> MISSING",
     resolveDurationSeries(f(1_600 * M), [NEW, OLD], [Q2], ALL, { cashFlow: true }).values[0],
     undefined
+  );
+}
+
+console.log("\n=== Two zeros never prove a splice ===");
+check(
+  "both tags zero in the most recent shared period -> no splice, even if they agreed non-zero earlier",
+  tagsAgree([inst("2024-12-31", 100 * M, "2025-02-01"), inst("2025-12-31", 0, "2026-02-01")], [inst("2024-12-31", 100 * M, "2025-02-01"), inst("2025-12-31", 0, "2026-02-01")], key),
+  false
+);
+check(
+  "one zero and one small value within $1M -> a splice (one value is non-zero)",
+  tagsAgree([inst("2025-12-31", 0, "2026-02-01")], [inst("2025-12-31", 0.4 * M, "2026-02-01")], key),
+  true
+);
+{
+  const total = { values: [undefined, { value: 0, concept: "T", method: "instant" as const, derived: false }] };
+  const parts = (i: number) => (i === 0 ? { value: 5 * M, concept: "A+B", method: "computed-sum" as const, derived: true } : { value: 0, concept: "A+B", method: "computed-sum" as const, derived: true });
+  check(
+    "a formula that only ever agrees with its tag at zero doesn't replace it",
+    wholeRowFallback(total, parts, 2).values[0],
+    undefined
+  );
+}
+
+console.log("\n=== Gross flows: a negative derived quarter is MISSING ===");
+{
+  const CAPEX = "PaymentsToAcquirePropertyPlantAndEquipment";
+  // Six months 90 after a Q1 of 120: the derived Q2 is −30.
+  const f = facts({ [CAPEX]: [EARLIER_10Q, pt("2026-01-01", "2026-03-31", 120 * M, "10-Q", "2026-04-30"), pt("2026-01-01", "2026-06-30", 90 * M, "10-Q", "2026-07-31")] });
+  const gross = resolveDurationSeries(f, [CAPEX], [Q2], ALL, { cashFlow: true, grossFlow: true });
+  check("derived −30 on a gross row -> MISSING", gross.values[0], undefined);
+  check("... with the reason", gross.missingReasons?.[0], NEGATIVE_DERIVED_QUARTER);
+  check(
+    "the same figures on a net row keep their sign",
+    resolveDurationSeries(f, [CAPEX], [Q2], ALL, { cashFlow: true }).values[0]?.value,
+    -30 * M
+  );
+  const filedNegative = facts({ [CAPEX]: [pt("2026-04-01", "2026-06-30", -3 * M, "10-Q", "2026-07-31")] });
+  check(
+    "a figure filed negative directly is left as filed",
+    resolveDurationSeries(filedNegative, [CAPEX], [Q2], ALL, { cashFlow: true, grossFlow: true }).values[0]?.value,
+    -3 * M
   );
 }
 

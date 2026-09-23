@@ -27,7 +27,7 @@ import { DURATION_CONCEPTS } from "@/lib/xbrl/concepts";
  */
 
 /** Bump when the extraction logic changes; rows stored under an older version are re-extracted. */
-export const STATEMENT_EXTRACT_VERSION = 2;
+export const STATEMENT_EXTRACT_VERSION = 3;
 
 export interface ExtractedLine {
   element: string;
@@ -58,7 +58,13 @@ export interface FilingStatementExtract {
     revenueElement: string | undefined;
     lines: ExtractedLine[];
   } | null;
-  /** Non-dimensional duration facts for every income statement line, by element. */
+  /**
+   * Every non-dimensional duration fact in US dollars the instance reports,
+   * by element -- not only the income statement's lines. Whether two
+   * elements are one line is proved from any period both report, and a
+   * filing often reports an element in a note that its statement no
+   * longer shows (a renamed line's old element, in the year it changed).
+   */
   facts: Record<string, ExtractedFact[]>;
   acquisitions: { element: string; caption: string; companyTag: boolean } | null;
   /** For the performance report. */
@@ -249,15 +255,30 @@ function parseContexts(xml: string): Map<string, Context> {
   return out;
 }
 
-/** Non-dimensional duration facts for the given elements. */
-function durationFacts(xml: string, elements: Set<string>): Record<string, ExtractedFact[]> {
+/** Unit ids that measure plain US dollars (not per share, not a ratio). */
+function usdUnits(xml: string): Set<string> {
+  const out = new Set<string>();
+  const re = /<(?:[\w-]+:)?unit\b[^>]*\bid="([^"]+)"[^>]*>([\s\S]*?)<\/(?:[\w-]+:)?unit>/g;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(xml))) {
+    const body = m[2];
+    if (/divide/i.test(body)) continue;
+    if (/<(?:[\w-]+:)?measure>\s*iso4217:USD\s*</i.test(body)) out.add(m[1]);
+  }
+  return out;
+}
+
+/** Every non-dimensional duration fact in US dollars, by element. */
+function durationFacts(xml: string): Record<string, ExtractedFact[]> {
   const contexts = parseContexts(xml);
+  const usd = usdUnits(xml);
   const out: Record<string, ExtractedFact[]> = {};
   const re = /<([\w-]+:[\w.-]+)\b([^>]*)>([^<]*)<\/\1>/g;
   let m: RegExpExecArray | null;
   while ((m = re.exec(xml))) {
     const element = m[1];
-    if (!elements.has(element)) continue;
+    const unit = m[2].match(/unitRef="([^"]+)"/)?.[1];
+    if (!unit || !usd.has(unit)) continue;
     const ref = m[2].match(/contextRef="([^"]+)"/)?.[1];
     const ctx = ref ? contexts.get(ref) : undefined;
     if (!ctx || ctx.dimensional || !ctx.start) continue;
@@ -290,7 +311,7 @@ export async function extractFilingStatement(cik: string, filing: FilingEntry): 
     const xml = await getFilingDocument(cik, filing.accessionNumber, files.instance);
     requests++;
     instanceBytes = Buffer.byteLength(xml, "utf8");
-    facts = durationFacts(xml, new Set(incomeStatement.lines.map((l) => l.element)));
+    facts = durationFacts(xml);
   }
 
   return {

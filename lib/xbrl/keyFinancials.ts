@@ -60,7 +60,11 @@ export interface CellValue {
 
 export interface LineItem {
   values: (CellValue | undefined)[]; // aligned to quarters, undefined = missing (never zero/guessed)
+  /** Why a cell is missing, where the reason is more than "not filed" (aligned to `values`). */
+  missingReasons?: (string | undefined)[];
 }
+
+export const NEGATIVE_DERIVED_QUARTER = "the filings don't reconcile: the derived quarter is negative";
 
 export interface KeyFinancials {
   quarters: QuarterColumn[];
@@ -181,7 +185,8 @@ function agreeWithinTolerance(a: number, b: number): boolean {
  * agreed years ago and disagree now have drifted apart -- a definition
  * changed, or one tag started carrying something the other doesn't --
  * and an old agreement proves nothing about the quarter being filled. Each
- * tag's value there is its latest-filed one, so a restatement counts.
+ * tag's value there is its latest-filed one, so a restatement counts. Two
+ * zeros there prove nothing either: at least one value must be non-zero.
  */
 export function tagsAgree(pointsA: FactPoint[], pointsB: FactPoint[], keyOf: (p: FactPoint) => string): boolean {
   const latestByKey = (points: FactPoint[]) => {
@@ -209,7 +214,10 @@ export function tagsAgree(pointsA: FactPoint[], pointsB: FactPoint[], keyOf: (p:
       recent = { a: pa, b: pb };
     }
   }
-  return recent !== undefined && agreeWithinTolerance(recent.a.val, recent.b.val);
+  // Two zeros agree without proving anything: a line both tags leave at
+  // nil says nothing about whether they are the same concept.
+  if (!recent || (recent.a.val === 0 && recent.b.val === 0)) return false;
+  return agreeWithinTolerance(recent.a.val, recent.b.val);
 }
 
 const durationKey = (p: FactPoint) => `${p.start}|${p.end}`;
@@ -324,6 +332,17 @@ export function nilRule(
 export interface DurationSeriesOptions {
   /** Apply the nil rule (cash-flow rows only). */
   cashFlow?: boolean;
+  /**
+   * A gross payment or proceeds row (capex, acquisitions, investment
+   * purchases and sales, debt raised and repaid, buybacks, dividends,
+   * stock-based compensation): an amount that cannot be negative. A
+   * derived quarter that comes out negative means the filings behind it
+   * don't reconcile -- a year-to-date figure fell, or a tag carried
+   * different things in different filings -- so the cell is MISSING with
+   * that reason, and everything computed from it is missing too. A figure
+   * filed as negative directly is left as filed.
+   */
+  grossFlow?: boolean;
 }
 
 export function resolveDurationSeries(
@@ -334,7 +353,7 @@ export function resolveDurationSeries(
   options: DurationSeriesOptions = {}
 ): LineItem {
   const nil = options.cashFlow ? nilRule(facts, conceptNames, allPeriods) : undefined;
-  return resolveSeries(
+  const item = resolveSeries(
     facts,
     conceptNames,
     displayPeriods,
@@ -342,6 +361,15 @@ export function resolveDurationSeries(
       resolveDuration(points, period, allPeriods, nil ? { nilPrior: nil(concept) } : {}),
     durationKey
   );
+  if (!options.grossFlow) return item;
+  const reasons = item.values.map((v) =>
+    v && v.value < 0 && v.method !== "direct" && v.method !== "instant" ? NEGATIVE_DERIVED_QUARTER : undefined
+  );
+  if (!reasons.some(Boolean)) return item;
+  return {
+    values: item.values.map((v, i) => (reasons[i] ? undefined : v)),
+    missingReasons: reasons,
+  };
 }
 
 /**
@@ -427,13 +455,20 @@ export function wholeRowFallback(
   const fallbackCoverage = fallbackValues.filter((v) => v !== undefined).length;
   if (fallbackCoverage <= primaryCoverage) return primary;
 
+  let sharedNonZero = 0;
+  let shared = 0;
   for (let i = 0; i < n; i++) {
     const p = primary.values[i];
     const f = fallbackValues[i];
     // No shared period here: nothing to corroborate, nothing to contradict.
     if (!p || !f) continue;
     if (!agreeWithinTolerance(p.value, f.value)) return primary;
+    shared++;
+    if (p.value !== 0 || f.value !== 0) sharedNonZero++;
   }
+  // Shared periods that are all zero agree without proving the formula
+  // measures what the tag does.
+  if (shared > 0 && sharedNonZero === 0) return primary;
   return { values: fallbackValues };
 }
 
@@ -649,7 +684,7 @@ export function buildKeyFinancials(
     DURATION_CONCEPTS.capitalExpenditures,
     displayPeriods,
     publishedPeriods,
-    { cashFlow: true }
+    { cashFlow: true, grossFlow: true }
   );
   const capFreeCashFlow = freeCashFlow(operatingCashFlow, capitalExpenditures);
 

@@ -2365,16 +2365,16 @@
         "flags": [],
         "cells": [
           {
-            "missing": "not filed for this period"
+            "missing": "depends on a missing figure"
           },
           {
-            "missing": "not filed for this period"
+            "missing": "depends on a missing figure"
           },
           {
-            "missing": "not filed for this period"
+            "missing": "depends on a missing figure"
           },
           {
-            "missing": "not filed for this period"
+            "missing": "depends on a missing figure"
           },
           {
             "value": 22474000,
@@ -2384,7 +2384,7 @@
             "source": "company-facts"
           },
           {
-            "missing": "not filed for this period"
+            "missing": "depends on a missing figure"
           },
           {
             "value": 56937000,
@@ -2431,11 +2431,7 @@
             "missing": "not filed for this period"
           },
           {
-            "value": -5000,
-            "concept": "PaymentsToAcquireBusinessesNetOfCashAcquired",
-            "method": "annual-minus-9mo",
-            "derived": true,
-            "source": "company-facts"
+            "missing": "the filings don't reconcile: the derived quarter is negative"
           },
           {
             "value": 11894000,
@@ -2644,11 +2640,7 @@
             "source": "company-facts"
           },
           {
-            "value": -16500000,
-            "concept": "ProceedsFromLinesOfCredit",
-            "method": "ytd-subtraction",
-            "derived": true,
-            "source": "company-facts"
+            "missing": "the filings don't reconcile: the derived quarter is negative"
           },
           {
             "value": 7500000,
@@ -2778,11 +2770,7 @@
             "source": "company-facts"
           },
           {
-            "value": -2120000,
-            "concept": "RepaymentsOfLinesOfCredit",
-            "method": "ytd-subtraction",
-            "derived": true,
-            "source": "company-facts"
+            "missing": "the filings don't reconcile: the derived quarter is negative"
           },
           {
             "value": 23500000,
@@ -2841,17 +2829,7 @@
             ]
           },
           {
-            "value": -17505000,
-            "concept": "net new debt",
-            "method": "computed-sum",
-            "derived": true,
-            "source": "company-facts",
-            "components": [
-              "ProceedsFromIssuanceOfLongTermDebt",
-              "ProceedsFromLinesOfCredit",
-              "RepaymentsOfLongTermDebt",
-              "RepaymentsOfLinesOfCredit"
-            ]
+            "missing": "depends on a missing figure"
           },
           {
             "missing": "depends on a missing figure"

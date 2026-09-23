@@ -62,9 +62,12 @@
     },
     {
       "from": "us-gaap:LegalFees",
-      "to": "",
+      "to": "us-gaap:SellingGeneralAndAdministrativeExpense",
       "joined": false,
-      "reason": "no current line reports a shared period with it"
+      "reason": "different values in the most recent period both report",
+      "period": "2026-01-01|2026-03-31",
+      "fromValue": 12000,
+      "toValue": 4397000
     },
     {
       "from": "us-gaap:ProvisionForDoubtfulAccounts",
@@ -74,6 +77,15 @@
       "period": "2023-07-01|2024-06-30",
       "fromValue": 0,
       "toValue": 0
+    },
+    {
+      "from": "us-gaap:ProvisionForDoubtfulAccounts",
+      "to": "us-gaap:SellingGeneralAndAdministrativeExpense",
+      "joined": false,
+      "reason": "different values in the most recent period both report",
+      "period": "2025-07-01|2025-12-31",
+      "fromValue": 0,
+      "toValue": 8451000
     }
   ],
   "tabs": {

@@ -205,8 +205,8 @@ export const DEBT_FLOW_TAGS: { tag: string; kind: "proceeds" | "repayment" | "ne
 
 // --- small helpers ------------------------------------------------------------
 
-function fromCompanyFacts(v: CellValue | undefined, missing = MISSING_NOT_FILED_FOR_PERIOD): StatementCell {
-  if (!v) return { missing };
+function fromCompanyFacts(v: CellValue | undefined, reason?: string): StatementCell {
+  if (!v) return { missing: reason ?? MISSING_NOT_FILED_FOR_PERIOD };
   const out: StatementValue = {
     value: v.value,
     concept: v.concept,
@@ -240,8 +240,8 @@ function row(
     label,
     kind,
     concept: firstConcept(quarterly) ?? firstConcept(annual),
-    quarterly: quarterly.values.map((v) => fromCompanyFacts(v)),
-    annual: annual.values.map((v) => fromCompanyFacts(v)),
+    quarterly: quarterly.values.map((v, i) => fromCompanyFacts(v, quarterly.missingReasons?.[i])),
+    annual: annual.values.map((v, i) => fromCompanyFacts(v, annual.missingReasons?.[i])),
     ...extra,
   };
 }
@@ -252,6 +252,8 @@ interface PooledFact extends ExtractedFact {
   element: string;
   accessionNumber: string;
   filingDate: string;
+  /** The element is a line on this filing's own income statement (not only in a note). */
+  onStatement: boolean;
 }
 
 function daysBetween(start: string, end: string): number {
@@ -269,9 +271,13 @@ class FactPool {
 
   constructor(extracts: FilingStatementExtract[]) {
     for (const x of extracts) {
+      const lines = new Set(x.incomeStatement?.lines.map((l) => l.element));
       for (const [element, facts] of Object.entries(x.facts)) {
         const list = this.byElement.get(element) ?? [];
-        for (const f of facts) list.push({ ...f, element, accessionNumber: x.accessionNumber, filingDate: x.filingDate });
+        const onStatement = lines.has(element);
+        for (const f of facts) {
+          list.push({ ...f, element, accessionNumber: x.accessionNumber, filingDate: x.filingDate, onStatement });
+        }
         this.byElement.set(element, list);
       }
     }
@@ -282,18 +288,30 @@ class FactPool {
   }
 
   /**
-   * The fact for a period, across the row's elements: the column's own
-   * filing first, then the latest-filed one. Elements are tried in order,
-   * so the row's own element wins over a joined older one.
+   * The figure a line shows for a period: from a filing whose income
+   * statement presents the line, and of those, the latest-filed one.
+   *
+   * On the statement, because a figure a filing reports only in a note is
+   * not a line of that filing's statement -- a 10-Q that folds legal fees
+   * into SG&A still tags them in a note, and showing both would count them
+   * twice. The latest-filed, because a column has to come from one
+   * presentation: when a company moves a cost from one line to another
+   * and restates its comparatives, taking one line as originally filed and
+   * the next as restated counts the moved cost twice (FedEx's separation
+   * costs, moved out of "Other" in its FY26 10-K). The latest presentation
+   * of every period in the window is the one the statement's own lines and
+   * captions come from. Across a joined row's elements, the latest-filed
+   * figure wins; on a tie, the row's own element.
    */
-  pick(elements: string[], match: (f: PooledFact) => boolean, ownAccession?: string): PooledFact | undefined {
+  pick(elements: string[], match: (f: PooledFact) => boolean): PooledFact | undefined {
+    let best: PooledFact | undefined;
     for (const element of elements) {
-      const candidates = this.facts(element).filter(match);
-      if (!candidates.length) continue;
-      const own = ownAccession ? candidates.find((f) => f.accessionNumber === ownAccession) : undefined;
-      return own ?? candidates.reduce((a, b) => (b.filingDate > a.filingDate ? b : a));
+      for (const f of this.facts(element)) {
+        if (!f.onStatement || !match(f)) continue;
+        if (!best || f.filingDate > best.filingDate) best = f;
+      }
     }
-    return undefined;
+    return best;
   }
 }
 
@@ -326,21 +344,20 @@ function valueFrom(
 
 function quarterCell(pool: FactPool, line: CompanyLine, period: FilingPeriod, all: FilingPeriod[]): StatementCell {
   const end = period.filing.reportDate;
-  const own = period.filing.accessionNumber;
   if (period.fp === "FY") {
     // Q4 = the 10-K's annual figure − Q1 to Q3 (the nine-month figure with
     // the same fiscal-year start), same element.
-    const annual = pool.pick(line.elements, (f) => f.end === end && inWindow(f, "FY"), own);
+    const annual = pool.pick(line.elements, (f) => f.end === end && inWindow(f, "FY"));
     if (!annual) return { missing: MISSING_NOT_FILED_FOR_PERIOD };
     const nine = pool.pick([annual.element, ...line.elements], (f) => f.start === annual.start && inWindow(f, "Q3"));
     if (!nine) return { missing: MISSING_NOT_FILED_FOR_PERIOD };
     return valueFrom(annual, line, "annual-minus-9mo", annual.value - nine.value, true);
   }
-  const direct = pool.pick(line.elements, (f) => f.end === end && inWindow(f, "Q1"), own);
+  const direct = pool.pick(line.elements, (f) => f.end === end && inWindow(f, "Q1"));
   if (direct) return valueFrom(direct, line, "direct");
   if (period.fp === "Q1") return { missing: MISSING_NOT_FILED_FOR_PERIOD };
   const priorFp: FiscalPeriodLabel = period.fp === "Q2" ? "Q1" : "Q2";
-  const ytd = pool.pick(line.elements, (f) => f.end === end && inWindow(f, period.fp), own);
+  const ytd = pool.pick(line.elements, (f) => f.end === end && inWindow(f, period.fp));
   const prior = all.find((p) => p.fy === period.fy && p.fp === priorFp);
   if (!ytd || !prior) return { missing: MISSING_NOT_FILED_FOR_PERIOD };
   const priorYtd = pool.pick(
@@ -355,7 +372,6 @@ function annualCell(pool: FactPool, line: CompanyLine, period: FilingPeriod): St
   const fact = pool.pick(
     line.elements,
     (f) => f.end === period.filing.reportDate && inWindow(f, "FY"),
-    period.filing.accessionNumber
   );
   return fact ? valueFrom(fact, line, "direct") : { missing: MISSING_NOT_FILED_FOR_PERIOD };
 }
@@ -510,8 +526,8 @@ export function buildStatements(
   const I = INSTANT_CONCEPTS;
   const S = STATEMENT_CONCEPTS;
 
-  const dur = (names: readonly string[], cashFlow = false) =>
-    resolveDurationSeries(facts, names, quarterPeriods, all, { cashFlow });
+  const dur = (names: readonly string[], cashFlow = false, grossFlow = false) =>
+    resolveDurationSeries(facts, names, quarterPeriods, all, { cashFlow, grossFlow });
   const inst = (names: readonly string[]) => resolveInstantSeries(facts, names, quarterPeriods);
   const annDur = (names: readonly string[], preferred?: string) => resolveAnnualSeries(facts, names, years, "duration", preferred);
   const annInst = (names: readonly string[], preferred?: string) => resolveAnnualSeries(facts, names, years, "instant", preferred);
@@ -712,7 +728,7 @@ export function buildStatements(
     "acquisitions",
     acquisitionsCaption ?? "Acquisitions",
     "line",
-    dur(S.acquisitions, true),
+    dur(S.acquisitions, true, true),
     annDur(S.acquisitions)
   );
   // A column whose filing puts the line under the company's own tag: its
@@ -729,7 +745,8 @@ export function buildStatements(
   const debtRows: StatementRow[] = [];
   for (const d of DEBT_FLOW_TAGS) {
     if (!everFiled(facts, [d.tag])) continue;
-    const r = row(`debt:${d.tag}`, d.label, "line", dur([d.tag], true), annDur([d.tag]), { debtKind: d.kind });
+    // Net lines keep their sign; gross proceeds and repayments can't be negative.
+    const r = row(`debt:${d.tag}`, d.label, "line", dur([d.tag], true, d.kind !== "net"), annDur([d.tag]), { debtKind: d.kind });
     if ([...r.quarterly, ...r.annual].some(isValue)) debtRows.push(r);
   }
   // A debt tag equal to the sum of the filer's other tags of the same kind,
@@ -778,16 +795,16 @@ export function buildStatements(
   };
   if (!counted.length) netNewDebt.notFiled = true;
 
-  const buybacks = row("buybacks", "Buybacks", "line", dur(S.buybacks, true), annDur(S.buybacks), {
+  const buybacks = row("buybacks", "Buybacks", "line", dur(S.buybacks, true, true), annDur(S.buybacks), {
     filedEver: everFiled(facts, S.buybacks),
   });
-  const dividends = row("dividends", "Dividends", "line", dur(S.dividends, true), annDur(S.dividends), {
+  const dividends = row("dividends", "Dividends", "line", dur(S.dividends, true, true), annDur(S.dividends), {
     filedEver: everFiled(facts, S.dividends),
   });
   if (!buybacks.filedEver) buybacks.notFiled = true;
   if (!dividends.filedEver) dividends.notFiled = true;
 
-  const sbc = row("shareBasedCompensation", "of which stock-based compensation (non-cash)", "of", dur(S.shareBasedCompensation, true), annDur(S.shareBasedCompensation));
+  const sbc = row("shareBasedCompensation", "of which stock-based compensation (non-cash)", "of", dur(S.shareBasedCompensation, true, true), annDur(S.shareBasedCompensation));
   const ocf = kfDur("operatingCashFlow", "Operating cash flow", "total", kf.operatingCashFlow, D.operatingCashFlow);
   const capex = kfDur("capitalExpenditures", "Capital expenditures", "line", kf.capitalExpenditures, D.capitalExpenditures);
   const fcfAnnual = ocf.annual.map((o, i) => {
@@ -795,6 +812,13 @@ export function buildStatements(
     return isValue(o) && isValue(c) ? cell(o.value - c.value, `${o.concept}-${c.concept}`, "computed-difference") : undefined;
   });
   const fcf = row("freeCashFlow", "Free cash flow", "total", kf.freeCashFlow, { values: fcfAnnual });
+  // Free cash flow is missing whenever either input is; say which kind of missing.
+  fcf.quarterly = fcf.quarterly.map((c, i) =>
+    !isValue(c) && (!isValue(ocf.quarterly[i]) || !isValue(capex.quarterly[i])) ? { missing: MISSING_DEPENDS } : c
+  );
+  fcf.annual = fcf.annual.map((c, i) =>
+    !isValue(c) && (!isValue(ocf.annual[i]) || !isValue(capex.annual[i])) ? { missing: MISSING_DEPENDS } : c
+  );
 
   const cashFlow: StatementRow[] = [
     ocf,
@@ -803,8 +827,8 @@ export function buildStatements(
     fcf,
     { key: "section:investing", label: "Investing", kind: "section", quarterly: [], annual: [] },
     acquisitions,
-    row("investmentPurchases", "Investment purchases", "line", dur(S.investmentPurchases, true), annDur(S.investmentPurchases)),
-    row("investmentSales", "Investment sales and maturities", "line", dur(S.investmentSales, true), annDur(S.investmentSales)),
+    row("investmentPurchases", "Investment purchases", "line", dur(S.investmentPurchases, true, true), annDur(S.investmentPurchases)),
+    row("investmentSales", "Investment sales and maturities", "line", dur(S.investmentSales, true, true), annDur(S.investmentSales)),
     { key: "section:financing", label: "Financing", kind: "section", quarterly: [], annual: [] },
     ...debtRows,
     netNewDebt,

@@ -2667,11 +2667,7 @@
             "missing": "not filed for this period"
           },
           {
-            "value": -1444626000,
-            "concept": "RepaymentsOfConvertibleDebt",
-            "method": "annual-minus-9mo",
-            "derived": true,
-            "source": "company-facts"
+            "missing": "the filings don't reconcile: the derived quarter is negative"
           },
           {
             "value": 0,

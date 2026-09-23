@@ -56,9 +56,12 @@
   "joins": [
     {
       "from": "fdx:BusinessOptimizationCosts",
-      "to": "",
-      "joined": false,
-      "reason": "no current line reports a shared period with it"
+      "to": "fdx:BusinessOptimizationAndRealignmentCosts",
+      "joined": true,
+      "reason": "same value within $1M in the most recent period both report",
+      "period": "2024-06-01|2025-05-31",
+      "fromValue": 756000000,
+      "toValue": 756000000
     }
   ],
   "tabs": {
@@ -625,57 +628,6 @@
         ]
       },
       {
-        "key": "line:fdx:BusinessOptimizationCosts",
-        "label": "Business optimization costs",
-        "kind": "line",
-        "concept": "fdx:BusinessOptimizationCosts",
-        "flags": [
-          "sign:-1:default",
-          "companyTag"
-        ],
-        "cells": [
-          {
-            "missing": "not filed for this period"
-          },
-          {
-            "value": 65000000,
-            "concept": "fdx:BusinessOptimizationCosts",
-            "method": "direct",
-            "derived": false,
-            "source": "filing",
-            "companyTag": true
-          },
-          {
-            "value": 30000000,
-            "concept": "fdx:BusinessOptimizationCosts",
-            "method": "direct",
-            "derived": false,
-            "source": "filing",
-            "companyTag": true
-          },
-          {
-            "value": 67000000,
-            "concept": "fdx:BusinessOptimizationCosts",
-            "method": "direct",
-            "derived": false,
-            "source": "filing",
-            "companyTag": true
-          },
-          {
-            "missing": "not filed for this period"
-          },
-          {
-            "missing": "not filed for this period"
-          },
-          {
-            "missing": "not filed for this period"
-          },
-          {
-            "missing": "not filed for this period"
-          }
-        ]
-      },
-      {
         "key": "line:fdx:BusinessOptimizationAndRealignmentCosts",
         "label": "Business optimization and realignment costs",
         "kind": "line",
@@ -686,19 +638,47 @@
         ],
         "cells": [
           {
-            "missing": "not filed for this period"
+            "value": 204000000,
+            "concept": "fdx:BusinessOptimizationAndRealignmentCosts",
+            "method": "annual-minus-9mo",
+            "derived": true,
+            "source": "filing",
+            "companyTag": true
           },
           {
-            "missing": "not filed for this period"
+            "value": 65000000,
+            "concept": "fdx:BusinessOptimizationAndRealignmentCosts",
+            "method": "direct",
+            "derived": false,
+            "source": "filing",
+            "companyTag": true,
+            "joinedFrom": "fdx:BusinessOptimizationCosts"
           },
           {
-            "missing": "not filed for this period"
+            "value": 30000000,
+            "concept": "fdx:BusinessOptimizationAndRealignmentCosts",
+            "method": "direct",
+            "derived": false,
+            "source": "filing",
+            "companyTag": true,
+            "joinedFrom": "fdx:BusinessOptimizationCosts"
           },
           {
-            "missing": "not filed for this period"
+            "value": 67000000,
+            "concept": "fdx:BusinessOptimizationAndRealignmentCosts",
+            "method": "direct",
+            "derived": false,
+            "source": "filing",
+            "companyTag": true,
+            "joinedFrom": "fdx:BusinessOptimizationCosts"
           },
           {
-            "missing": "not filed for this period"
+            "value": 123000000,
+            "concept": "fdx:BusinessOptimizationAndRealignmentCosts",
+            "method": "annual-minus-9mo",
+            "derived": true,
+            "source": "filing",
+            "companyTag": true
           },
           {
             "value": 366000000,
@@ -811,7 +791,7 @@
             "source": "filing"
           },
           {
-            "value": 3377000000,
+            "value": 3339000000,
             "concept": "us-gaap:OtherCostAndExpenseOperating",
             "method": "annual-minus-9mo",
             "derived": true,
@@ -825,7 +805,7 @@
             "source": "filing"
           },
           {
-            "value": 13001000000,
+            "value": 12963000000,
             "concept": "us-gaap:OtherCostAndExpenseOperating",
             "method": "direct",
             "derived": false,

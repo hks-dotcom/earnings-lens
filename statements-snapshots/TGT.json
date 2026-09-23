@@ -180,7 +180,7 @@
             "source": "filing"
           },
           {
-            "value": 77736000000,
+            "value": 77828000000,
             "concept": "us-gaap:CostOfGoodsAndServicesSold",
             "method": "direct",
             "derived": false,
@@ -312,7 +312,7 @@
             "source": "filing"
           },
           {
-            "value": 21554000000,
+            "value": 21462000000,
             "concept": "us-gaap:SellingGeneralAndAdministrativeExpense",
             "method": "direct",
             "derived": false,
