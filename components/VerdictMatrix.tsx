@@ -1,6 +1,5 @@
 import { LadderRung } from "@/lib/rules/ladder";
 import { Quadrant } from "@/lib/rules/matrix";
-import { riskWord } from "@/lib/present/riskWords";
 
 const COLORS: Record<"Services" | "SaaS", string> = {
   Services: "#1F6F5C",
@@ -22,6 +21,7 @@ export function VerdictMatrix({
   opportunityHigh,
   riskHigh,
   rung,
+  riskText,
   quadrant,
 }: {
   ticker: string;
@@ -29,6 +29,8 @@ export function VerdictMatrix({
   opportunityHigh: boolean;
   riskHigh: boolean;
   rung: LadderRung;
+  /** The hero's risk phrase: "medium", or "low, with spending cuts". */
+  riskText: string;
   quadrant: Quadrant;
 }) {
   const color = COLORS[lens];
@@ -93,7 +95,7 @@ export function VerdictMatrix({
       </text>
 
       <text x={rightX - gap / 2} y={H - 8} textAnchor="middle" fontSize={12} fill="#55524C">
-        Counterparty risk: {riskWord(rung)} &#8594;
+        Counterparty risk: {riskText} &#8594;
       </text>
       <text x={16} y={top + boxSize + gap} textAnchor="middle" fontSize={12} fill="#55524C" transform={`rotate(-90 16 ${top + boxSize + gap})`}>
         Relationship opportunity &#8594;

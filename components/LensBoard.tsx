@@ -10,7 +10,7 @@ import { BoardActions } from "@/components/BoardActions";
 import { Footer } from "@/components/Footer";
 import { buildStandOut } from "@/lib/present/standOut";
 import { buildSummary } from "@/lib/present/summary";
-import { heroSubline, whyThisVerdict } from "@/lib/present/verdictReasons";
+import { heroSubline, riskLabel, whyThisVerdict } from "@/lib/present/verdictReasons";
 import { formatPeriodEnd } from "@/lib/present/format";
 import { Lens } from "@/lib/rules/dealStructure";
 import { LENS_NAME } from "@/lib/present/lensNames";
@@ -100,6 +100,7 @@ export function LensBoard({
             opportunityHigh={lens.opportunity.high}
             riskHigh={lens.risk.high}
             rung={lens.ladder.rung}
+            riskText={riskLabel(lens)}
             quadrant={lens.quadrant}
           />
         </div>

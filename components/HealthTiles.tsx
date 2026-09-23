@@ -139,11 +139,11 @@ function PeriodBars({ l, p, max }: { l: LiquidityDebt; p: LiquidityPeriod; max: 
         {p.label || "Year-ago quarter"} {p.periodEnd && <span>· {formatPeriodEnd(p.periodEnd)}</span>}
       </h4>
       <div className="liq-bar">
-        <span className="liq-name">{liquidityLabel(l)}</span>
+        <span className="liq-name">{liquidityLabel(p)}</span>
         <div className="liq-track">
           <div className="liq-fill liq-cash" style={{ width: `${width(p.liquidity)}%` }} />
         </div>
-        <span className="liq-amt">{liquidityAmount(p.liquidity, l.scale)}</span>
+        <span className="liq-amt">{liquidityAmount(p.liquidity, p.unit)}</span>
       </div>
       <div className="liq-bar">
         <span className="liq-name">Debt</span>
@@ -152,7 +152,7 @@ function PeriodBars({ l, p, max }: { l: LiquidityDebt; p: LiquidityPeriod; max: 
             <div className="liq-track">
               <div className="liq-fill liq-debt" style={{ width: `${width(p.debt)}%` }} />
             </div>
-            <span className="liq-amt">{liquidityAmount(p.debt, l.scale)}</span>
+            <span className="liq-amt">{liquidityAmount(p.debt, p.unit)}</span>
           </>
         ) : (
           <span className="liq-none">No debt tagged</span>

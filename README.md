@@ -161,8 +161,12 @@ short-term investments (teal) against debt (slate), never red or green.
 
 - **Liquidity** is the runway's figure, with the runway's rule: cash plus
   short-term investments; cash alone when short-term investments are never
-  filed (the bar then reads "Cash"), or when they are filed but not for the
-  quarter (the line under the bars says so).
+  filed, or when they are filed but not for the quarter (the bar then reads
+  "Cash"). Only the first is complete liquidity. A company that holds
+  short-term investments but didn't file them for the quarter has a
+  cash-only figure that can flip the answer, so that period's net figure
+  reads "Net MISSING" and the line under the bars says why. The runway
+  keeps its cash-only fallback, which can only understate it.
 - **Debt** is long-term debt including the part due within a year, plus
   short-term borrowings, from the Balance sheet tab's rows. Leases are
   excluded. A row the filer uses that is missing for the quarter makes debt
@@ -174,11 +178,12 @@ short-term investments (teal) against debt (slate), never red or green.
   $44.8B · long-term debt, incl. the part due within a year, $133.0B +
   short-term borrowings $0.3B. Leases excluded."
 
-Amounts are in $B with one decimal ($M with one decimal when quarterly
-revenue is under $100M). The strip is display only: it has no effect on the
-ladder, the quadrant, the Summary or the findings. The Copy brief carries it
-as one line: "Liquidity vs debt: $123.0B vs $133.3B, Net Debt $10.3B (Net
-Cash $36.9B a year ago)."
+Amounts are set per period: $M when the larger of the period's two amounts
+is under $1B (whole numbers, or one decimal when quarterly revenue is under
+$100M), otherwise $B with one decimal. The strip is display only: it has no
+effect on the ladder, the quadrant, the Summary or the findings. The Copy
+brief carries it as one line: "Liquidity vs debt: $123.0B vs $133.3B, Net
+Debt $10.3B (Net Cash $36.9B a year ago)."
 
 ## How it works
 
@@ -206,14 +211,15 @@ ticker → SEC EDGAR → rules → verdict, why, Summary, what stands out, terms
    the reader's words: "Risk: low · Opportunity: high · Offer Net 30; Net 45
    if pushed"), with "with spending cuts" when a restructuring filing or an
    R&D or SG&A cut puts the company in the higher-risk half of the matrix;
-   high or low opportunity; and the terms. Net 45 is offered only when risk
-   is low. Beside the matrix, "Why this verdict" gives the input that decided
-   each axis, with its figure — payables up 27%, Z'' 2.71, revenue up 20% —
-   using the rules' own values, and states the payables fact rather than a
-   reading of it ("payables are falling: 56.9 days of cost of revenue, from
-   64.0 a year ago"). Where there are restructuring filings it names the
-   latest and counts the rest ("on 3 Jun 2026 and 1 earlier"). The rules
-   themselves are in the board's footnotes.
+   high or low opportunity; and the terms. The matrix's risk axis reads the
+   same phrase ("Counterparty risk: low, with spending cuts →"). Net 45 is
+   offered only when risk is low. Beside the matrix, "Why this verdict"
+   gives the input that decided each axis, with its figure — payables up
+   27%, Z'' 2.71, revenue up 20% — using the rules' own values, and states
+   the payables fact rather than a reading of it ("payables are falling:
+   56.9 days of cost of revenue, from 64.0 a year ago"). Where there are
+   restructuring filings it names the latest and counts the rest ("on 3 Jun
+   2026 and 1 earlier"). The rules themselves are in the board's footnotes.
 4. **Summary.** The Summary beside the matrix is commentary, templated from
    the rules' own output and carrying no ratio values. The verdict is its
    first part; on the page it starts at the second, because the verdict is
@@ -418,8 +424,8 @@ statement cell whose presentation differs from Key financials, the findings
 tests (the returns threshold below and above its size test, every
 restructuring filing in the window, "none" for a zero comparison, risk as
 low / medium / high, the payables clause, and liquidity vs debt against
-Amazon's figures), and three
-snapshot diffs over thirteen real companies — one over every Key financials
+Amazon's figures, with the net MISSING rule and the per-period units), and
+three snapshot diffs over thirteen real companies — one over every Key financials
 figure with its full provenance, one over every rules output, one over every
 statement cell. All report per-cell and per-field changes, so a change in
 what EDGAR returns shows up as a diff rather than as a quietly different

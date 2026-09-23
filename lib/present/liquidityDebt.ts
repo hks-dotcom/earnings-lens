@@ -11,16 +11,30 @@ import { isValue, StatementRow, Statements } from "@/lib/xbrl/statements";
  *
  * - Liquidity is the runway's figure with the runway's rule: cash plus
  *   short-term investments; cash alone when short-term investments are
- *   never filed (and the bar is labelled "Cash"), or when they are filed
- *   but not for this quarter (and the components line says so).
+ *   never filed, or when they are filed but not for this quarter. Either
+ *   way the bar is labelled "Cash". Only the first is complete liquidity:
+ *   a filer that holds short-term investments but didn't file them for
+ *   the quarter has a cash-only figure that can flip Net Debt into Net
+ *   Cash, so that period's net figure is MISSING and the components line
+ *   says why. (The runway keeps its cash-only fallback, which can only
+ *   understate it.)
  * - Debt is long-term debt including the part due within a year, plus
  *   short-term borrowings. Leases are excluded. A row the filer uses that
  *   is missing for the quarter makes debt, and the net figure, MISSING. A
  *   filer that has tagged neither shows "No debt tagged", with no bar and
  *   no net figure.
+ * - Units are per period: $M when the larger of the period's two amounts
+ *   is under $1B (whole numbers, or one decimal when quarterly revenue is
+ *   under $100M), otherwise $B with one decimal.
  */
 
 export type PartState = "included" | "missing" | "not-tagged";
+
+/** How a period's amounts are written: "$1.2B", "$845M" or "$35.5M". */
+export interface StripUnit {
+  scale: "B" | "M";
+  decimals: 0 | 1;
+}
 
 export interface LiquidityPeriod {
   label: string;
@@ -31,14 +45,21 @@ export interface LiquidityPeriod {
   stiState: PartState;
   /** Cash plus short-term investments (or cash alone); undefined when cash is missing. */
   liquidity: number | undefined;
+  /** Cash plus short-term investments, or cash when they are never filed: the figure a net can rest on. */
+  liquidityComplete: boolean;
   longTermDebt: number | undefined;
   ltdState: PartState;
   shortTermBorrowings: number | undefined;
   stbState: PartState;
   /** Undefined when a debt row the filer uses is missing, or no debt is tagged. */
   debt: number | undefined;
-  /** Debt − liquidity: positive is Net Debt, otherwise Net Cash. Undefined when either side is. */
+  /**
+   * Debt − liquidity: positive is Net Debt, otherwise Net Cash. Undefined
+   * when either side is, or when liquidity is cash alone because
+   * short-term investments aren't filed for the quarter.
+   */
   net: number | undefined;
+  unit: StripUnit;
 }
 
 export interface LiquidityDebt {
@@ -48,11 +69,10 @@ export interface LiquidityDebt {
   stiFiledEver: boolean;
   latest: LiquidityPeriod;
   yearAgo: LiquidityPeriod;
-  /** $M with one decimal when quarterly revenue is under $100M, otherwise $B with one decimal. */
-  scale: "B" | "M";
 }
 
 const SMALL_REVENUE_USD = 100_000_000;
+const BILLION = 1_000_000_000;
 
 function at(row: StatementRow | undefined, i: number): number | undefined {
   const c = row?.quarterly[i];
@@ -62,6 +82,17 @@ function at(row: StatementRow | undefined, i: number): number | undefined {
 /** A row the filer uses within the five quarters shown. */
 function usedInWindow(row: StatementRow | undefined): boolean {
   return !!row && !row.notFiled && row.quarterly.some(isValue);
+}
+
+/**
+ * $M when the larger of the period's two amounts is under $1B (one decimal
+ * when quarterly revenue is under $100M, else whole numbers); $B otherwise.
+ */
+export function stripUnit(amounts: (number | undefined)[], revenue: number | undefined): StripUnit {
+  const present = amounts.filter((v): v is number => v !== undefined).map(Math.abs);
+  if (present.length === 0 || Math.max(...present) >= BILLION) return { scale: "B", decimals: 1 };
+  const smallRevenue = revenue !== undefined && Math.abs(revenue) < SMALL_REVENUE_USD;
+  return { scale: "M", decimals: smallRevenue ? 1 : 0 };
 }
 
 export function buildLiquidityDebt(s: Statements, kf: KeyFinancials): LiquidityDebt {
@@ -79,11 +110,14 @@ export function buildLiquidityDebt(s: Statements, kf: KeyFinancials): LiquidityD
   const stbTagged = usedInWindow(stbRow);
   const debtTagged = ltdTagged || stbTagged;
 
+  const revenue = kf.revenue.values[0]?.value;
+
   const period = (i: number): LiquidityPeriod => {
     const cash = at(cashRow, i);
     const sti = at(stiRow, i);
     const stiState: PartState = !stiFiledEver ? "not-tagged" : sti === undefined ? "missing" : "included";
     const liquidity = cash === undefined ? undefined : cash + (sti ?? 0);
+    const liquidityComplete = stiState !== "missing";
 
     const ltd = at(ltdRow, i);
     const stb = at(stbRow, i);
@@ -91,7 +125,7 @@ export function buildLiquidityDebt(s: Statements, kf: KeyFinancials): LiquidityD
     const stbState: PartState = !stbTagged ? "not-tagged" : stb === undefined ? "missing" : "included";
     const debt =
       !debtTagged || ltdState === "missing" || stbState === "missing" ? undefined : (ltd ?? 0) + (stb ?? 0);
-    const net = debt === undefined || liquidity === undefined ? undefined : debt - liquidity;
+    const net = debt === undefined || liquidity === undefined || !liquidityComplete ? undefined : debt - liquidity;
 
     return {
       label: kf.quarters[i]?.label ?? "",
@@ -100,42 +134,45 @@ export function buildLiquidityDebt(s: Statements, kf: KeyFinancials): LiquidityD
       shortTermInvestments: sti,
       stiState,
       liquidity,
+      liquidityComplete,
       longTermDebt: ltd,
       ltdState,
       shortTermBorrowings: stb,
       stbState,
       debt,
       net,
+      unit: stripUnit([liquidity, debt], revenue),
     };
   };
 
-  const revenue = kf.revenue.values[0]?.value;
   return {
     debtTagged,
     stiFiledEver,
     latest: period(0),
     yearAgo: period(4),
-    scale: revenue !== undefined && Math.abs(revenue) < SMALL_REVENUE_USD ? "M" : "B",
   };
 }
 
-/** "$123.0B", or "$35.5M" for a small filer; "MISSING" when absent. */
-export function liquidityAmount(value: number | undefined, scale: "B" | "M"): string {
+/** "$123.0B", "$845M", or "$35.5M" for a small filer; "MISSING" when absent. */
+export function liquidityAmount(value: number | undefined, unit: StripUnit): string {
   if (value === undefined) return "MISSING";
-  const divisor = scale === "B" ? 1_000_000_000 : 1_000_000;
-  const text = (Math.abs(value) / divisor).toLocaleString("en-US", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
-  return `${value < 0 ? "−" : ""}$${text}${scale}`;
+  const divisor = unit.scale === "B" ? BILLION : 1_000_000;
+  const text = (Math.abs(value) / divisor).toLocaleString("en-US", {
+    minimumFractionDigits: unit.decimals,
+    maximumFractionDigits: unit.decimals,
+  });
+  return `${value < 0 ? "−" : ""}$${text}${unit.scale}`;
 }
 
 /** "Net Debt $10.3B" or "Net Cash $36.9B"; undefined when there is no net figure to state. */
-export function netText(p: LiquidityPeriod, scale: "B" | "M"): string | undefined {
+export function netText(p: LiquidityPeriod): string | undefined {
   if (p.net === undefined) return undefined;
-  return p.net > 0 ? `Net Debt ${liquidityAmount(p.net, scale)}` : `Net Cash ${liquidityAmount(-p.net, scale)}`;
+  return p.net > 0 ? `Net Debt ${liquidityAmount(p.net, p.unit)}` : `Net Cash ${liquidityAmount(-p.net, p.unit)}`;
 }
 
-/** The liquidity bar's label: "Cash" when short-term investments are never filed. */
-export function liquidityLabel(l: LiquidityDebt): string {
-  return l.stiFiledEver ? "Cash and short-term investments" : "Cash";
+/** A period's liquidity bar label: "Cash" unless short-term investments are in the figure. */
+export function liquidityLabel(p: LiquidityPeriod): string {
+  return p.stiState === "included" ? "Cash and short-term investments" : "Cash";
 }
 
 /**
@@ -145,8 +182,8 @@ export function liquidityLabel(l: LiquidityDebt): string {
 export function netHeader(l: LiquidityDebt): { now: string; yearAgo: string } {
   if (!l.debtTagged) return { now: "No debt tagged", yearAgo: "" };
   return {
-    now: netText(l.latest, l.scale) ?? "Net MISSING",
-    yearAgo: ` · ${netText(l.yearAgo, l.scale) ?? "MISSING"} a year ago`,
+    now: netText(l.latest) ?? "Net MISSING",
+    yearAgo: ` · ${netText(l.yearAgo) ?? "MISSING"} a year ago`,
   };
 }
 
@@ -157,7 +194,7 @@ export function netHeader(l: LiquidityDebt): { now: string; yearAgo: string } {
  */
 export function componentsLine(l: LiquidityDebt): string {
   const p = l.latest;
-  const $ = (v: number | undefined) => liquidityAmount(v, l.scale);
+  const $ = (v: number | undefined) => liquidityAmount(v, p.unit);
   const liquidity =
     p.stiState === "included"
       ? `cash ${$(p.cash)} + short-term investments ${$(p.shortTermInvestments)}`
@@ -185,11 +222,14 @@ export function componentsLine(l: LiquidityDebt): string {
 
 /** The Copy brief's line: "Liquidity vs debt: $123.0B vs $133.3B, Net Debt $10.3B (Net Cash $36.9B a year ago)." */
 export function liquidityBriefLine(l: LiquidityDebt): string {
-  const $ = (v: number | undefined) => liquidityAmount(v, l.scale);
-  if (!l.debtTagged) return `Liquidity vs debt: ${$(l.latest.liquidity)}; no debt tagged.`;
-  const now = netText(l.latest, l.scale) ?? "Net MISSING";
-  const then = netText(l.yearAgo, l.scale) ?? "MISSING";
-  return `Liquidity vs debt: ${$(l.latest.liquidity)} vs ${$(l.latest.debt)}, ${now} (${then} a year ago).`;
+  const p = l.latest;
+  const $ = (v: number | undefined) => liquidityAmount(v, p.unit);
+  const liquidity =
+    p.stiState === "missing" ? `cash ${$(p.liquidity)} (short-term investments not filed for this quarter)` : $(p.liquidity);
+  if (!l.debtTagged) return `Liquidity vs debt: ${liquidity}; no debt tagged.`;
+  const now = netText(p) ?? "Net MISSING";
+  const then = netText(l.yearAgo) ?? "MISSING";
+  return `Liquidity vs debt: ${liquidity} vs ${$(p.debt)}, ${now} (${then} a year ago).`;
 }
 
 export const LIQUIDITY_TIP =

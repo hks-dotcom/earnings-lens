@@ -23,7 +23,7 @@ import { LensResult } from "@/lib/rules/evaluateLens";
 import { heroSubline, whyThisVerdict } from "@/lib/present/verdictReasons";
 import { buildSummary } from "@/lib/present/summary";
 import { FinancialHealth } from "@/lib/metrics/health";
-import { buildLiquidityDebt, componentsLine, liquidityBriefLine, netHeader } from "@/lib/present/liquidityDebt";
+import { buildLiquidityDebt, componentsLine, liquidityAmount, liquidityBriefLine, liquidityLabel, netHeader, stripUnit } from "@/lib/present/liquidityDebt";
 import { Statements, StatementRow, StatementCell } from "@/lib/xbrl/statements";
 
 let pass = 0;
@@ -338,6 +338,42 @@ check(
   [stiMissing.latest.liquidity! / M, componentsLine(stiMissing)],
   [1_000, "Q2 FY26: cash $1.0B (short-term investments not filed for this quarter, so cash only) · long-term debt, incl. the part due within a year, $0.8B; no short-term borrowings tagged. Leases excluded."]
 );
+// Cash alone is not complete liquidity when short-term investments are
+// filed but not for the quarter: the bar reads "Cash", the net is MISSING.
+check(
+  "liquidity: short-term investments missing this quarter, net MISSING, bar reads Cash",
+  [stiMissing.latest.net, netHeader(stiMissing), liquidityLabel(stiMissing.latest), liquidityLabel(stiMissing.yearAgo), liquidityBriefLine(stiMissing)],
+  [
+    undefined,
+    { now: "Net MISSING", yearAgo: " · Net Cash $0.6B a year ago" },
+    "Cash",
+    "Cash and short-term investments",
+    "Liquidity vs debt: cash $1.0B (short-term investments not filed for this quarter) vs $0.8B, Net MISSING (Net Cash $0.6B a year ago).",
+  ]
+);
+// Never filed: cash is complete liquidity, so the net stands.
+check("liquidity: short-term investments never filed, the net stands", [cashOnly.latest.net! / M, liquidityLabel(cashOnly.latest)], [-40, "Cash"]);
+
+// Units per period: $M under $1B (whole, or one decimal under $100M
+// quarterly revenue), $B from $1B up. A UFPT-sized filer no longer reads $0.0B.
+const small = buildLiquidityDebt(
+  statements([bsRow("cash", 23.4, 1_200), bsRow("shortTermInvestments", undefined, undefined, true), bsRow("longTermDebt", 130.6, 180.2), bsRow("shortTermBorrowings", undefined, undefined, true)]),
+  kfWith({ revenue: line(150), shortTermInvestmentsFiledEver: false } as never)
+);
+check(
+  "liquidity: $M whole under $1B, $B from $1B, per period",
+  [netHeader(small), componentsLine(small), liquidityAmount(small.yearAgo.liquidity, small.yearAgo.unit)],
+  [
+    { now: "Net Debt $107M", yearAgo: " · Net Cash $1.0B a year ago" },
+    "Q2 FY26: cash $23M · long-term debt, incl. the part due within a year, $131M; no short-term borrowings tagged. Leases excluded.",
+    "$1.2B",
+  ]
+);
+check("liquidity: $M with one decimal under $100M revenue", [stripUnit([23.4 * M, 130.6 * M], 80 * M), stripUnit([999 * M], 80 * M), stripUnit([1_000 * M], 80 * M)], [
+  { scale: "M", decimals: 1 },
+  { scale: "M", decimals: 1 },
+  { scale: "B", decimals: 1 },
+]);
 
 console.log(`\n${pass} passed, ${fail} failed`);
 if (fail > 0) process.exit(1);
