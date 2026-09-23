@@ -424,7 +424,7 @@ them ever belongs in the repo):
 | Variable | What it is for |
 |---|---|
 | `EDGAR_CONTACT_EMAIL` | SEC's fair-access policy requires a contact email in the User-Agent on every EDGAR request. |
-| `DATABASE_URL` | Postgres (Neon). Holds the explanation cache, the daily call count and per-filing segment data. The pooled connection string is all that is needed. |
+| `DATABASE_URL` | Postgres (Neon). Holds the explanation cache, the daily call count, per-filing segment data and per-filing statement extracts. The pooled connection string is all that is needed. |
 | `ANTHROPIC_API_KEY` | The explanation layer. Without it the app runs, and every finding renders without its closing explanation. |
 
 Optional: `CLAUDE_ENABLED=false` turns the explanation layer off outright,
@@ -473,7 +473,7 @@ exercising: a derived Q4 from a just-filed 10-K (MSFT, FDX), an operating loss
 whose change reads in dollars (SNAP, RIVN), a cash burn with a runway figure
 (RIVN), heavy investment with none (AMZN, GOOGL), a one-off non-operating
 item (NVDA, AMZN, GOOGL, UBER, ZM), a tax position that repeats from a year
-earlier and so is not a one-off (RIVN), a company with no debt tagged (ZM), a
+earlier and so is not a one-off (RIVN), a company with no debt on its balance sheet (ZM), a
 restructuring filing (FDX, SNAP), the grey zone (WMT, TGT), the one path from
 grey to high risk (TGT) and the Altman distress cap (UBER). Where no real filer
 reaches a rule, the rule gets unit tests instead of a ticker — the two runway
