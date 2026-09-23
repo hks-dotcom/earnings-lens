@@ -378,7 +378,7 @@ check("liquidity: AMZN header", netHeader(amzn), { now: "Net Debt $9.6B", yearAg
 check(
   "liquidity: AMZN components line",
   componentsLine(amzn),
-  "Q2 FY26: Cash and cash equivalents $78.2B + Marketable securities $44.8B · short-term debt $0.3B + long-term debt, current maturities $3.3B + long-term debt $128.9B. Leases excluded."
+  "Cash and cash equivalents $78.2B + Marketable securities $44.8B · short-term debt $0.3B + long-term debt, current maturities $3.3B + long-term debt $128.9B. Leases excluded."
 );
 check("liquidity: AMZN Copy brief line", liquidityBriefLine(amzn), "Liquidity vs debt: $123.0B vs $132.5B, Net Debt $9.6B (Net Cash $37.3B a year ago).");
 
@@ -403,7 +403,7 @@ check("liquidity: NVDA equity securities excluded", [...figures(nvda), nvda.excl
 check(
   "liquidity: NVDA components line",
   componentsLine(strip(nvda, nvda)),
-  "Q2 FY27: Cash and cash equivalents $22.4B + Marketable debt securities $34.1B · short-term debt $1.0B + long-term debt $32.4B. Marketable equity securities $42.8B and leases excluded."
+  "Cash and cash equivalents $22.4B + Marketable debt securities $34.1B · short-term debt $1.0B + long-term debt $32.4B. Marketable equity securities $42.8B and leases excluded."
 );
 
 // NVDA's FY26 10-K: one company line for debt and equity securities together.
@@ -420,7 +420,7 @@ check("liquidity: a combined debt-and-equity line leaves net MISSING", [combined
 check(
   "liquidity: the components line says why",
   componentsLine(strip(combined, amznThen)),
-  "Q4 FY26: Cash and cash equivalents $10.6B + Marketable securities $52.0B (debt and equity securities combined) · long-term debt $8.5B. Leases excluded. Q4 FY26: Marketable securities combines debt and equity securities and can't be split, so there is no net figure."
+  "Cash and cash equivalents $10.6B + Marketable securities $52.0B (debt and equity securities combined) · long-term debt $8.5B. Leases excluded. Marketable securities combines debt and equity securities and can't be split, so there is no net figure."
 );
 
 // TGT: the cash line's own element includes short-term investments; debt
@@ -438,7 +438,7 @@ check("liquidity: TGT cash line includes short-term investments", [liquidityLabe
 check(
   "liquidity: TGT finance leases as filed",
   componentsLine(strip(tgt, tgt)),
-  "Q2 FY26: Cash and cash equivalents $5.4B · current portion of long-term debt and other borrowings $1.1B (includes finance leases, as filed) + long-term debt and other borrowings $14.2B (includes finance leases, as filed). Other leases excluded."
+  "Cash and cash equivalents $5.4B · current portion of long-term debt and other borrowings $1.1B (includes finance leases, as filed) + long-term debt and other borrowings $14.2B (includes finance leases, as filed). Other leases excluded."
 );
 
 // GOOGL: a total of cash and marketable securities is a sum, never added.
@@ -487,8 +487,39 @@ check("liquidity: FDX long-term debt without finance leases replaces the lines",
 check(
   "liquidity: FDX components line",
   componentsLine(strip(fdx, fdx)),
-  "Q4 FY26: Cash and cash equivalents $13.3B · short-term borrowings $0.7B + long-term debt $23.5B (from the notes, without finance leases). Leases excluded."
+  "Cash and cash equivalents $13.3B · short-term borrowings $0.7B + long-term debt $23.5B (from the notes, without finance leases). Leases excluded."
 );
+
+// Lease basis: the year-ago clause says when the two periods' debt differ
+// in lease treatment. FDX: the latest quarter reads long-term debt without
+// finance leases; its year-ago 10-K comparative only has lines that include them.
+const fdxThen = read(
+  extractOf(
+    [
+      ["us-gaap:CashAndCashEquivalentsAtCarryingValue", "Cash and cash equivalents", 5_502],
+      ...ASSETS_TOTALS,
+      ["us-gaap:LongTermDebtAndCapitalLeaseObligationsCurrent", "Current portion of long-term debt", 1_428],
+      ["us-gaap:ShortTermBorrowings", "Short-term borrowings", 0],
+      ["us-gaap:LiabilitiesCurrent", "Total current liabilities", 1, true],
+      ["us-gaap:LongTermDebtNoncurrent", "LONG-TERM DEBT, LESS CURRENT PORTION", 19_151],
+    ],
+    [
+      ["us-gaap:FinanceLeaseLiabilityCurrent", "Current portion of long-term debt", 59],
+      ["us-gaap:FinanceLeaseLiabilityNoncurrent", "Long-term debt, less current portion", 621],
+    ]
+  ),
+  "Q4 FY25"
+);
+check("liquidity: FDX year ago keeps its finance leases, as filed", [...figures(fdxThen), fdxThen.debtLines.every((d) => d.value === 0 || d.includesLeases)], [5_502, 20_579, 15_077, true]);
+check("liquidity: FDX header names the year ago's lease basis", netHeader(strip(fdx, fdxThen)), { now: "Net Debt $10.9B", yearAgo: " · Net Debt $15.1B a year ago, including finance leases" });
+check(
+  "liquidity: FDX Copy brief follows the header",
+  liquidityBriefLine(strip(fdx, fdxThen)),
+  "Liquidity vs debt: $13.3B vs $24.2B, Net Debt $10.9B (Net Debt $15.1B a year ago, including finance leases)."
+);
+check("liquidity: the latest includes finance leases, the year ago doesn't", netHeader(strip(fdxThen, fdx)).yearAgo, " · Net Debt $10.9B a year ago, excluding finance leases");
+check("liquidity: both periods include them, nothing to say", netHeader(strip(tgt, tgt)).yearAgo, " · Net Debt $9.9B a year ago");
+check("liquidity: a year-ago net MISSING", netHeader(strip(amznNow, combined)), { now: "Net Debt $9.6B", yearAgo: " · Net MISSING a year ago" });
 
 // A face value is never read: only a combined element equal to the gross figure is filed.
 const faceOnly = read(
@@ -563,7 +594,18 @@ check("liquidity: a year-end date, newest filing first", candidateFilings("2025-
   "10-Q-2025-09-30",
   "10-K-2025-06-30",
 ]);
-check("liquidity: a quarter-end date, its own filing only", candidateFilings("2025-03-31", kfFilings).map((f) => f.accessionNumber), ["10-Q-2025-03-31"]);
+check("liquidity: a quarter-end date, its own filing and the one a year later", candidateFilings("2025-03-31", kfFilings).map((f) => f.accessionNumber), ["10-Q-2026-03-31", "10-Q-2025-03-31"]);
+// A retailer's 52/53-week quarter: Target's Q2 FY26 10-Q presents Aug 2, 2025 too.
+const kfRetail = {
+  lookbackPeriods: [
+    filing("10-Q", "2026-08-01", "2026-08-28"),
+    filing("10-Q", "2026-05-02", "2026-05-29"),
+    filing("10-K", "2026-01-31", "2026-03-11"),
+    filing("10-Q", "2025-11-01", "2025-11-26"),
+    filing("10-Q", "2025-08-02", "2025-08-29"),
+  ],
+} as unknown as KeyFinancials;
+check("liquidity: a year-earlier quarter, the newer 10-Q first", candidateFilings("2025-08-02", kfRetail).map((f) => f.accessionNumber), ["10-Q-2026-08-01", "10-Q-2025-08-02"]);
 
 console.log(`\n${pass} passed, ${fail} failed`);
 if (fail > 0) process.exit(1);

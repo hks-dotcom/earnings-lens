@@ -155,13 +155,16 @@ tick or cross, move nothing, and are declared in the board's footnotes with
 the other values. The zone and DPO's year-ago figure live where the rules use
 them -- the Why box, the payables finding and the terms line.
 
-Beneath the tiles, **liquidity vs debt**: the latest quarter beside the same
-quarter last year, each with two bars on one shared scale -- cash and
-short-term investments (teal) against debt (slate), never red or green.
+Beneath the tiles, **liquidity vs debt** for the latest quarter: two
+full-width bars on one scale -- cash and short-term investments (teal)
+against debt (slate), never red or green -- with the period beside the
+title and last year's net figure as a short clause in the header.
 
-Each period is read from a filing's own balance sheet, not from Key
+Both periods are read from a filing's own balance sheet, not from Key
 financials: the latest-filed filing whose balance sheet presents that date,
-the same latest-presentation rule the income statement uses. The extractor
+the same latest-presentation rule the income statement uses. A retailer's
+10-Q presents the same quarter last year as well, so Target's and Walmart's
+year-ago figures come from their latest 10-Q. The extractor
 reads the balance sheet's lines, captions and dates, and every instant
 figure the filing reports at those dates, notes included; each filing's
 extract is stored and read once.
@@ -188,12 +191,17 @@ extract is stored and read once.
   or commercial paper. No debt element at all reads "No debt on the balance
   sheet", with no debt bar and no net figure.
 - **The header** states the net position, "Net Debt $9.6B" when debt is the
-  larger and "Net Cash" when liquidity is, then the same a year ago -- only
-  when both sides are complete for the period; otherwise "Net MISSING". A
-  line of components follows, in the company's own captions: "Q2 FY26: Cash
-  and cash equivalents $78.2B + Marketable securities $44.8B · short-term
-  debt $0.3B + long-term debt, current maturities $3.3B + long-term debt
-  $128.9B. Leases excluded."
+  larger and "Net Cash" when liquidity is, only when both sides are complete
+  for the period, otherwise "Net MISSING"; then, muted, the same a year ago:
+  "Net Debt $9.6B · Net Cash $37.3B a year ago". When the two periods' debt
+  differ in lease treatment, the clause says so: FedEx's latest quarter reads
+  its long-term debt without finance leases and its year-ago comparative
+  only with them, so it reads "Net Debt $10.9B · Net Debt $15.1B a year ago,
+  including finance leases". Under the bars, the latest quarter's
+  components in the company's own captions: "Cash and cash equivalents
+  $78.2B + Marketable securities $44.8B · short-term debt $0.3B + long-term
+  debt, current maturities $3.3B + long-term debt $128.9B. Leases
+  excluded."
 
 The strip's debt is the carrying amount, so it can differ from the Balance
 sheet tab's long-term debt, which is Key financials' one tag across time:
@@ -201,8 +209,8 @@ Amazon's "Notes outstanding" is the face value, $771M above the carrying
 amounts on its balance sheet. Key financials, debt / equity and the runway
 keep their own figures.
 
-Amounts are set per period: $M when the larger of the period's two amounts
-is under $1B (whole numbers, or one decimal when quarterly revenue is under
+Amounts are set per period: $M when the larger of the period's liquidity
+and debt is under $1B (whole numbers, or one decimal when quarterly revenue is under
 $100M), otherwise $B with one decimal. The strip is display only: it has no
 effect on the ladder, the quadrant, the Summary or the findings. The Copy
 brief carries it as one line: "Liquidity vs debt: $123.0B vs $132.5B, Net

@@ -8,7 +8,6 @@ import {
   componentsLine,
   LIQUIDITY_TIP,
   LiquidityDebt,
-  LiquidityPeriod,
   liquidityAmount,
   liquidityLabel,
   netHeader,
@@ -131,14 +130,36 @@ function SegmentLine({ segments, kf }: { segments: SegmentRevenue | null; kf: Ke
   );
 }
 
-/** One period's pair of bars, on the strip's shared scale. */
-function PeriodBars({ p, max }: { p: LiquidityPeriod; max: number }) {
+/**
+ * Liquidity vs debt for the latest quarter: two full-width bars on one
+ * scale, the period beside the title, and last year's net figure as a
+ * muted clause in the header. Teal for liquidity, slate for debt; nothing
+ * red or green, because neither side is good or bad news on its own.
+ */
+function LiquidityStrip({ l }: { l: LiquidityDebt }) {
+  const p = l.latest;
+  const values = [p.liquidity, p.debt].filter((v): v is number => v !== undefined);
+  const max = values.length ? Math.max(...values) : 0;
   const width = (v: number | undefined) => (v === undefined || max <= 0 ? 0 : Math.max(0, (v / max) * 100));
+  const head = netHeader(l);
   return (
-    <div className="liq-pair">
-      <h4>
-        {p.label || "Year-ago quarter"} {p.periodEnd && <span>· {formatPeriodEnd(p.periodEnd)}</span>}
-      </h4>
+    <div className="liq">
+      <div className="liq-head">
+        <div className="liq-k">
+          Liquidity vs debt
+          <Tooltip label="Liquidity vs debt" text={LIQUIDITY_TIP} />
+          {p.label && (
+            <span className="liq-per">
+              {p.label}
+              {p.periodEnd && ` · ${formatPeriodEnd(p.periodEnd)}`}
+            </span>
+          )}
+        </div>
+        <div className="liq-net">
+          {head.now}
+          {head.yearAgo && <span>{head.yearAgo}</span>}
+        </div>
+      </div>
       <div className="liq-bar">
         <span className="liq-name">{liquidityLabel(p)}</span>
         <div className="liq-track">
@@ -158,37 +179,6 @@ function PeriodBars({ p, max }: { p: LiquidityPeriod; max: number }) {
         ) : (
           <span className="liq-none">{NO_DEBT}</span>
         )}
-      </div>
-    </div>
-  );
-}
-
-/**
- * Liquidity vs debt: the latest quarter beside the same quarter last year,
- * all four bars on one scale. Teal for liquidity, slate for debt; nothing
- * red or green, because neither side is good or bad news on its own.
- */
-function LiquidityStrip({ l }: { l: LiquidityDebt }) {
-  const values = [l.latest.liquidity, l.latest.debt, l.yearAgo.liquidity, l.yearAgo.debt].filter(
-    (v): v is number => v !== undefined
-  );
-  const max = values.length ? Math.max(...values) : 0;
-  const head = netHeader(l);
-  return (
-    <div className="liq">
-      <div className="liq-head">
-        <div className="liq-k">
-          Liquidity vs debt
-          <Tooltip label="Liquidity vs debt" text={LIQUIDITY_TIP} />
-        </div>
-        <div className="liq-net">
-          {head.now}
-          {head.yearAgo && <span>{head.yearAgo}</span>}
-        </div>
-      </div>
-      <div className="liq-pairs">
-        <PeriodBars p={l.latest} max={max} />
-        <PeriodBars p={l.yearAgo} max={max} />
       </div>
       <div className="liq-parts">{componentsLine(l)}</div>
     </div>

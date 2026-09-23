@@ -3,8 +3,9 @@ import { FilingStatementExtract } from "@/lib/xbrl/statementExtract";
 /**
  * Liquidity vs debt: the strip under the Financial health tiles.
  *
- * Two periods, the latest quarter end and the same quarter end last year,
- * each read from a filing's own balance sheet: the latest-filed filing
+ * The latest quarter's bars and components, and last year's net figure as
+ * a short clause in the header. Both periods are read from a filing's own
+ * balance sheet: the latest-filed filing
  * whose balance sheet presents that date, the same latest-presentation
  * rule the income statement uses. Nothing here comes from the Key
  * financials rows, and nothing here is a rule input: it moves no rung, no
@@ -437,15 +438,30 @@ export function liquidityLabel(p: LiquidityPeriod): string {
 
 export const NO_DEBT = "No debt on the balance sheet";
 
+/** The period's debt includes finance leases as filed. */
+export function includesFinanceLeases(p: LiquidityPeriod): boolean {
+  return p.debtState === "complete" && p.debtLines.some((d) => d.includesLeases && d.value !== 0);
+}
+
 /**
- * The header's right side: "Net Debt $10.3B" then " · Net Cash $36.9B a
- * year ago" (muted on the page).
+ * The header's right side: "Net Debt $9.6B" then " · Net Cash $37.3B a
+ * year ago" (muted on the page). The year-ago clause is the only place the
+ * year-ago balance sheet shows; when its debt and the latest quarter's
+ * differ in lease treatment, it says so: "· Net Debt $15.1B a year ago,
+ * including finance leases".
  */
 export function netHeader(l: LiquidityDebt): { now: string; yearAgo: string } {
   const one = (p: LiquidityPeriod) => (p.debtState === "none" ? NO_DEBT : netText(p));
   const now = one(l.latest) ?? "Net MISSING";
   const then = one(l.yearAgo);
-  return { now, yearAgo: ` · ${then === NO_DEBT ? "no debt" : (then ?? "MISSING")} a year ago` };
+  let basis = "";
+  if (l.yearAgo.net !== undefined && l.latest.debtState === "complete") {
+    const nowLeases = includesFinanceLeases(l.latest);
+    const thenLeases = includesFinanceLeases(l.yearAgo);
+    if (thenLeases && !nowLeases) basis = ", including finance leases";
+    else if (nowLeases && !thenLeases) basis = ", excluding finance leases";
+  }
+  return { now, yearAgo: ` · ${then === NO_DEBT ? "no debt" : (then ?? "Net MISSING")} a year ago${basis}` };
 }
 
 /** Why a period has no net figure, in the components line's words; undefined when it has one. */
@@ -469,17 +485,19 @@ function debtCaption(s: string): string {
   return /^[A-Z][a-z]/.test(s) ? s[0].toLowerCase() + s.slice(1) : s;
 }
 
+const upperFirst = (s: string) => s[0].toUpperCase() + s.slice(1);
+
 /**
- * The components line for the latest period: each included line with the
- * company's own caption and amount, then what was excluded. "Q2 FY27: Cash
- * and cash equivalents $22.4B + Marketable debt securities $34.1B ·
- * short-term debt $1.0B + long-term debt $32.4B. Marketable equity
- * securities $42.8B and leases excluded."
+ * The components line for the latest period, which the strip names by its
+ * title: each included line with the company's own caption and amount,
+ * then what was excluded. "Cash and cash equivalents $22.4B + Marketable
+ * debt securities $34.1B · short-term debt $1.0B + long-term debt $32.4B.
+ * Marketable equity securities $42.8B and leases excluded."
  */
 export function componentsLine(l: LiquidityDebt): string {
   const p = l.latest;
   const $ = (v: number | undefined) => liquidityAmount(v, p.unit);
-  if (p.unavailable) return `${p.label}: ${p.unavailable}.`;
+  if (p.unavailable) return `${upperFirst(p.unavailable)}.`;
 
   const liquidityParts = [...p.cashLines, ...p.investmentLines].filter((x) => x.value !== 0).map((x) => `${x.caption} ${$(x.value)}`);
   if (p.combined) liquidityParts.push(`${p.combined.caption} ${$(p.combined.value)} (debt and equity securities combined)`);
@@ -504,15 +522,17 @@ export function componentsLine(l: LiquidityDebt): string {
   const excludedParts = [...p.excluded.map((x) => `${x.caption} ${$(x.value)}`), leasesIncluded ? "other leases" : "leases"];
   const excludedList =
     excludedParts.length === 1 ? excludedParts[0] : `${excludedParts.slice(0, -1).join(", ")} and ${excludedParts.at(-1)}`;
-  const excluded = `${excludedList[0].toUpperCase()}${excludedList.slice(1)} excluded.`;
+  const excluded = `${upperFirst(excludedList)} excluded.`;
 
-  const reasons = [netMissingReason(p) && `${p.label}: ${netMissingReason(p)}.`, netMissingReason(l.yearAgo) && `${l.yearAgo.label || "A year ago"}: ${netMissingReason(l.yearAgo)}.`]
+  const nowReason = netMissingReason(p);
+  const thenReason = netMissingReason(l.yearAgo);
+  const reasons = [nowReason && `${upperFirst(nowReason)}.`, thenReason && `${l.yearAgo.label || "A year ago"}: ${thenReason}.`]
     .filter(Boolean)
     .join(" ");
-  return `${p.label}: ${liquidity} · ${debt}. ${excluded}${reasons ? ` ${reasons}` : ""}`;
+  return `${liquidity} · ${debt}. ${excluded}${reasons ? ` ${reasons}` : ""}`;
 }
 
-/** The Copy brief's line: "Liquidity vs debt: $123.0B vs $132.5B, Net Debt $9.6B (Net Cash $37.3B a year ago)." */
+/** The Copy brief's line, following the header: "Liquidity vs debt: $123.0B vs $132.5B, Net Debt $9.6B (Net Cash $37.3B a year ago)." */
 export function liquidityBriefLine(l: LiquidityDebt): string {
   const p = l.latest;
   const $ = (v: number | undefined) => liquidityAmount(v, p.unit);
@@ -523,4 +543,4 @@ export function liquidityBriefLine(l: LiquidityDebt): string {
 }
 
 export const LIQUIDITY_TIP =
-  "Cash and short-term investments against borrowings, each period read from the filing's own balance sheet. Liquidity is cash plus marketable debt securities and short-term investments; equity securities and restricted cash are excluded. Debt is short-term borrowings, the current portion of long-term debt and long-term debt, at carrying amounts; leases are excluded. Net Debt = debt − cash and short-term investments.";
+  "Cash and short-term investments against borrowings, at the amounts on the latest balance sheet. Leases and marketable equity securities are excluded.";
