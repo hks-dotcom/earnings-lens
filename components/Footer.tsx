@@ -20,7 +20,8 @@ export function Footer({ page }: { page: PageData }) {
   return (
     <div className="board-footnotes">
       <p>
-        <b>Data.</b> Source: {page.companyName} filings, XBRL via SEC EDGAR. Free cash flow = operating cash flow
+        <b>Data.</b> Source: {page.companyName} filings, XBRL via SEC EDGAR. Statement tabs show standard lines as
+        filed; nothing is estimated or plugged, and missing stays missing. Free cash flow = operating cash flow
         &minus; capital expenditures, as filed in XBRL (tag shown per cell); may differ from a company&apos;s own
         non-GAAP figure. Equity includes noncontrolling interest, everywhere it is used.
       </p>
@@ -37,7 +38,8 @@ export function Footer({ page }: { page: PageData }) {
         <b>Explanations.</b> Triggers: a non-operating swing past {f.nonOperatingSwingPct}% of quarterly revenue; an
         income tax charge more than {f.taxDivergencePct}% of quarterly revenue away from {f.statutoryTaxRatePct}% of
         pre-tax income, when the same quarter last year was not also that far away; net income and operating income with opposite signs; spending cuts; payables past the band;
-        any red flag. Daily call cap: {f.claudeDailyCap}.
+        any red flag; acquisitions and investments past {f.acquisitionsPct}% of quarterly revenue. Daily call cap:{" "}
+        {f.claudeDailyCap}.
       </p>
       <p>
         <b>Limits.</b> Red-flag window: trailing 12 months from today. Going concern: not checked (see Financial

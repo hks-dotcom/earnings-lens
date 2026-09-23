@@ -3001,19 +3001,59 @@
         "flags": [],
         "cells": [
           {
-            "missing": "depends on a missing figure"
+            "value": -735000000,
+            "concept": "net new debt",
+            "method": "computed-sum",
+            "derived": true,
+            "source": "company-facts",
+            "components": [
+              "ProceedsFromIssuanceOfDebt",
+              "RepaymentsOfLongTermDebtAndCapitalSecurities"
+            ]
           },
           {
-            "missing": "depends on a missing figure"
+            "value": 3625000000,
+            "concept": "net new debt",
+            "method": "computed-sum",
+            "derived": true,
+            "source": "company-facts",
+            "components": [
+              "ProceedsFromIssuanceOfDebt",
+              "RepaymentsOfLongTermDebtAndCapitalSecurities"
+            ]
           },
           {
-            "missing": "depends on a missing figure"
+            "value": -22000000,
+            "concept": "net new debt",
+            "method": "computed-sum",
+            "derived": true,
+            "source": "company-facts",
+            "components": [
+              "ProceedsFromIssuanceOfDebt",
+              "RepaymentsOfLongTermDebtAndCapitalSecurities"
+            ]
           },
           {
-            "missing": "depends on a missing figure"
+            "value": 372000000,
+            "concept": "net new debt",
+            "method": "computed-sum",
+            "derived": true,
+            "source": "company-facts",
+            "components": [
+              "ProceedsFromIssuanceOfDebt",
+              "RepaymentsOfLongTermDebtAndCapitalSecurities"
+            ]
           },
           {
-            "missing": "depends on a missing figure"
+            "value": -68000000,
+            "concept": "net new debt",
+            "method": "computed-sum",
+            "derived": true,
+            "source": "company-facts",
+            "components": [
+              "ProceedsFromIssuanceOfDebt",
+              "RepaymentsOfLongTermDebtAndCapitalSecurities"
+            ]
           },
           {
             "value": 3982000000,

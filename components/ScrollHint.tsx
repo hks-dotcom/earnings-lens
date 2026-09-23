@@ -13,7 +13,14 @@ import { useCallback, useEffect, useRef, useState } from "react";
  * renders at desktop widths, where the table fits and there is nothing to
  * hint at.
  */
-export function ScrollHint({ children }: { children: React.ReactNode }) {
+export function ScrollHint({
+  children,
+  cue = "scroll for prior year & trend",
+}: {
+  children: React.ReactNode;
+  /** What is off to the right: Key financials' year-ago columns, or a statement's earlier periods. */
+  cue?: string;
+}) {
   const ref = useRef<HTMLDivElement>(null);
   const [atStart, setAtStart] = useState(true);
   const [atEnd, setAtEnd] = useState(true);
@@ -52,7 +59,7 @@ export function ScrollHint({ children }: { children: React.ReactNode }) {
         <div className="scroll-fade scroll-fade-right" data-visible={!atEnd} aria-hidden="true" />
       </div>
       <div className="scroll-cue" data-visible={!atEnd} aria-hidden="true">
-        scroll for prior year &amp; trend &rarr;
+        {cue} &rarr;
       </div>
     </div>
   );

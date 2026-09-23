@@ -2670,6 +2670,49 @@
         ]
       },
       {
+        "key": "debt:RepaymentsOfShortTermDebtMaturingInThreeMonthsOrLess",
+        "label": "Short-term debt maturing within three months repaid",
+        "kind": "line",
+        "concept": "RepaymentsOfShortTermDebtMaturingInThreeMonthsOrLess",
+        "flags": [
+          "debt:repayment"
+        ],
+        "cells": [
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "value": 0,
+            "concept": "RepaymentsOfShortTermDebtMaturingInThreeMonthsOrLess",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 0,
+            "concept": "RepaymentsOfShortTermDebtMaturingInThreeMonthsOrLess",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "missing": "not filed for this period"
+          },
+          {
+            "missing": "not filed for this period"
+          }
+        ]
+      },
+      {
         "key": "debt:ProceedsFromRepaymentsOfShortTermDebtMaturingInThreeMonthsOrLess",
         "label": "Short-term debt maturing within three months, net",
         "kind": "line",
@@ -2739,16 +2782,7 @@
         "flags": [],
         "cells": [
           {
-            "value": 0,
-            "concept": "net new debt",
-            "method": "computed-sum",
-            "derived": true,
-            "source": "company-facts",
-            "components": [
-              "ProceedsFromDebtMaturingInMoreThanThreeMonths",
-              "RepaymentsOfDebtMaturingInMoreThanThreeMonths",
-              "ProceedsFromRepaymentsOfShortTermDebtMaturingInThreeMonthsOrLess"
-            ]
+            "missing": "depends on a missing figure"
           },
           {
             "missing": "depends on a missing figure"
@@ -2760,16 +2794,7 @@
             "missing": "depends on a missing figure"
           },
           {
-            "value": 0,
-            "concept": "net new debt",
-            "method": "computed-sum",
-            "derived": true,
-            "source": "company-facts",
-            "components": [
-              "ProceedsFromDebtMaturingInMoreThanThreeMonths",
-              "RepaymentsOfDebtMaturingInMoreThanThreeMonths",
-              "ProceedsFromRepaymentsOfShortTermDebtMaturingInThreeMonthsOrLess"
-            ]
+            "missing": "depends on a missing figure"
           },
           {
             "value": -3000000000,

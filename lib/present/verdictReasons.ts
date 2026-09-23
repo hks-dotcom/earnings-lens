@@ -10,7 +10,7 @@ import {
   RUNWAY_NEUTRAL_CAP_QUARTERS,
   RUNWAY_WEAK_BELOW_QUARTERS,
 } from "@/lib/rules/declaredValues";
-import { bandPctWords, payablesShown, RED_FLAG_HEADLINE } from "@/lib/present/standOut";
+import { bandPctWords, dpoMissingReason, payablesShown, RED_FLAG_HEADLINE } from "@/lib/present/standOut";
 import { LENS_NAME } from "@/lib/present/lensNames";
 import { MINUS } from "@/lib/present/format";
 import { runwayCaveat, runwaySubject } from "@/lib/rules/runway";
@@ -67,24 +67,6 @@ function zScore(z: number): string {
   return `${z < 0 ? MINUS : ""}${Math.abs(z).toFixed(2)}`;
 }
 
-/**
- * Why a day count could not be measured, from which input is absent. A
- * payables trend that can't be measured is never "not rising": it is
- * unknown, and says so.
- */
-function dpoMissingReason(kf: KeyFinancials): string {
-  const cogs = [0, 4].map((i) => kf.costOfRevenue.values[i]?.value);
-  const payables = [0, 4].map((i) => kf.accountsPayable.values[i]?.value);
-  const yearAgoLabel = kf.quarters[4]?.label ?? "the year-ago quarter";
-  const latestLabel = kf.quarters[0]?.label ?? "this quarter";
-  if (cogs.every((v) => v === undefined || v === 0)) return "no cost of revenue is filed";
-  if (cogs[0] === undefined) return `cost of revenue is not filed for ${latestLabel}`;
-  if (cogs[1] === undefined) return `cost of revenue is not filed for ${yearAgoLabel}`;
-  if (payables.every((v) => v === undefined)) return "no payables figure is filed";
-  if (payables[0] === undefined) return `payables are not filed for ${latestLabel}`;
-  if (payables[1] === undefined) return `payables are not filed for ${yearAgoLabel}`;
-  return "the day count can't be computed for both quarters";
-}
 
 /**
  * The retrenchment causes, as a reader would say them. The rules state

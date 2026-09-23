@@ -3,7 +3,7 @@ import { PageData } from "@/lib/present/buildPageData";
 import { ladderCeilingDays } from "@/lib/rules/ladder";
 import { computeNetIncomeGap } from "@/lib/present/netIncomeGap";
 import { chooseUnit, formatMoneyInline } from "@/lib/present/format";
-import { buildStandOut, StandOutItem } from "@/lib/present/standOut";
+import { buildStandOut, paymentTimingCaveat, StandOutItem } from "@/lib/present/standOut";
 import { summaryText } from "@/lib/present/summary";
 import { ALTMAN_CAP_NOTE } from "@/lib/metrics/health";
 import { LENS_NAME } from "@/lib/present/lensNames";
@@ -29,7 +29,7 @@ import type { ExplainedItem } from "@/lib/claude/explain";
  *   otherwise be silent on a question its reader will be asked next.
  */
 export function buildCopyBrief(page: PageData, lens: LensResult): string {
-  const standOut = buildStandOut(lens, page.keyFinancials, page.health);
+  const standOut = buildStandOut(lens, page.keyFinancials, page.health, page.flows, page.ticker);
   const lines: string[] = [];
 
   lines.push(`${page.companyName} (${page.ticker}) — ${page.header.fiscalQuarterLabel} — ${LENS_NAME[lens.lens]} lens`);
@@ -57,6 +57,8 @@ export function buildCopyBrief(page: PageData, lens: LensResult): string {
   );
   lines.push(`- Credit exposure: ${lens.dealStructure.creditExposure} (${lens.dealStructure.billingAssumption})`);
   lines.push(`- ${lens.negotiationNote}`);
+  const caveat = paymentTimingCaveat(lens, page.keyFinancials);
+  if (caveat) lines.push(`- ${caveat}`);
   if (lens.dealStructure.contractStructure) {
     lines.push(`- Contract structure: ${lens.dealStructure.contractStructure}.`);
   }

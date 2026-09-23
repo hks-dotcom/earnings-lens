@@ -14,6 +14,8 @@ import { heroSubline, whyThisVerdict } from "@/lib/present/verdictReasons";
 import { formatPeriodEnd } from "@/lib/present/format";
 import { Lens } from "@/lib/rules/dealStructure";
 import { LENS_NAME } from "@/lib/present/lensNames";
+import { fiscalYearInfo } from "@/lib/present/fiscalYear";
+import type { PanelTab } from "@/components/FinancialsPanel";
 
 /**
  * The lens section, top to bottom: identity line; title and lens question;
@@ -29,7 +31,15 @@ import { LENS_NAME } from "@/lib/present/lensNames";
  * product-focus handover live in the Copy brief, where the deal desk and
  * GTM actually use them.
  */
-export function LensBoard({ page, lensName }: { page: PageData; lensName: Lens }) {
+export function LensBoard({
+  page,
+  lensName,
+  onOpenTab,
+}: {
+  page: PageData;
+  lensName: Lens;
+  onOpenTab?: (tab: PanelTab) => void;
+}) {
   const lens = page.lenses[lensName];
   const color = lensName === "Services" ? "#1F6F5C" : "#3B4BA8";
   const question =
@@ -39,8 +49,9 @@ export function LensBoard({ page, lensName }: { page: PageData; lensName: Lens }
 
   // One evaluation of "What stands out" per board: the Summary quotes the
   // item it singles out, so the two must be looking at the same list.
-  const standOut = buildStandOut(lens, page.keyFinancials, page.health);
+  const standOut = buildStandOut(lens, page.keyFinancials, page.health, page.flows, page.ticker);
   const summary = buildSummary(lens, page.keyFinancials, page.health, standOut);
+  const fy = fiscalYearInfo(page.keyFinancials);
 
   // "Download image" captures this element: header through footer, so the
   // period, the source line and the declared values are always in the
@@ -60,7 +71,7 @@ export function LensBoard({ page, lensName }: { page: PageData; lensName: Lens }
         image feature exists to prevent.
       */}
       <div style={{ fontSize: 12, color: "var(--text-tertiary)", letterSpacing: "0.02em" }}>
-        {page.companyName} ({page.ticker}) &middot; quarter ended {formatPeriodEnd(page.header.periodEndDate)} (
+        {page.companyName} ({page.ticker}) &middot; {fy ? <>fiscal year {fy.short} &middot; </> : null}quarter ended {formatPeriodEnd(page.header.periodEndDate)} (
         {page.header.fiscalQuarterLabel}) &middot; {LENS_NAME[lensName]} lens
       </div>
 
@@ -99,7 +110,7 @@ export function LensBoard({ page, lensName }: { page: PageData; lensName: Lens }
         </div>
       </div>
 
-      <StandOutList items={standOut} explained={page.explained} />
+      <StandOutList items={standOut} explained={page.explained} onOpenTab={onOpenTab} />
 
       <BoardActions page={page} lens={lens} boardRef={boardRef} />
       <Footer page={page} />

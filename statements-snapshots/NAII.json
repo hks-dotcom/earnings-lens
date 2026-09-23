@@ -2591,19 +2591,59 @@
         "flags": [],
         "cells": [
           {
-            "missing": "depends on a missing figure"
+            "value": 4122000,
+            "concept": "net new debt",
+            "method": "computed-sum",
+            "derived": true,
+            "source": "company-facts",
+            "components": [
+              "RepaymentsOfLongTermDebt",
+              "ProceedsFromRepaymentsOfLinesOfCredit"
+            ]
           },
           {
-            "missing": "depends on a missing figure"
+            "value": 3273000,
+            "concept": "net new debt",
+            "method": "computed-sum",
+            "derived": true,
+            "source": "company-facts",
+            "components": [
+              "RepaymentsOfLongTermDebt",
+              "ProceedsFromRepaymentsOfLinesOfCredit"
+            ]
           },
           {
-            "missing": "depends on a missing figure"
+            "value": 477000,
+            "concept": "net new debt",
+            "method": "computed-sum",
+            "derived": true,
+            "source": "company-facts",
+            "components": [
+              "RepaymentsOfLongTermDebt",
+              "ProceedsFromRepaymentsOfLinesOfCredit"
+            ]
           },
           {
-            "missing": "depends on a missing figure"
+            "value": -174000,
+            "concept": "net new debt",
+            "method": "computed-sum",
+            "derived": true,
+            "source": "company-facts",
+            "components": [
+              "RepaymentsOfLongTermDebt",
+              "ProceedsFromRepaymentsOfLinesOfCredit"
+            ]
           },
           {
-            "missing": "depends on a missing figure"
+            "value": -3075000,
+            "concept": "net new debt",
+            "method": "computed-sum",
+            "derived": true,
+            "source": "company-facts",
+            "components": [
+              "RepaymentsOfLongTermDebt",
+              "ProceedsFromRepaymentsOfLinesOfCredit"
+            ]
           },
           {
             "missing": "depends on a missing figure"

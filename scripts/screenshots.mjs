@@ -146,7 +146,7 @@ const OUT_DIR = join(process.cwd(), "screenshots");
 mkdirSync(OUT_DIR, { recursive: true });
 
 async function waitForBoard(page) {
-  await page.waitForSelector("text=KEY FINANCIALS", { timeout: 60000 });
+  await page.waitForSelector("[data-lens-board]", { timeout: 60000 });
   await page.waitForTimeout(500);
 }
 

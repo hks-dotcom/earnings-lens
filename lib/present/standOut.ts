@@ -24,6 +24,12 @@ import { formatMagnitude } from "@/lib/present/netIncomeGap";
 import { chooseUnit, formatMoneyInline, MINUS, Unit } from "@/lib/present/format";
 import { termsSentence } from "@/lib/present/termsSentence";
 import { runwayCaveat, runwaySubject } from "@/lib/rules/runway";
+import { payablesPctText } from "@/lib/rules/signals";
+import { FlowFacts } from "@/lib/present/flowFacts";
+import {
+  ACQUISITIONS_PCT_OF_REVENUE,
+  BORROWING_PCT_OF_REVENUE,
+} from "@/lib/rules/declaredValues";
 import { LENS_NAME } from "@/lib/present/lensNames";
 
 /**
@@ -58,6 +64,9 @@ export type StandOutKind =
   | "red-flag"
   | "cash-burn"
   | "heavy-investment"
+  | "borrowing"
+  | "acquisitions"
+  | "returns"
   | "one-off"
   | "spending-cuts"
   | "payables"
@@ -65,6 +74,13 @@ export type StandOutKind =
   | "losses"
   | "margin"
   | "terms";
+
+/**
+ * The statements a finding reads, as tags on the finding: each opens its
+ * tab. "filings" is a filing, not a statement (red flags, a restructuring
+ * 8-K); "all" is the terms item, which reads everything.
+ */
+export type StatementTag = "is" | "bs" | "cf" | "filings" | "all";
 
 export interface TermMark {
   label: string;
@@ -90,6 +106,8 @@ export interface StandOutItem {
   terms?: TermMark[];
   /** The rule that made the item fire, as a clause: shown after "Rule:". */
   rule: string;
+  /** The statements it reads, as tags that open their tabs; set by buildStandOut on every item. */
+  statements?: StatementTag[];
   /**
    * The explanation trigger whose answer, when the filing gives one, closes
    * `sentence`. Only the items the Claude layer explains carry one.
@@ -168,8 +186,27 @@ export function payablesShown(lens: LensResult): PayablesShown | undefined {
   return {
     days: p.dpoCurrent.toFixed(1),
     daysYearAgo: p.dpoYearAgo.toFixed(1),
-    move: `${p.yoyPctChange >= 0 ? "up" : "down"} ${Math.abs(Math.round(p.yoyPctChange))}%`,
+    move: `${p.yoyPctChange >= 0 ? "up" : "down"} ${payablesPctText(p.yoyPctChange)}%`,
   };
+}
+
+/**
+ * Why a day count could not be measured, from which input is absent. A
+ * payables trend that can't be measured is never "not rising": it is
+ * unknown, and says so.
+ */
+export function dpoMissingReason(kf: KeyFinancials): string {
+  const cogs = [0, 4].map((i) => kf.costOfRevenue.values[i]?.value);
+  const payables = [0, 4].map((i) => kf.accountsPayable.values[i]?.value);
+  const yearAgoLabel = kf.quarters[4]?.label ?? "the year-ago quarter";
+  const latestLabel = kf.quarters[0]?.label ?? "this quarter";
+  if (cogs.every((v) => v === undefined || v === 0)) return "no cost of revenue is filed";
+  if (cogs[0] === undefined) return `cost of revenue is not filed for ${latestLabel}`;
+  if (cogs[1] === undefined) return `cost of revenue is not filed for ${yearAgoLabel}`;
+  if (payables.every((v) => v === undefined)) return "no payables figure is filed";
+  if (payables[0] === undefined) return `payables are not filed for ${latestLabel}`;
+  if (payables[1] === undefined) return `payables are not filed for ${yearAgoLabel}`;
+  return "the day count can't be computed for both quarters";
 }
 
 /** "Payables ≈ 54.2 days of cost of revenue, down 13% on last year." -- the fact the terms and payables items both rest on. */
@@ -606,14 +643,24 @@ function billingPhrase(lens: LensResult): string {
   return lens.ladder.rung === "Strong" ? "T&M monthly; milestones acceptable." : "T&M monthly.";
 }
 
-function termsItem(lens: LensResult): StandOutItem {
+/**
+ * The terms caveat, when DPO can't be computed: the ladder's "will they pay
+ * on time?" question has no answer, and a reader of the terms is owed that.
+ * Shared with the Copy brief's terms envelope.
+ */
+export function paymentTimingCaveat(lens: LensResult, kf: KeyFinancials): string | undefined {
+  if (payablesShown(lens)) return undefined;
+  return `Payment timing can't be checked: ${dpoMissingReason(kf)}, so payables can't be measured.`;
+}
+
+function termsItem(lens: LensResult, kf: KeyFinancials): StandOutItem {
   const l = lens.ladder;
   return {
     kind: "terms",
     tag: "TERMS",
     tone: "terms",
     headline: termsSentence(lens),
-    sentence: `${billingPhrase(lens)} ${payablesFact(lens)}`,
+    sentence: `${billingPhrase(lens)} ${paymentTimingCaveat(lens, kf) ?? payablesFact(lens)}`,
     figures: "",
     rule: `baseline Net ${PAYMENT_TERMS_BASELINE_DAYS}; ceiling Net ${PAYMENT_TERMS_CEILING_DAYS}, offered only when risk is Strong; Net 60 never approved.`,
     terms: [
@@ -624,24 +671,161 @@ function termsItem(lens: LensResult): StandOutItem {
   };
 }
 
+// --- the display-only cash-flow findings -----------------------------------------
+// Borrowing, acquisitions and investments, returns. None of them moves the
+// ladder or the quadrant, and none is in the Summary: they say what the
+// cash flow statement shows, beside the verdict rather than inside it.
+
+/** "Long-term debt raised $13,557M, repaid $2,752M": the debt lines, grouped by the kind of debt. */
+function debtLinesText(flows: FlowFacts, unit: Unit): string {
+  const groups = new Map<string, string[]>();
+  for (const d of flows.debtLines) {
+    const m = d.label.match(/^(.*?)\s+(raised|repaid|drawn)$/);
+    const family = m ? m[1] : d.label;
+    const verb = m ? m[2] : "";
+    const text = `${verb ? `${verb} ` : ""}${formatMoneyInline(d.value, unit)}`;
+    groups.set(family, [...(groups.get(family) ?? []), text]);
+  }
+  return [...groups.entries()]
+    .map(([family, parts], i) => `${i === 0 ? family : family[0].toLowerCase() + family.slice(1)} ${parts.join(", ")}`)
+    .join(" · ");
+}
+
+function borrowingItem(kf: KeyFinancials, flows: FlowFacts, unit: Unit): StandOutItem | undefined {
+  const revenue = kf.revenue.values[0]?.value;
+  const fcf = kf.freeCashFlow.values[0]?.value;
+  const debt = flows.netNewDebt;
+  if (revenue === undefined || revenue <= 0 || debt === undefined) return undefined;
+  const band = (revenue * BORROWING_PCT_OF_REVENUE) / 100;
+  if (debt <= band) return undefined;
+
+  const t = flows.ttm;
+  const returns = t.buybacks !== undefined && t.dividends !== undefined ? t.buybacks + t.dividends : undefined;
+  const fcfNegative = fcf !== undefined && fcf < 0;
+  const returnsExceed = returns !== undefined && t.freeCashFlow !== undefined && returns > t.freeCashFlow;
+  if (!fcfNegative && !returnsExceed) return undefined;
+
+  const ltd =
+    flows.longTermDebt !== undefined
+      ? ` · long-term debt ${formatMoneyInline(flows.longTermDebt, unit)}${
+          flows.longTermDebtYearAgo !== undefined
+            ? `, from ${formatMoneyInline(flows.longTermDebtYearAgo, unit)} in ${kf.quarters[4]?.label ?? "the year-ago quarter"}`
+            : ""
+        }`
+      : "";
+  return {
+    kind: "borrowing",
+    tag: "BORROWING",
+    tone: "watch",
+    headline: fcfNegative ? "Borrowing while investment runs ahead of cash." : "Borrowing while returning more than it generates.",
+    sentence: fcfNegative
+      ? `Net new debt of ${formatMoneyInline(debt, unit)} this quarter, with free cash flow at ${formatMoneyInline(fcf, unit)}.`
+      : `Net new debt of ${formatMoneyInline(debt, unit)} this quarter, while buybacks and dividends of ${formatMoneyInline(returns, unit)} over four quarters exceed free cash flow of ${formatMoneyInline(t.freeCashFlow, unit)}.`,
+    figures: `${debtLinesText(flows, unit)}${ltd}`,
+    rule: `net new debt above ${BORROWING_PCT_OF_REVENUE}% of quarterly revenue (${formatMoneyInline(band, unit)} here), while free cash flow is negative or buybacks and dividends exceed it. No effect on risk.`,
+  };
+}
+
+function acquisitionsItem(kf: KeyFinancials, flows: FlowFacts, unit: Unit, ticker: string): StandOutItem | undefined {
+  const revenue = kf.revenue.values[0]?.value;
+  const a = flows.acquisitions;
+  if (revenue === undefined || revenue <= 0 || a === undefined) return undefined;
+  if (a <= (revenue * ACQUISITIONS_PCT_OF_REVENUE) / 100) return undefined;
+  const yearAgo =
+    flows.acquisitionsYearAgo !== undefined
+      ? `, against ${formatMoneyInline(flows.acquisitionsYearAgo, unit)} in ${kf.quarters[4]?.label ?? "the year-ago quarter"}`
+      : "";
+  const caption = flows.acquisitionsCaption ? `${ticker}'s line: "${flows.acquisitionsCaption}"` : "The acquisitions line";
+  return {
+    kind: "acquisitions",
+    tag: "ACQUISITIONS AND INVESTMENTS",
+    tone: "info",
+    headline: "Large spending on acquisitions and investments.",
+    sentence: `${formatMoneyInline(a, unit)} this quarter${yearAgo}.`,
+    figures: `${caption} · ${((a / revenue) * 100).toFixed(1)}% of revenue`,
+    rule: `flagged when this line exceeds ${ACQUISITIONS_PCT_OF_REVENUE}% of quarterly revenue; named as the company names it.`,
+    explainKey: "acquisitions",
+  };
+}
+
+function returnsItem(flows: FlowFacts, unit: Unit): StandOutItem | undefined {
+  const t = flows.ttm;
+  if (t.buybacks === undefined || t.dividends === undefined || t.freeCashFlow === undefined) return undefined;
+  const returns = t.buybacks + t.dividends;
+  if (returns <= 0 || returns <= t.freeCashFlow) return undefined;
+  const span = t.from && t.to ? `, ${t.from} to ${t.to}` : "";
+  return {
+    kind: "returns",
+    tag: "RETURNS",
+    tone: "watch",
+    headline: "Returning more cash than it generates.",
+    sentence: `Buybacks and dividends of ${formatMoneyInline(returns, unit)} over four quarters, against free cash flow of ${formatMoneyInline(t.freeCashFlow, unit)}.`,
+    figures: `Buybacks ${formatMoneyInline(t.buybacks, unit)} · dividends ${formatMoneyInline(t.dividends, unit)} · free cash flow ${formatMoneyInline(t.freeCashFlow, unit)}${span}`,
+    rule: "flagged when buybacks plus dividends over four quarters exceed free cash flow over the same quarters, and are above zero. No effect on risk.",
+  };
+}
+
+/**
+ * The statements each finding reads, as tags on the finding. A red flag and
+ * a restructuring filing are filings, not statements; the terms item reads
+ * all of them.
+ */
+function statementsFor(item: StandOutItem, lens: LensResult): StatementTag[] {
+  switch (item.kind) {
+    case "one-off":
+    case "costs":
+    case "losses":
+    case "margin":
+      return ["is"];
+    case "payables":
+      return ["bs", "is"];
+    case "borrowing":
+    case "cash-burn":
+      return ["cf", "bs"];
+    case "heavy-investment":
+    case "acquisitions":
+    case "returns":
+      return ["cf"];
+    case "spending-cuts": {
+      const causes = lens.retrenchment.causes;
+      const tags: StatementTag[] = [];
+      if (causes.some((c) => /^(R&D|SG&A)/.test(c))) tags.push("is");
+      if (causes.some((c) => /restructuring filing/.test(c))) tags.push("filings");
+      return tags;
+    }
+    case "red-flag":
+      return ["filings"];
+    case "terms":
+      return ["all"];
+  }
+}
+
 export function buildStandOut(
   lens: LensResult,
   kf: KeyFinancials,
-  health: FinancialHealth
+  health: FinancialHealth,
+  flows?: FlowFacts,
+  ticker = ""
 ): StandOutItem[] {
   const unit = chooseUnit(kf.revenue.values[0]?.value);
   const items: StandOutItem[] = [];
 
   items.push(...redFlagItems(lens));
   push(items, cashItem(lens, kf, unit));
+  if (flows) {
+    push(items, borrowingItem(kf, flows, unit));
+    push(items, acquisitionsItem(kf, flows, unit, ticker));
+    push(items, returnsItem(flows, unit));
+  }
   push(items, oneOffItem(kf, unit));
   push(items, spendingCutsItem(lens));
   push(items, payablesItem(lens));
   push(items, costsItem(kf, unit));
   push(items, lossesItem(kf, health, unit));
   push(items, marginItem(kf, health));
-  items.push(termsItem(lens));
+  items.push(termsItem(lens, kf));
 
+  for (const item of items) item.statements = statementsFor(item, lens);
   return items;
 }
 

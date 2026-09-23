@@ -32,6 +32,11 @@ import { buildStandOut } from "@/lib/present/standOut";
 import { shownByExplainKey } from "@/lib/present/findingExplanations";
 import { ExplainedItem, explainFlaggedItems, ExplainDiagnostics } from "@/lib/claude/explain";
 import { readSegments, writeSegments } from "@/lib/db/store";
+import { buildStatements } from "@/lib/xbrl/statements";
+import { buildFlowFacts, FlowFacts } from "@/lib/present/flowFacts";
+import { loadFilingExtract } from "@/lib/xbrl/statementLoader";
+import { FilingStatementExtract } from "@/lib/xbrl/statementExtract";
+import { ACQUISITIONS_PCT_OF_REVENUE } from "@/lib/rules/declaredValues";
 
 export interface HeaderLine {
   periodEndDate: string;
@@ -65,6 +70,8 @@ export interface PageData {
    */
   explained: ExplainedItem[];
   claudeDiagnostics: ExplainDiagnostics;
+  /** Cash-flow figures behind the borrowing, acquisitions and returns findings. */
+  flows: FlowFacts;
   footer: {
     zSafeAbove: number;
     zDistressBelow: number;
@@ -83,6 +90,7 @@ export interface PageData {
     nonOperatingSwingPct: number;
     taxDivergencePct: number;
     statutoryTaxRatePct: number;
+    acquisitionsPct: number;
     claudeDailyCap: number;
   };
 }
@@ -169,6 +177,27 @@ export async function buildPageData(rawTicker: string, now: Date = new Date()): 
   const services = evaluateLens("Services", kf, health, subs, now);
   const saas = evaluateLens("SaaS", kf, health, subs, now);
 
+  // The display-only cash-flow findings read the Cash flow tab's own rows,
+  // built here from company facts. The tab's filings are read later, by
+  // the tab; the board only reads the latest filing, and only when the
+  // acquisitions finding fires and needs the company's caption for the line.
+  let flows = buildFlowFacts(buildStatements(facts, kf, periodic, new Map()), kf);
+  const revenueNow = kf.revenue.values[0]?.value;
+  const acquisitionsFire =
+    flows.acquisitions !== undefined &&
+    revenueNow !== undefined &&
+    revenueNow > 0 &&
+    flows.acquisitions > (revenueNow * ACQUISITIONS_PCT_OF_REVENUE) / 100;
+  if (acquisitionsFire && latestPeriod) {
+    try {
+      const { extract } = await loadFilingExtract(record.cik, record.ticker, latestPeriod.filing);
+      const extracts = new Map<string, FilingStatementExtract>([[extract.accessionNumber, extract]]);
+      flows = buildFlowFacts(buildStatements(facts, kf, periodic, extracts), kf);
+    } catch {
+      // No caption: the finding names the line generically. Never a reason to fail the board.
+    }
+  }
+
   // The triggers are read off the Services-lens evaluation because every
   // trigger input -- the figures, the DPO trend, retrenchment, the red
   // flags -- is lens-independent. Only what the matrix does with them
@@ -177,8 +206,11 @@ export async function buildPageData(rawTicker: string, now: Date = new Date()): 
   // Each explanation closes a "What stands out" finding, so each trigger
   // carries the text its finding already shows, for the prompt to exclude.
   // Those findings read the same lens-independent inputs on both lenses.
-  const shown = shownByExplainKey(buildStandOut(services, kf, health));
-  const triggers = buildExplanationTriggers(kf, services, subs).map((t) => ({ ...t, shown: shown.get(t.key) }));
+  const shown = shownByExplainKey(buildStandOut(services, kf, health, flows, record.ticker));
+  const triggers = buildExplanationTriggers(kf, services, subs, { acquisitions: acquisitionsFire }).map((t) => ({
+    ...t,
+    shown: shown.get(t.key),
+  }));
   const { items: explained, diagnostics: claudeDiagnostics } = await explainFlaggedItems(triggers, {
     ticker: record.ticker,
     cik: record.cik,
@@ -199,6 +231,7 @@ export async function buildPageData(rawTicker: string, now: Date = new Date()): 
     lenses: { Services: services, SaaS: saas },
     explained,
     claudeDiagnostics,
+    flows,
     footer: {
       zSafeAbove: ALTMAN_ZONES.safeAbove,
       zDistressBelow: ALTMAN_ZONES.distressBelow,
@@ -217,6 +250,7 @@ export async function buildPageData(rawTicker: string, now: Date = new Date()): 
       nonOperatingSwingPct: NON_OPERATING_SWING_PCT_OF_REVENUE,
       taxDivergencePct: TAX_DIVERGENCE_PCT_OF_REVENUE,
       statutoryTaxRatePct: STATUTORY_TAX_RATE_PCT,
+      acquisitionsPct: ACQUISITIONS_PCT_OF_REVENUE,
       claudeDailyCap: CLAUDE_DAILY_CAP,
     },
   };

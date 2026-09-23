@@ -86,6 +86,17 @@ export interface PaymentBehaviorSignal {
   yoyPctChange: number | undefined;
 }
 
+/**
+ * The payables Y/Y change as printed anywhere: the rules' own value, as a
+ * whole number -- except one decimal when rounding would land exactly on
+ * the band edge, where a whole "10%" can't say which side of ±10% it is on.
+ * Unsigned; the caller says up or down.
+ */
+export function payablesPctText(pct: number): string {
+  const abs = Math.abs(pct);
+  return Math.round(abs) === DPO_BAND_PCT ? abs.toFixed(1) : String(Math.round(abs));
+}
+
 /** DPO Y/Y trend against the declared ±10% band. Never compared Q/Q (seasonality). */
 export function computePaymentBehaviorSignal(health: FinancialHealth): PaymentBehaviorSignal {
   const dpoCurrent = health.dpo[0];

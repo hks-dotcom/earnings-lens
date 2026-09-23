@@ -1,13 +1,15 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { StandOutItem, StandOutTone } from "@/lib/present/standOut";
+import { StandOutItem, StandOutTone, StatementTag } from "@/lib/present/standOut";
+import type { PanelTab } from "@/components/FinancialsPanel";
 import type { ExplainedItem } from "@/lib/claude/explain";
 import {
   citationDetail,
   citationLabel,
   explanationFor,
   FindingExplanation,
+  findingShownText,
 } from "@/lib/present/findingExplanations";
 
 /**
@@ -116,7 +118,62 @@ function Explained({ explanation }: { explanation: FindingExplanation | undefine
   );
 }
 
-export function StandOutList({ items, explained }: { items: StandOutItem[]; explained: ExplainedItem[] }) {
+type Filter = "all" | "is" | "bs" | "cf";
+
+const FILTERS: { key: Filter; label: string }[] = [
+  { key: "all", label: "All" },
+  { key: "is", label: "P&L" },
+  { key: "bs", label: "Balance sheet" },
+  { key: "cf", label: "Cash flow" },
+];
+
+const TAG_LABEL: Record<StatementTag, string> = {
+  is: "P&L",
+  bs: "Balance sheet",
+  cf: "Cash flow",
+  filings: "Filings",
+  all: "All statements",
+};
+
+const TAG_TAB: Partial<Record<StatementTag, PanelTab>> = { is: "income", bs: "balance", cf: "cashFlow" };
+
+/** Terms and any red flag are never filtered out: a filter must never hide a reason to escalate. */
+function alwaysShown(item: StandOutItem): boolean {
+  return item.kind === "terms" || item.kind === "red-flag";
+}
+
+function StatementTags({ item, onOpenTab }: { item: StandOutItem; onOpenTab?: (tab: PanelTab) => void }) {
+  return (
+    <span className="stand-srcs">
+      {(item.statements ?? []).map((t) => {
+        const tab = TAG_TAB[t];
+        return tab && onOpenTab ? (
+          <button key={t} type="button" className="stand-src" title={`Open the ${TAG_LABEL[t]} tab`} onClick={() => onOpenTab(tab)}>
+            {TAG_LABEL[t]}
+          </button>
+        ) : (
+          <span key={t} className="stand-src stand-src-fixed">
+            {TAG_LABEL[t]}
+          </span>
+        );
+      })}
+    </span>
+  );
+}
+
+export function StandOutList({
+  items,
+  explained,
+  onOpenTab,
+}: {
+  items: StandOutItem[];
+  explained: ExplainedItem[];
+  onOpenTab?: (tab: PanelTab) => void;
+}) {
+  const [filter, setFilter] = useState<Filter>("all");
+  const counted = items.filter((i) => i.kind !== "terms");
+  const count = (f: Filter) => (f === "all" ? counted.length : counted.filter((i) => i.statements?.includes(f)).length);
+  const visible = items.filter((i) => filter === "all" || alwaysShown(i) || i.statements?.includes(filter));
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
       <div style={{ fontSize: 12, fontWeight: 600, letterSpacing: "0.08em", color: "var(--text-tertiary)" }}>
@@ -126,8 +183,15 @@ export function StandOutList({ items, explained }: { items: StandOutItem[]; expl
         Where a finding says why, the reason comes from the filing: Claude explains from filed text only, and every
         quoted passage and figure is checked against the filing before it is shown.
       </p>
+      <div className="stand-filters" role="group" aria-label="Filter findings by statement">
+        {FILTERS.map((f) => (
+          <button key={f.key} type="button" aria-pressed={filter === f.key} onClick={() => setFilter(f.key)}>
+            {f.label} <span>{count(f.key)}</span>
+          </button>
+        ))}
+      </div>
       <div style={{ display: "flex", flexDirection: "column", borderTop: "1px solid var(--border-subtle)" }}>
-        {items.map((item, i) => (
+        {visible.map((item, i) => (
           <div
             key={`${item.kind}-${i}`}
             className="stand-item"
@@ -135,6 +199,7 @@ export function StandOutList({ items, explained }: { items: StandOutItem[]; expl
           >
             <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.07em", color: TONE_COLOR[item.tone] }}>
               {item.tag}
+              <StatementTags item={item} onOpenTab={onOpenTab} />
             </span>
             <div className="stand-text">
               {item.terms && (
@@ -145,12 +210,12 @@ export function StandOutList({ items, explained }: { items: StandOutItem[]; expl
                 </span>
               )}
               <b style={{ fontWeight: 600 }}>{item.headline}</b> {item.sentence}
-              <Explained explanation={explanationFor(item.explainKey, explained)} />
+              <Explained explanation={explanationFor(item.explainKey, explained, findingShownText(item))} />
               {item.more?.map((m) => (
                 <span key={m.explainKey}>
                   {" "}
                   {m.sentence}
-                  <Explained explanation={explanationFor(m.explainKey, explained)} />
+                  <Explained explanation={explanationFor(m.explainKey, explained, findingShownText(item))} />
                 </span>
               ))}
               {item.figures && <span className="stand-figures">{item.figures}</span>}

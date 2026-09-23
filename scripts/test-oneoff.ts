@@ -15,6 +15,7 @@ import { KeyFinancials, LineItem } from "@/lib/xbrl/keyFinancials";
 import { bandPctWords, oneOffItem, StandOutItem } from "@/lib/present/standOut";
 import { heroTermsPhrase } from "@/lib/present/verdictReasons";
 import { MILLIONS, MILLIONS_1DP } from "@/lib/present/format";
+import { withoutRepeatedDollars } from "@/lib/present/findingExplanations";
 
 let pass = 0;
 let fail = 0;
@@ -185,6 +186,27 @@ check("a fall", bandPctWords(-11.06, 10), "down 11%");
 check("Strong terms", heroTermsPhrase("Strong"), "Offer Net 30; Net 45 if pushed");
 check("Neutral terms", heroTermsPhrase("Neutral"), "Offer Net 30 and hold it");
 check("Weak terms", heroTermsPhrase("Weak"), "Offer Net 30 · escalate before signing");
+
+// --- An explanation never repeats a dollar figure its finding shows ------------
+{
+  const shown = "Pre-tax income is $53.4B above operating income. Operating income $27,461M · pre-tax income $80,857M (Q2 FY26)";
+  check(
+    "\"$53.4 billion\" repeats \"$53.4B\" -> dropped",
+    withoutRepeatedDollars(["Other income, net of $53.4 billion in Q2 2026, drove it."], shown).dropped.length,
+    1
+  );
+  check(
+    "\"27,461 million\" and \"27461\" repeat \"$27,461M\" -> dropped",
+    withoutRepeatedDollars(["It was $27,461 million.", "Also 27461."], shown).dropped.length,
+    2
+  );
+  check(
+    "a different figure is kept: $1,612.7 million, $153.4 billion",
+    withoutRepeatedDollars(["A $1,612.7 million gain.", "A $153.4 billion portfolio."], shown).kept.length,
+    2
+  );
+  check("years and percentages are not dollar figures -> kept", withoutRepeatedDollars(["Up 16% in fiscal 2026."], shown).kept.length, 1);
+}
 
 console.log(`\n${pass} passed, ${fail} failed`);
 if (fail > 0) process.exit(1);

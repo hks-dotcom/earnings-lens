@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { KeyFinancials, LineItem, CellValue } from "@/lib/xbrl/keyFinancials";
 import { FinancialHealth, marginPtsChange } from "@/lib/metrics/health";
 import { AnnualFigures, AnnualCell } from "@/lib/present/annualFigures";
@@ -115,16 +114,22 @@ function PeriodHeader({ label, periodEnd, strong, tint }: { label: string | unde
   );
 }
 
+/**
+ * The Key financials tab. Its content is unchanged by the statement tabs;
+ * only its Quarterly / Annual toggle moved up into the financials panel,
+ * where all four tabs share it, so the table is controlled by `showAnnual`.
+ */
 export function KeyFinancialsTable({
   kf,
   health,
   annual,
+  showAnnual,
 }: {
   kf: KeyFinancials;
   health: FinancialHealth;
   annual: AnnualFigures | null;
+  showAnnual: boolean;
 }) {
-  const [showAnnual, setShowAnnual] = useState(false);
 
   // "When the latest quarter's revenue is under $100M, figures show one
   // decimal" -- one decision for the whole board, taken from revenue.
@@ -165,31 +170,7 @@ export function KeyFinancialsTable({
   const th: React.CSSProperties = { fontWeight: 500, fontSize: 12, color: "var(--text-tertiary)", padding: "4px 8px" };
 
   return (
-    <div style={{ background: "var(--bg-white)", border: "1px solid var(--border-card)", borderRadius: 12, padding: "20px 22px", display: "flex", flexDirection: "column", gap: 10 }}>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
-        <div style={{ fontSize: 12, fontWeight: 600, letterSpacing: "0.08em", color: "var(--text-tertiary)" }}>
-          KEY FINANCIALS &middot; {unit.label.toUpperCase()}
-        </div>
-        {annual && (
-          <button
-            onClick={() => setShowAnnual((s) => !s)}
-            aria-pressed={showAnnual}
-            style={{
-              fontSize: 12,
-              fontWeight: 600,
-              padding: "4px 10px",
-              borderRadius: 6,
-              border: "1px solid var(--border-medium)",
-              background: showAnnual ? "var(--text-primary)" : "var(--bg-white)",
-              color: showAnnual ? "#fff" : "var(--text-secondary)",
-              cursor: "pointer",
-            }}
-          >
-            Annual
-          </button>
-        )}
-      </div>
-
+    <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
       <ScrollHint>
         {showAnnual && annual ? (
           <AnnualTable annual={annual} unit={unit} />

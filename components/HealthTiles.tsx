@@ -176,7 +176,7 @@ export function HealthTiles({
         />
         <Tile
           label="DSO"
-          value={dso === undefined ? "MISSING" : `~${Math.round(dso)} days`}
+          value={dso === undefined ? "MISSING" : `${dso.toFixed(1)} days`}
           sub="receivables ÷ revenue"
           tooltip={{ key: "dso", label: "DSO" }}
         />

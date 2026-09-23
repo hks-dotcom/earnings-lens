@@ -171,8 +171,13 @@ function oneOffSentence(kf: KeyFinancials): string | undefined {
  */
 const ALREADY_SAID: StandOutItem["kind"][] = ["cash-burn", "heavy-investment", "losses", "spending-cuts"];
 
+/** The display-only cash-flow findings: on the board and in the brief, never in the Summary. */
+const NOT_IN_SUMMARY: StandOutItem["kind"][] = ["borrowing", "acquisitions", "returns"];
+
 function watchClause(standOut: StandOutItem[]): string | undefined {
-  const item = standOut.find((i) => i.tone === "watch" && !ALREADY_SAID.includes(i.kind));
+  const item = standOut.find(
+    (i) => i.tone === "watch" && !ALREADY_SAID.includes(i.kind) && !NOT_IN_SUMMARY.includes(i.kind)
+  );
   if (!item) return undefined;
   const headline = item.headline.replace(/\.$/, "");
   return `The one thing to watch is ${headline[0].toLowerCase()}${headline.slice(1)}.`;

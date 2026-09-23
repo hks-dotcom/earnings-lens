@@ -49,6 +49,13 @@ export interface StatementValue {
   joinedFrom?: string;
   /** Computed rows: what went into the figure. */
   components?: string[];
+  /**
+   * An income statement standard row read from the column's presentation
+   * (the latest-filed statement that presents the period) where that
+   * differs from Key financials: the filing it was restated in, and the
+   * figure Key financials shows.
+   */
+  restated?: { form: string; filingDate: string; accessionNumber: string; original: number };
 }
 
 export interface MissingValue {
@@ -171,8 +178,9 @@ export const STATEMENT_CONCEPTS = {
  * Every debt proceeds and repayment tag a filer might use, each its own
  * row when used. Long-term, short-term, commercial paper, revolver or line
  * of credit, net short-term and convertible. The short-term and
- * commercial-paper gross tags, the line-of-credit net tag and the bank and
- * notes-payable tags are new since the coverage work.
+ * commercial-paper gross tags, the line-of-credit net tag, the bank,
+ * notes-payable and unsecured tags and the three-months-or-less gross tags
+ * are new since the coverage work.
  */
 export const DEBT_FLOW_TAGS: { tag: string; kind: "proceeds" | "repayment" | "net"; label: string }[] = [
   { tag: "ProceedsFromIssuanceOfLongTermDebt", kind: "proceeds", label: "Long-term debt raised" },
@@ -186,6 +194,8 @@ export const DEBT_FLOW_TAGS: { tag: string; kind: "proceeds" | "repayment" | "ne
   { tag: "ProceedsFromConvertibleDebt", kind: "proceeds", label: "Convertible debt raised" },
   { tag: "ProceedsFromBankDebt", kind: "proceeds", label: "Bank debt raised" },
   { tag: "ProceedsFromNotesPayable", kind: "proceeds", label: "Notes payable raised" },
+  { tag: "ProceedsFromIssuanceOfUnsecuredDebt", kind: "proceeds", label: "Unsecured debt raised" },
+  { tag: "ProceedsFromShortTermDebtMaturingInThreeMonthsOrLess", kind: "proceeds", label: "Short-term debt maturing within three months raised" },
   { tag: "RepaymentsOfLongTermDebt", kind: "repayment", label: "Long-term debt repaid" },
   { tag: "RepaymentsOfSeniorDebt", kind: "repayment", label: "Senior notes repaid" },
   { tag: "RepaymentsOfDebt", kind: "repayment", label: "Debt repaid" },
@@ -197,6 +207,8 @@ export const DEBT_FLOW_TAGS: { tag: string; kind: "proceeds" | "repayment" | "ne
   { tag: "RepaymentsOfConvertibleDebt", kind: "repayment", label: "Convertible debt repaid" },
   { tag: "RepaymentsOfBankDebt", kind: "repayment", label: "Bank debt repaid" },
   { tag: "RepaymentsOfNotesPayable", kind: "repayment", label: "Notes payable repaid" },
+  { tag: "RepaymentsOfDebtAndCapitalLeaseObligations", kind: "repayment", label: "Debt and finance leases repaid" },
+  { tag: "RepaymentsOfShortTermDebtMaturingInThreeMonthsOrLess", kind: "repayment", label: "Short-term debt maturing within three months repaid" },
   { tag: "ProceedsFromRepaymentsOfShortTermDebt", kind: "net", label: "Short-term debt, net" },
   { tag: "ProceedsFromRepaymentsOfShortTermDebtMaturingInThreeMonthsOrLess", kind: "net", label: "Short-term debt maturing within three months, net" },
   { tag: "ProceedsFromRepaymentsOfCommercialPaper", kind: "net", label: "Commercial paper, net" },
@@ -303,6 +315,18 @@ class FactPool {
    * captions come from. Across a joined row's elements, the latest-filed
    * figure wins; on a tie, the row's own element.
    */
+  /** The latest-filed fact on any filing's income statement that matches: the presentation of a period. */
+  latestOnStatement(match: (f: PooledFact) => boolean): PooledFact | undefined {
+    let best: PooledFact | undefined;
+    for (const list of this.byElement.values()) {
+      for (const f of list) {
+        if (!f.onStatement || !match(f)) continue;
+        if (!best || f.filingDate > best.filingDate) best = f;
+      }
+    }
+    return best;
+  }
+
   pick(elements: string[], match: (f: PooledFact) => boolean): PooledFact | undefined {
     let best: PooledFact | undefined;
     for (const element of elements) {
@@ -481,6 +505,150 @@ function companyLines(extracts: FilingStatementExtract[], pool: FactPool, joins:
   return lines;
 }
 
+// --- one presentation per income statement column ---------------------------------
+
+interface Source {
+  accessionNumber: string;
+  form: string;
+  filingDate: string;
+}
+
+type ColumnSource =
+  | { kind: "single"; window: FiscalPeriodLabel; end: string; source: Source }
+  | { kind: "q4"; end: string; annual: Source; annualStart: string; nine: Source; ownAnnual: string }
+  | undefined;
+
+/**
+ * For each column, the latest-filed statement that presents its period --
+ * the presentation the company lines already come from. A derived Q4 has
+ * two: the latest 10-K presenting the year and the latest filing
+ * presenting the nine months before it.
+ */
+function presentationSources(
+  pool: FactPool,
+  quarters: FilingPeriod[],
+  years: FilingPeriod[],
+  extracts: FilingStatementExtract[]
+): { quarterly: ColumnSource[]; annual: ColumnSource[] } {
+  const meta = new Map(extracts.map((x) => [x.accessionNumber, x]));
+  const source = (f: PooledFact | undefined): Source | undefined => {
+    if (!f) return undefined;
+    const x = meta.get(f.accessionNumber);
+    return x ? { accessionNumber: x.accessionNumber, form: x.form, filingDate: x.filingDate } : undefined;
+  };
+  const latest = (match: (f: PooledFact) => boolean) => pool.latestOnStatement(match);
+  const single = (end: string, window: FiscalPeriodLabel): ColumnSource => {
+    const s = source(latest((f) => f.end === end && inWindow(f, window)));
+    return s ? { kind: "single", window, end, source: s } : undefined;
+  };
+  return {
+    quarterly: quarters.map((p) => {
+      const end = p.filing.reportDate;
+      if (p.fp !== "FY") return single(end, "Q1");
+      const annualFact = latest((f) => f.end === end && inWindow(f, "FY"));
+      const annual = source(annualFact);
+      if (!annualFact || !annual) return undefined;
+      const nine = source(latest((f) => f.start === annualFact.start && inWindow(f, "Q3")));
+      return nine
+        ? { kind: "q4", end, annual, annualStart: annualFact.start, nine, ownAnnual: p.filing.accessionNumber }
+        : undefined;
+    }),
+    annual: years.map((p) => single(p.filing.reportDate, "FY")),
+  };
+}
+
+function daysOf(p: { start?: string; end: string }): number {
+  return p.start ? daysBetween(p.start, p.end) : 0;
+}
+
+/**
+ * A company-facts figure for a concept (or an "A-B"/"A+B" composite)
+ * exactly as one filing reports it -- or, with accession "original", as
+ * first filed.
+ */
+function valueIn(
+  facts: CompanyFacts,
+  concept: string,
+  accession: string | "original",
+  match: (p: { start?: string; end: string }) => boolean
+): number | undefined {
+  const plus = concept.split("+");
+  if (plus.length === 2) {
+    const [a, b] = plus.map((c) => valueIn(facts, c, accession, match));
+    return a !== undefined && b !== undefined ? a + b : undefined;
+  }
+  const minus = concept.split(/-(?=[A-Za-z])/);
+  if (minus.length === 2) {
+    const [a, b] = minus.map((c) => valueIn(facts, c, accession, match));
+    return a !== undefined && b !== undefined ? a - b : undefined;
+  }
+  const points = (getConceptPoints(facts, concept) ?? []).filter((p) => match(p));
+  if (accession === "original") {
+    return points.length ? points.reduce((a, b) => (b.filed < a.filed ? b : a)).val : undefined;
+  }
+  return points.find((p) => p.accn === accession)?.val;
+}
+
+function withinWindow(p: { start?: string; end: string }, fp: FiscalPeriodLabel): boolean {
+  const [min, max] = DURATION_WINDOWS[fp];
+  const d = daysOf(p);
+  return d >= min && d <= max;
+}
+
+function sourcedValue(facts: CompanyFacts, concept: string, col: ColumnSource): { value: number; source: Source } | undefined {
+  if (!col) return undefined;
+  if (col.kind === "single") {
+    const v = valueIn(facts, concept, col.source.accessionNumber, (p) => p.end === col.end && withinWindow(p, col.window));
+    return v === undefined ? undefined : { value: v, source: col.source };
+  }
+  const annualMatch = (p: { start?: string; end: string }) => p.end === col.end && withinWindow(p, "FY");
+  const nineMatch = (p: { start?: string; end: string }) => p.start === col.annualStart && withinWindow(p, "Q3");
+  const annual = valueIn(facts, concept, col.annual.accessionNumber, annualMatch);
+  const nine = valueIn(facts, concept, col.nine.accessionNumber, nineMatch);
+  if (annual === undefined || nine === undefined) return undefined;
+  // A derived Q4 differs from Key financials' by a unit of rounding when
+  // Key financials subtracts three filed quarters and this subtracts the
+  // filed nine months. That is a different route, not a restatement: only
+  // a year or nine months refiled with a different figure is one.
+  const originalAnnual = valueIn(facts, concept, col.ownAnnual, annualMatch);
+  const originalNine = valueIn(facts, concept, "original", nineMatch);
+  if (annual === originalAnnual && nine === originalNine) return undefined;
+  return { value: annual - nine, source: col.annual };
+}
+
+/**
+ * Re-reads a standard row from each column's presentation. A cell whose
+ * figure there differs from the Key financials figure takes the
+ * presentation's figure and says so; a cell the presentation can't supply
+ * keeps the Key financials figure; a MISSING cell stays MISSING.
+ */
+function resource(
+  r: StatementRow,
+  facts: CompanyFacts,
+  sources: { quarterly: ColumnSource[]; annual: ColumnSource[] },
+  quarters: FilingPeriod[],
+  years: FilingPeriod[]
+) {
+  const apply = (cells: StatementCell[], cols: ColumnSource[]) =>
+    cells.map((c, i) => {
+      if (!isValue(c)) return c;
+      const got = sourcedValue(facts, c.concept, cols[i]);
+      if (!got || got.value === c.value) return c;
+      return {
+        ...c,
+        value: got.value,
+        restated: {
+          form: got.source.form,
+          filingDate: got.source.filingDate,
+          accessionNumber: got.source.accessionNumber,
+          original: c.value,
+        },
+      };
+    });
+  r.quarterly = apply(r.quarterly, sources.quarterly.slice(0, quarters.length));
+  r.annual = apply(r.annual, sources.annual.slice(0, years.length));
+}
+
 // --- building everything --------------------------------------------------------
 
 export const ANNUAL_LOOKBACK_FILINGS = 16;
@@ -599,6 +767,14 @@ export function buildStatements(
   const nonop = row("nonoperating", "Non-operating income, total", "line", nonopQuarterly, nonopAnnual);
   const interest = row("interestExpense", "of which interest expense", "of", dur(S.interestExpense), annDur(S.interestExpense));
   const otherNonop = row("otherNonoperating", "of which other non-operating line", "of", dur(S.otherNonoperating), annDur(S.otherNonoperating));
+
+  // One presentation per column: the standard rows are re-read from the
+  // same statement the company lines come from. Where Key financials shows
+  // something else for the period, the cell carries the restatement.
+  const sources = presentationSources(pool, quarterPeriods, years, extractList);
+  for (const r of [revenue, grossProfit, operatingIncome, nonop, interest, otherNonop, pretax, incomeTax, netIncome]) {
+    resource(r, facts, sources, quarterPeriods, years);
+  }
 
   const afterTax = (n: StatementCell, p: StatementCell, t: StatementCell): StatementCell => {
     if (!isValue(n) || !isValue(p) || !isValue(t)) return { missing: MISSING_DEPENDS };
@@ -760,40 +936,53 @@ export function buildStatements(
   // every figure is zero prove nothing and are not counted as agreement.
   const generality = (r: StatementRow) => {
     const tag = r.key.slice("debt:".length);
-    if (/^(ProceedsFromIssuanceOfDebt|ProceedsFromDebtNetOfIssuanceCosts|ProceedsFromDebtMaturingInMoreThanThreeMonths|RepaymentsOfDebt|RepaymentsOfDebtMaturingInMoreThanThreeMonths|RepaymentsOfLongTermDebtAndCapitalSecurities)$/.test(tag)) return 0;
+    if (/^(ProceedsFromIssuanceOfDebt|ProceedsFromDebtNetOfIssuanceCosts|ProceedsFromDebtMaturingInMoreThanThreeMonths|RepaymentsOfDebt|RepaymentsOfDebtMaturingInMoreThanThreeMonths|RepaymentsOfLongTermDebtAndCapitalSecurities|RepaymentsOfDebtAndCapitalLeaseObligations)$/.test(tag)) return 0;
     if (/LongTermDebt$/.test(tag)) return 1;
     return 2;
   };
-  const cols = (x: StatementRow) => [...x.quarterly, ...x.annual];
-  for (const r of [...debtRows].sort((x, y) => generality(x) - generality(y))) {
-    const others = debtRows.filter((o) => o !== r && o.debtKind === r.debtKind && !o.debtTotal);
-    if (!others.length) continue;
-    let compared = 0;
-    let equal = true;
-    cols(r).forEach((c, i) => {
-      if (!isValue(c)) return;
-      const parts = others.map((o) => cols(o)[i]).filter(isValue);
-      if (!parts.length) return;
-      const sum = parts.reduce((s, p) => s + p.value, 0);
-      if (Math.abs(sum - c.value) > TOLERANCE_USD) equal = false;
-      else if (c.value !== 0) compared++;
-    });
-    if (compared > 0 && equal) r.debtTotal = true;
-  }
-  const counted = debtRows.filter((r) => !r.debtTotal);
+  // Judged per view: a tag can be a total of other tags in the quarters
+  // and the only figure in the years, when the other tags never appear in
+  // a 10-K. Lines count toward a view's sum when the filer uses them
+  // somewhere in that view: a tag that only ever appears in 10-Qs is not a
+  // gap in the annual columns, but a line used in some quarters and not
+  // others is.
+  const totalsIn = (cellsOf: (x: StatementRow) => StatementCell[]): Set<StatementRow> => {
+    const totals = new Set<StatementRow>();
+    for (const r of [...debtRows].sort((x, y) => generality(x) - generality(y))) {
+      const others = debtRows.filter((o) => o !== r && o.debtKind === r.debtKind && !totals.has(o));
+      if (!others.length) continue;
+      let compared = 0;
+      let equal = true;
+      cellsOf(r).forEach((c, i) => {
+        if (!isValue(c)) return;
+        const parts = others.map((o) => cellsOf(o)[i]).filter(isValue);
+        if (!parts.length) return;
+        const sum = parts.reduce((s, p) => s + p.value, 0);
+        if (Math.abs(sum - c.value) > TOLERANCE_USD) equal = false;
+        else if (c.value !== 0) compared++;
+      });
+      if (compared > 0 && equal) totals.add(r);
+    }
+    return totals;
+  };
+  const totalsQ = totalsIn((x) => x.quarterly);
+  const totalsA = totalsIn((x) => x.annual);
+  for (const r of debtRows) if (totalsQ.has(r) || totalsA.has(r)) r.debtTotal = true;
   const debtSign = (r: StatementRow) => (r.debtKind === "repayment" ? -1 : 1);
+  const countedQ = debtRows.filter((r) => !totalsQ.has(r) && r.quarterly.some(isValue));
+  const countedA = debtRows.filter((r) => !totalsA.has(r) && r.annual.some(isValue));
   const netNewDebt: StatementRow = {
     key: "netNewDebt",
     label: "Net new debt",
     kind: "line",
     quarterly: quarterPeriods.map((_, i) =>
-      counted.length ? sumCells(counted.map((r) => r.quarterly[i]), counted.map(debtSign), "net new debt") : { missing: MISSING_NOT_FILED_FOR_PERIOD }
+      countedQ.length ? sumCells(countedQ.map((r) => r.quarterly[i]), countedQ.map(debtSign), "net new debt") : { missing: MISSING_NOT_FILED_FOR_PERIOD }
     ),
     annual: years.map((_, i) =>
-      counted.length ? sumCells(counted.map((r) => r.annual[i]), counted.map(debtSign), "net new debt") : { missing: MISSING_NOT_FILED_FOR_PERIOD }
+      countedA.length ? sumCells(countedA.map((r) => r.annual[i]), countedA.map(debtSign), "net new debt") : { missing: MISSING_NOT_FILED_FOR_PERIOD }
     ),
   };
-  if (!counted.length) netNewDebt.notFiled = true;
+  if (!countedQ.length && !countedA.length) netNewDebt.notFiled = true;
 
   const buybacks = row("buybacks", "Buybacks", "line", dur(S.buybacks, true, true), annDur(S.buybacks), {
     filedEver: everFiled(facts, S.buybacks),

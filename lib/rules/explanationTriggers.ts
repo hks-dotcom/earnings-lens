@@ -5,6 +5,7 @@ import { RedFlagFinding } from "@/lib/rules/redFlags";
 import { findRestructuringFiling } from "@/lib/rules/restructuring";
 import { formatMagnitude } from "@/lib/present/netIncomeGap";
 import {
+  ACQUISITIONS_PCT_OF_REVENUE,
   DPO_BAND_PCT,
   NON_OPERATING_SWING_PCT_OF_REVENUE,
   STATUTORY_TAX_RATE_PCT,
@@ -34,7 +35,8 @@ export type TriggerKind =
   | "opposite-signs"
   | "retrenchment"
   | "dpo-rising"
-  | "red-flag";
+  | "red-flag"
+  | "acquisitions";
 
 /**
  * Which filed text can answer this trigger.
@@ -231,9 +233,25 @@ export function filingBehindRedFlag(
 export function buildExplanationTriggers(
   kf: KeyFinancials,
   lens: LensResult,
-  subs: CompanySubmissions
+  subs: CompanySubmissions,
+  flags: { acquisitions?: boolean } = {}
 ): ExplanationTrigger[] {
   const triggers: ExplanationTrigger[] = [...financialTriggers(kf)];
+
+  // Acquisitions and investments past the declared share of revenue: the
+  // line is often a mix (businesses, private stakes, other), and the filing
+  // is where the company says what it bought.
+  if (flags.acquisitions) {
+    triggers.push({
+      kind: "acquisitions",
+      key: "acquisitions",
+      title: "Acquisitions and investments",
+      detail: `The acquisitions line is above ${ACQUISITIONS_PCT_OF_REVENUE}% of quarterly revenue.`,
+      question:
+        "What does the filing say the company acquired or invested in this quarter, in the line for acquisitions, non-marketable investments and similar payments?",
+      source: { scope: "financials" },
+    });
+  }
 
   if (lens.retrenchment.triggered) {
     const restructuring = findRestructuringFiling(subs);

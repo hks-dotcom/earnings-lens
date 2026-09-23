@@ -4,7 +4,7 @@ import { getCompanyFacts } from "@/lib/edgar/companyFacts";
 import { buildKeyFinancials } from "@/lib/xbrl/keyFinancials";
 import { extractFilingStatement, FilingStatementExtract } from "@/lib/xbrl/statementExtract";
 import { buildStatements, statementFilings, Statements } from "@/lib/xbrl/statements";
-import { readFilingStatement, writeFilingStatement } from "@/lib/db/store";
+import { readFilingStatement, storeConfigured, writeFilingStatement } from "@/lib/db/store";
 
 /**
  * Loads each filing's extracted statements: from the store when it has
@@ -56,6 +56,75 @@ export async function loadFilingExtract(
       instanceBytes: extract.instanceBytes,
     },
   };
+}
+
+/** The company-level inputs every statements request starts from: cached per process like the rest of EDGAR. */
+async function companyInputs(rawTicker: string) {
+  const record = await resolveTicker(rawTicker);
+  if (!record) throw new StatementsTickerNotFound(`Ticker "${rawTicker}" not found`);
+  const subs = await getSubmissions(record.cik);
+  const facts = await getCompanyFacts(record.cik);
+  const periodic = periodicFilings(subs);
+  const kf = buildKeyFinancials(facts, periodic, subs.fiscalYearEnd);
+  return { record, facts, periodic, kf, filings: statementFilings(kf, periodic) };
+}
+
+export class StatementsTickerNotFound extends Error {}
+
+export interface StatementFilingStatus {
+  accessionNumber: string;
+  form: string;
+  reportDate: string;
+  stored: boolean;
+}
+
+/**
+ * The statement tabs' first request: the assembled statements when every
+ * filing they read is already extracted, or otherwise the list of filings
+ * and which of them still need reading. Nothing here reads a filing, so it
+ * answers in the time a store lookup takes.
+ */
+export async function statementsOrWork(
+  rawTicker: string
+): Promise<
+  | { status: "ready"; ticker: string; statements: Statements }
+  | { status: "needs"; ticker: string; filings: StatementFilingStatus[] }
+> {
+  const { record, facts, periodic, kf, filings } = await companyInputs(rawTicker);
+  // With no store there is nowhere to keep a filing between requests, so
+  // this one request reads them all -- slower, but it finishes.
+  if (!storeConfigured()) {
+    const extracts = new Map<string, FilingStatementExtract>();
+    for (const f of filings) extracts.set(f.accessionNumber, await extractFilingStatement(record.cik, f));
+    return { status: "ready", ticker: record.ticker, statements: buildStatements(facts, kf, periodic, extracts) };
+  }
+  const stored = await Promise.all(filings.map((f) => readFilingStatement(f.accessionNumber)));
+  if (stored.every(Boolean)) {
+    const extracts = new Map(stored.map((x) => [x!.accessionNumber, x!]));
+    return { status: "ready", ticker: record.ticker, statements: buildStatements(facts, kf, periodic, extracts) };
+  }
+  return {
+    status: "needs",
+    ticker: record.ticker,
+    filings: filings.map((f, i) => ({
+      accessionNumber: f.accessionNumber,
+      form: f.form,
+      reportDate: f.reportDate,
+      stored: Boolean(stored[i]),
+    })),
+  };
+}
+
+/**
+ * Reads one filing for the statement tabs and stores it: one filing per
+ * request, so no single request does a whole company's reading. Only a
+ * filing the tabs actually read for this ticker is accepted.
+ */
+export async function readOneStatementFiling(rawTicker: string, accessionNumber: string): Promise<ExtractStats> {
+  const { record, filings } = await companyInputs(rawTicker);
+  const filing = filings.find((f) => f.accessionNumber === accessionNumber);
+  if (!filing) throw new StatementsTickerNotFound(`${accessionNumber} is not one of ${record.ticker}'s statement filings`);
+  return (await loadFilingExtract(record.cik, record.ticker, filing)).stats;
 }
 
 export interface LoadedStatements {

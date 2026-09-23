@@ -685,11 +685,17 @@
             "source": "company-facts"
           },
           {
-            "value": 155000000,
+            "value": 72000000,
             "concept": "OtherNonoperatingIncomeExpense",
             "method": "direct",
             "derived": false,
-            "source": "company-facts"
+            "source": "company-facts",
+            "restated": {
+              "form": "10-Q",
+              "filingDate": "2026-07-23",
+              "accessionNumber": "0001652044-26-000071",
+              "original": 155000000
+            }
           },
           {
             "value": 1667000000,
@@ -699,18 +705,30 @@
             "source": "company-facts"
           },
           {
-            "value": 919000000,
+            "value": 1137000000,
             "concept": "OtherNonoperatingIncomeExpense",
             "method": "direct",
             "derived": false,
-            "source": "company-facts"
+            "source": "company-facts",
+            "restated": {
+              "form": "10-K",
+              "filingDate": "2026-02-05",
+              "accessionNumber": "0001652044-26-000018",
+              "original": 919000000
+            }
           },
           {
-            "value": 299000000,
+            "value": 556000000,
             "concept": "OtherNonoperatingIncomeExpense",
             "method": "direct",
             "derived": false,
-            "source": "company-facts"
+            "source": "company-facts",
+            "restated": {
+              "form": "10-K",
+              "filingDate": "2026-02-05",
+              "accessionNumber": "0001652044-26-000018",
+              "original": 299000000
+            }
           }
         ]
       },
@@ -2576,6 +2594,73 @@
         ]
       },
       {
+        "key": "debt:RepaymentsOfDebtAndCapitalLeaseObligations",
+        "label": "Debt and finance leases repaid",
+        "kind": "line",
+        "concept": "RepaymentsOfDebtAndCapitalLeaseObligations",
+        "flags": [
+          "debt:repayment"
+        ],
+        "cells": [
+          {
+            "value": 3776000000,
+            "concept": "RepaymentsOfDebtAndCapitalLeaseObligations",
+            "method": "ytd-subtraction",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 1477000000,
+            "concept": "RepaymentsOfDebtAndCapitalLeaseObligations",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 6333000000,
+            "concept": "RepaymentsOfDebtAndCapitalLeaseObligations",
+            "method": "annual-minus-9mo",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 7697000000,
+            "concept": "RepaymentsOfDebtAndCapitalLeaseObligations",
+            "method": "ytd-subtraction",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 13876000000,
+            "concept": "RepaymentsOfDebtAndCapitalLeaseObligations",
+            "method": "ytd-subtraction",
+            "derived": true,
+            "source": "company-facts"
+          },
+          {
+            "value": 32427000000,
+            "concept": "RepaymentsOfDebtAndCapitalLeaseObligations",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 12701000000,
+            "concept": "RepaymentsOfDebtAndCapitalLeaseObligations",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          },
+          {
+            "value": 11550000000,
+            "concept": "RepaymentsOfDebtAndCapitalLeaseObligations",
+            "method": "direct",
+            "derived": false,
+            "source": "company-facts"
+          }
+        ]
+      },
+      {
         "key": "netNewDebt",
         "label": "Net new debt",
         "kind": "line",
@@ -2583,83 +2668,91 @@
         "flags": [],
         "cells": [
           {
-            "value": 24847000000,
+            "value": 21071000000,
             "concept": "net new debt",
             "method": "computed-sum",
             "derived": true,
             "source": "company-facts",
             "components": [
-              "ProceedsFromDebtNetOfIssuanceCosts"
+              "ProceedsFromDebtNetOfIssuanceCosts",
+              "RepaymentsOfDebtAndCapitalLeaseObligations"
             ]
           },
           {
-            "value": 31379000000,
+            "value": 29902000000,
             "concept": "net new debt",
             "method": "computed-sum",
             "derived": true,
             "source": "company-facts",
             "components": [
-              "ProceedsFromDebtNetOfIssuanceCosts"
+              "ProceedsFromDebtNetOfIssuanceCosts",
+              "RepaymentsOfDebtAndCapitalLeaseObligations"
             ]
           },
           {
-            "value": 26562000000,
+            "value": 20229000000,
             "concept": "net new debt",
             "method": "computed-sum",
             "derived": true,
             "source": "company-facts",
             "components": [
-              "ProceedsFromDebtNetOfIssuanceCosts"
+              "ProceedsFromDebtNetOfIssuanceCosts",
+              "RepaymentsOfDebtAndCapitalLeaseObligations"
             ]
           },
           {
-            "value": 6624000000,
+            "value": -1073000000,
             "concept": "net new debt",
             "method": "computed-sum",
             "derived": true,
             "source": "company-facts",
             "components": [
-              "ProceedsFromDebtNetOfIssuanceCosts"
+              "ProceedsFromDebtNetOfIssuanceCosts",
+              "RepaymentsOfDebtAndCapitalLeaseObligations"
             ]
           },
           {
-            "value": 26846000000,
+            "value": 12970000000,
             "concept": "net new debt",
             "method": "computed-sum",
             "derived": true,
             "source": "company-facts",
             "components": [
-              "ProceedsFromDebtNetOfIssuanceCosts"
+              "ProceedsFromDebtNetOfIssuanceCosts",
+              "RepaymentsOfDebtAndCapitalLeaseObligations"
             ]
           },
           {
-            "value": 64564000000,
+            "value": 32137000000,
             "concept": "net new debt",
             "method": "computed-sum",
             "derived": true,
             "source": "company-facts",
             "components": [
-              "ProceedsFromDebtNetOfIssuanceCosts"
+              "ProceedsFromDebtNetOfIssuanceCosts",
+              "RepaymentsOfDebtAndCapitalLeaseObligations"
             ]
           },
           {
-            "value": 13589000000,
+            "value": 888000000,
             "concept": "net new debt",
             "method": "computed-sum",
             "derived": true,
             "source": "company-facts",
             "components": [
-              "ProceedsFromDebtNetOfIssuanceCosts"
+              "ProceedsFromDebtNetOfIssuanceCosts",
+              "RepaymentsOfDebtAndCapitalLeaseObligations"
             ]
           },
           {
-            "value": 10790000000,
+            "value": -760000000,
             "concept": "net new debt",
             "method": "computed-sum",
             "derived": true,
             "source": "company-facts",
             "components": [
-              "ProceedsFromDebtNetOfIssuanceCosts"
+              "ProceedsFromDebtNetOfIssuanceCosts",
+              "RepaymentsOfDebtAndCapitalLeaseObligations"
             ]
           }
         ]

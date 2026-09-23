@@ -671,11 +671,17 @@
             "source": "company-facts"
           },
           {
-            "value": 2236000000,
+            "value": -11000000,
             "concept": "OtherNonoperatingIncomeExpense",
             "method": "direct",
             "derived": false,
-            "source": "company-facts"
+            "source": "company-facts",
+            "restated": {
+              "form": "10-Q",
+              "filingDate": "2026-08-26",
+              "accessionNumber": "0001045810-26-000075",
+              "original": 2236000000
+            }
           },
           {
             "value": 9022000000,

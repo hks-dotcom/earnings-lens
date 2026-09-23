@@ -5,7 +5,7 @@ import {
   RUNWAY_NEUTRAL_CAP_QUARTERS,
   RUNWAY_WEAK_BELOW_QUARTERS,
 } from "@/lib/rules/declaredValues";
-import { PaymentBehaviorSignal } from "@/lib/rules/signals";
+import { PaymentBehaviorSignal, payablesPctText } from "@/lib/rules/signals";
 import { RedFlagsResult } from "@/lib/rules/redFlags";
 import { CashPosition, runwaySubject } from "@/lib/rules/runway";
 import { AltmanZoneResult, ALTMAN_CAP_NOTE } from "@/lib/metrics/health";
@@ -104,7 +104,7 @@ function balanceSheetLadder(
   }
   if (zGrey && dpoRising) {
     return weak(
-      `Altman Z'' ${zPrime!.toFixed(2)} is grey-zone and DPO is up ${Math.round(paymentBehavior.yoyPctChange!)}% Y/Y (beyond the band) -- the grey-zone-plus-rising-DPO exception.${capNote}`
+      `Altman Z'' ${zPrime!.toFixed(2)} is grey-zone and DPO is up ${payablesPctText(paymentBehavior.yoyPctChange!)}% Y/Y (beyond the band) -- the grey-zone-plus-rising-DPO exception.${capNote}`
     );
   }
 
@@ -112,13 +112,13 @@ function balanceSheetLadder(
     const dpoNote =
       paymentBehavior.state === "missing"
         ? "DPO unavailable, treated as not rising"
-        : `DPO ${paymentBehavior.state} Y/Y (${Math.round(paymentBehavior.yoyPctChange!)}%, within/below the band)`;
+        : `DPO ${paymentBehavior.state} Y/Y (${paymentBehavior.yoyPctChange! < 0 ? "-" : ""}${payablesPctText(paymentBehavior.yoyPctChange!)}%, within/below the band)`;
     return strong(`Altman Z'' ${zPrime!.toFixed(2)} is safe (> ${ALTMAN_ZONES.safeAbove}), no red flags, and ${dpoNote}.`);
   }
 
   if (zSafe && dpoRising) {
     return neutral(
-      `Altman Z'' ${zPrime!.toFixed(2)} is safe, but DPO is up ${Math.round(paymentBehavior.yoyPctChange!)}% Y/Y (beyond the band) -- safe balance sheet, slower payer.`
+      `Altman Z'' ${zPrime!.toFixed(2)} is safe, but DPO is up ${payablesPctText(paymentBehavior.yoyPctChange!)}% Y/Y (beyond the band) -- safe balance sheet, slower payer.`
     );
   }
   if (zGrey) {
@@ -159,7 +159,7 @@ export function negotiationNote(paymentBehavior: PaymentBehaviorSignal, rung: La
   // Days to one decimal and the change as a whole percentage, the same as
   // every other place the payables fact is printed.
   const x = paymentBehavior.dpoCurrent.toFixed(1);
-  const y = Math.abs(Math.round(paymentBehavior.yoyPctChange));
+  const y = payablesPctText(paymentBehavior.yoyPctChange);
   const direction = paymentBehavior.yoyPctChange >= 0 ? "up" : "down";
   return `Payables ≈ ${x} days of cost of revenue, ${direction} ${y}% Y/Y. Expect pressure for longer terms; our ceiling is Net ${ceiling}.`;
 }

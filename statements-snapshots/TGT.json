@@ -245,11 +245,17 @@
             "source": "company-facts"
           },
           {
-            "value": 29676000000,
+            "value": 29584000000,
             "concept": "RevenueFromContractWithCustomerExcludingAssessedTax-CostOfGoodsAndServicesSold",
             "method": "computed-difference",
             "derived": true,
-            "source": "company-facts"
+            "source": "company-facts",
+            "restated": {
+              "form": "10-K",
+              "filingDate": "2026-03-11",
+              "accessionNumber": "0000027419-26-000016",
+              "original": 29676000000
+            }
           }
         ]
       },

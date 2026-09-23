@@ -377,7 +377,7 @@ body {
  */
 .stand-item {
   display: grid;
-  grid-template-columns: 110px minmax(0, 1fr);
+  grid-template-columns: 150px minmax(0, 1fr);
   gap: 14px;
   align-items: baseline;
   padding: 12px 0 12px 14px;
@@ -491,4 +491,273 @@ body {
   .cite-wrap:hover .cite-box {
     display: block;
   }
+}
+
+/* The statement tags under a finding's name: each opens its tab. */
+.stand-srcs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 6px;
+  letter-spacing: 0;
+}
+
+.stand-src {
+  border: 1px solid var(--border-card);
+  background: var(--bg-white);
+  color: var(--text-tertiary);
+  font: 500 10.5px var(--font-ibm-plex-sans), system-ui, sans-serif;
+  border-radius: 5px;
+  padding: 1px 6px;
+  cursor: pointer;
+}
+
+button.stand-src:hover,
+button.stand-src:focus-visible {
+  border-color: var(--core-strong);
+  color: var(--core-strong);
+  outline: none;
+}
+
+.stand-src-fixed {
+  cursor: default;
+}
+
+/* Filter chips: All, P&L, Balance sheet, Cash flow, each with its count. */
+.stand-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 8px;
+}
+
+.stand-filters button {
+  border: 1px solid var(--border-card);
+  background: var(--bg-white);
+  color: var(--text-tertiary);
+  font: 500 13px var(--font-ibm-plex-sans), system-ui, sans-serif;
+  border-radius: 16px;
+  padding: 4px 12px;
+  cursor: pointer;
+}
+
+.stand-filters button span {
+  color: #9c978c;
+  margin-left: 3px;
+}
+
+.stand-filters button[aria-pressed="true"] {
+  background: var(--core-tint-bg);
+  border-color: var(--core-strong);
+  color: var(--core-strong);
+  font-weight: 600;
+}
+
+.stand-filters button:focus-visible {
+  outline: 2px solid var(--nova-strong);
+  outline-offset: 2px;
+}
+
+/* The financials panel: company and fiscal year, tabs, the shared toggle. */
+.fin-panel {
+  background: var(--bg-white);
+  border: 1px solid var(--border-card);
+  border-radius: 12px;
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+  scroll-margin-top: 12px;
+}
+
+.fin-coid {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 12px;
+}
+
+.fin-coid b {
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.fin-coid span {
+  font-size: 13px;
+  color: var(--text-tertiary);
+}
+
+.fin-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.fin-tabs {
+  display: flex;
+  gap: 2px;
+  flex-wrap: wrap;
+}
+
+.fin-tabs button {
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: none;
+  padding: 9px 12px;
+  font: 500 14px var(--font-ibm-plex-sans), system-ui, sans-serif;
+  color: var(--text-tertiary);
+  cursor: pointer;
+}
+
+.fin-tabs button[aria-selected="true"] {
+  color: var(--text-primary);
+  font-weight: 600;
+  border-bottom-color: var(--core-strong);
+}
+
+.fin-seg {
+  display: inline-flex;
+  border: 1px solid var(--border-card);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+
+.fin-seg button {
+  border: 0;
+  background: none;
+  padding: 5px 11px;
+  font: 500 13px var(--font-ibm-plex-sans), system-ui, sans-serif;
+  color: var(--text-tertiary);
+  cursor: pointer;
+}
+
+.fin-seg button[aria-pressed="true"] {
+  background: var(--core-tint-bg);
+  color: var(--core-strong);
+  font-weight: 600;
+}
+
+.fin-tabs button:focus-visible,
+.fin-seg button:focus-visible {
+  outline: 2px solid var(--nova-strong);
+  outline-offset: -2px;
+}
+
+.fin-unit {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--text-tertiary);
+}
+
+.fin-note,
+.fin-loading {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--text-tertiary);
+}
+
+.fin-loading {
+  padding: 18px 0;
+  font-size: 14px;
+}
+
+/* A statement table: five quarters or three years, no change columns. */
+.st-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+.st-table th,
+.st-table td {
+  white-space: nowrap;
+  padding: 8px;
+  text-align: right;
+  vertical-align: top;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.st-table thead th {
+  vertical-align: bottom;
+}
+
+.st-head {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-tertiary);
+}
+
+.st-head span {
+  display: block;
+  font-weight: 400;
+  font-size: 10.5px;
+}
+
+.st-table .st-label {
+  text-align: left;
+  white-space: normal;
+  min-width: 200px;
+  position: sticky;
+  left: 0;
+  background: var(--bg-white);
+  z-index: 1;
+}
+
+.st-total td {
+  font-weight: 600;
+}
+
+.st-of td {
+  font-size: 12.5px;
+  color: var(--text-secondary);
+}
+
+.st-of td.st-label {
+  padding-left: 22px;
+  color: var(--text-tertiary);
+}
+
+.st-section td {
+  text-align: left;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  color: var(--text-tertiary);
+  padding-top: 14px;
+}
+
+.st-neg {
+  color: var(--bad-text);
+}
+
+.st-mark {
+  color: var(--text-tertiary);
+  font-size: 10.5px;
+}
+
+.st-change {
+  display: block;
+  font-size: 10.5px;
+  font-weight: 400;
+  color: var(--text-tertiary);
+  margin-top: 1px;
+}
+
+.st-table td.st-missing {
+  color: #9c978c;
+}
+
+.st-table td.st-notfiled {
+  text-align: left;
+  color: #9c978c;
+  font-style: italic;
+  font-size: 12.5px;
 }

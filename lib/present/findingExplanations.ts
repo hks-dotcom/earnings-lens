@@ -20,14 +20,52 @@ export interface FindingExplanation {
   citation: Citation | undefined;
 }
 
+/**
+ * The dollar figures a finding already shows ("$53.4B", "$27,461M"), as the
+ * digits a sentence would repeat them with: "53.4", "27,461" and "27461".
+ */
+function shownDollarFigures(shown: string): string[] {
+  const out = new Set<string>();
+  for (const m of shown.matchAll(/\$\s?([\d,]+(?:\.\d+)?)/g)) {
+    out.add(m[1]);
+    out.add(m[1].replace(/,/g, ""));
+  }
+  return [...out].filter((f) => /\d/.test(f));
+}
+
+/**
+ * Drops an explanation sentence that repeats a dollar figure the finding
+ * already shows in its own sentence or figures line, by string match on the
+ * figure's digits ("$53.4 billion" repeats "$53.4B"). The prompt asks for
+ * this already; this is the check that holds when it isn't followed.
+ */
+export function withoutRepeatedDollars(sentences: string[], shown: string): { kept: string[]; dropped: string[] } {
+  const figures = shownDollarFigures(shown);
+  const kept: string[] = [];
+  const dropped: string[] = [];
+  for (const s of sentences) {
+    const repeats = figures.some((f) => new RegExp(`(?<![\\d.,])${f.replace(/[.,]/g, (c) => `\\${c}`)}(?![\\d]|[.,]\\d)`).test(s));
+    (repeats ? dropped : kept).push(s);
+  }
+  return { kept, dropped };
+}
+
+/** What the finding shows before its explanation: the rule-based sentence and the figures line. */
+export function findingShownText(item: StandOutItem): string {
+  return [item.sentence, ...(item.more ?? []).map((m) => m.sentence), item.figures].join(" ");
+}
+
 export function explanationFor(
   key: string | undefined,
-  explained: ExplainedItem[]
+  explained: ExplainedItem[],
+  shown = ""
 ): FindingExplanation | undefined {
   if (!key) return undefined;
   const item = explained.find((e) => e.trigger.key === key);
   if (!item || item.state !== "explained" || item.sentences.length === 0) return undefined;
-  return { sentences: item.sentences, passages: item.passages, citation: item.citation };
+  const { kept } = withoutRepeatedDollars(item.sentences, shown);
+  if (kept.length === 0) return undefined;
+  return { sentences: kept, passages: item.passages, citation: item.citation };
 }
 
 /**
@@ -87,8 +125,9 @@ export function shownByExplainKey(items: StandOutItem[]): Map<string, string> {
  * version of what the board shows.
  */
 export function findingProse(item: StandOutItem, explained: ExplainedItem[]): string {
+  const shown = findingShownText(item);
   const withExplanation = (sentence: string, key: string | undefined) => {
-    const e = explanationFor(key, explained);
+    const e = explanationFor(key, explained, shown);
     if (!e) return sentence;
     const cite = e.citation ? ` [${citationLabel(e.citation)}: ${citationDetail(e.citation)}]` : "";
     return `${sentence} ${e.sentences.join(" ")}${cite}`;

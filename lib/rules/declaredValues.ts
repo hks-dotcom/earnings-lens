@@ -103,3 +103,16 @@ export const OPERATING_INCOME_FAST_MOVE_PCT = 50;
 
 /** Margin: gross margin moved this many points Y/Y. */
 export const GROSS_MARGIN_MOVE_PTS = 2;
+
+/**
+ * The three display-only cash-flow findings. None affects the ladder, the
+ * quadrant or the Summary.
+ *
+ * Borrowing: net new debt above this share of quarterly revenue, while free
+ * cash flow is negative or buybacks and dividends over four quarters
+ * exceed free cash flow over the same quarters.
+ */
+export const BORROWING_PCT_OF_REVENUE = 5;
+
+/** Acquisitions and investments: the line above this share of quarterly revenue. Also an explanation trigger. */
+export const ACQUISITIONS_PCT_OF_REVENUE = 5;

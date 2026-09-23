@@ -5,7 +5,7 @@ import { PageData } from "@/lib/present/buildPageData";
 import { Lens } from "@/lib/rules/dealStructure";
 import { nullsToUndefined } from "@/lib/present/sanitizeJson";
 import { TickerHeader } from "@/components/TickerHeader";
-import { KeyFinancialsTable } from "@/components/KeyFinancialsTable";
+import { FinancialsPanel, PanelTab } from "@/components/FinancialsPanel";
 import { HealthTiles } from "@/components/HealthTiles";
 import { LensBoard } from "@/components/LensBoard";
 
@@ -15,6 +15,13 @@ export default function Home() {
   const [page, setPage] = useState<PageData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [tab, setTab] = useState<PanelTab>("kf");
+
+  // A finding's statement tag opens that tab and brings the panel into view.
+  const openTab = useCallback((t: PanelTab) => {
+    setTab(t);
+    document.getElementById("financials")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, []);
 
   const load = useCallback(async (ticker: string) => {
     if (!ticker.trim()) return;
@@ -96,9 +103,9 @@ export default function Home() {
 
           {page && (
             <>
-              <KeyFinancialsTable kf={page.keyFinancials} health={page.health} annual={page.annual} />
+              <FinancialsPanel key={page.ticker} page={page} tab={tab} onTabChange={setTab} />
               <HealthTiles health={page.health} segments={page.segments} redFlags={page.lenses.Services.redFlags} kf={page.keyFinancials} />
-              <LensBoard page={page} lensName={lens} />
+              <LensBoard page={page} lensName={lens} onOpenTab={openTab} />
             </>
           )}
         </div>

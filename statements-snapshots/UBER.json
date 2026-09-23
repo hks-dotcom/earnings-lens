@@ -747,11 +747,17 @@
             "source": "company-facts"
           },
           {
-            "value": -99000000,
+            "value": -19000000,
             "concept": "OtherNonoperatingIncomeExpense",
             "method": "direct",
             "derived": false,
-            "source": "company-facts"
+            "source": "company-facts",
+            "restated": {
+              "form": "10-Q",
+              "filingDate": "2026-08-05",
+              "accessionNumber": "0001543151-26-000032",
+              "original": -99000000
+            }
           },
           {
             "value": -68000000,
@@ -761,18 +767,30 @@
             "source": "company-facts"
           },
           {
-            "value": -77000000,
+            "value": 1128000000,
             "concept": "OtherNonoperatingIncomeExpense",
             "method": "direct",
             "derived": false,
-            "source": "company-facts"
+            "source": "company-facts",
+            "restated": {
+              "form": "10-K",
+              "filingDate": "2026-02-13",
+              "accessionNumber": "0001543151-26-000015",
+              "original": -77000000
+            }
           },
           {
-            "value": -198000000,
+            "value": 1360000000,
             "concept": "OtherNonoperatingIncomeExpense",
             "method": "direct",
             "derived": false,
-            "source": "company-facts"
+            "source": "company-facts",
+            "restated": {
+              "form": "10-K",
+              "filingDate": "2026-02-13",
+              "accessionNumber": "0001543151-26-000015",
+              "original": -198000000
+            }
           }
         ]
       },
@@ -2839,19 +2857,53 @@
             "missing": "depends on a missing figure"
           },
           {
-            "missing": "depends on a missing figure"
+            "value": 1032000000,
+            "concept": "net new debt",
+            "method": "computed-sum",
+            "derived": true,
+            "source": "company-facts",
+            "components": [
+              "ProceedsFromIssuanceOfSeniorLongTermDebt",
+              "RepaymentsOfLongTermDebt"
+            ]
+          },
+          {
+            "value": 1127000000,
+            "concept": "net new debt",
+            "method": "computed-sum",
+            "derived": true,
+            "source": "company-facts",
+            "components": [
+              "ProceedsFromIssuanceOfSeniorLongTermDebt",
+              "RepaymentsOfLongTermDebt"
+            ]
           },
           {
             "missing": "depends on a missing figure"
           },
           {
-            "missing": "depends on a missing figure"
+            "value": -14000000,
+            "concept": "net new debt",
+            "method": "computed-sum",
+            "derived": true,
+            "source": "company-facts",
+            "components": [
+              "ProceedsFromIssuanceOfLongTermDebt",
+              "RepaymentsOfLongTermDebt",
+              "RepaymentsOfNotesPayable"
+            ]
           },
           {
-            "missing": "depends on a missing figure"
-          },
-          {
-            "missing": "depends on a missing figure"
+            "value": 124000000,
+            "concept": "net new debt",
+            "method": "computed-sum",
+            "derived": true,
+            "source": "company-facts",
+            "components": [
+              "ProceedsFromIssuanceOfLongTermDebt",
+              "RepaymentsOfLongTermDebt",
+              "RepaymentsOfNotesPayable"
+            ]
           }
         ]
       },
