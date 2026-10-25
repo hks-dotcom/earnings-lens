@@ -1,13 +1,32 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { PageData } from "@/lib/present/buildPageData";
 import { Lens } from "@/lib/rules/dealStructure";
 import { nullsToUndefined } from "@/lib/present/sanitizeJson";
 import { TickerHeader } from "@/components/TickerHeader";
 import { FinancialsPanel, PanelTab } from "@/components/FinancialsPanel";
-import { HealthTiles } from "@/components/HealthTiles";
-import { LensBoard } from "@/components/LensBoard";
+import { VerdictCard } from "@/components/VerdictCard";
+import { HealthSection } from "@/components/HealthSection";
+import { SegmentsSection } from "@/components/SegmentsSection";
+import { StandOutList } from "@/components/StandOutList";
+import { shownFindings, standOutRows } from "@/lib/present/standOutRows";
+import { ExplainedFromFilings } from "@/components/ExplainedFromFilings";
+import { HowVerdictWorks } from "@/components/HowVerdictWorks";
+import { buildStandOut } from "@/lib/present/standOut";
+import { formatPeriodEnd } from "@/lib/present/format";
+import { LENS_NAME } from "@/lib/present/lensNames";
+import type { Seller } from "@/lib/verdict/types";
+
+/**
+ * The API's JSON as page data. Statement series use undefined for a
+ * missing cell, so their nulls are turned back into undefined; the S5
+ * verdict model uses null for missing throughout (as the engine does), so
+ * it is kept exactly as sent.
+ */
+function fromJson(data: PageData): PageData {
+  return { ...(nullsToUndefined(data) as PageData), verdict: data.verdict };
+}
 
 export default function Home() {
   const [tickerInput, setTickerInput] = useState("NVDA");
@@ -16,12 +35,6 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [tab, setTab] = useState<PanelTab>("kf");
-
-  // A finding's statement tag opens that tab and brings the panel into view.
-  const openTab = useCallback((t: PanelTab) => {
-    setTab(t);
-    document.getElementById("financials")?.scrollIntoView({ behavior: "smooth", block: "start" });
-  }, []);
 
   const load = useCallback(async (ticker: string) => {
     if (!ticker.trim()) return;
@@ -34,7 +47,7 @@ export default function Home() {
         setError(data.error ?? "Failed to load ticker.");
         setPage(null);
       } else {
-        setPage(nullsToUndefined(data) as PageData);
+        setPage(fromJson(data));
       }
     } catch {
       setError("Network error fetching ticker data.");
@@ -56,7 +69,7 @@ export default function Home() {
         if (!res.ok) {
           setError(data.error ?? "Failed to load ticker.");
         } else {
-          setPage(nullsToUndefined(data) as PageData);
+          setPage(fromJson(data));
         }
       } catch {
         if (!cancelled) setError("Network error fetching ticker data.");
@@ -71,20 +84,14 @@ export default function Home() {
     // Runs once on mount only -- the ticker input's own submit uses `load` directly.
   }, []);
 
+  const boardRef = useRef<HTMLDivElement>(null);
+  const seller = LENS_NAME[lens] as Seller;
+  const findings = page ? shownFindings(buildStandOut(page.signals, page.keyFinancials, page.health, page.flows, page.ticker)) : [];
+
   return (
     <div style={{ minHeight: "100vh", background: "var(--bg-page)" }}>
-      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "24px 16px 64px", display: "flex", flexDirection: "column", gap: 20 }}>
-        <div
-          style={{
-            background: "#F6F4EF",
-            border: "1px solid var(--border-card)",
-            borderRadius: 12,
-            padding: "24px 16px",
-            display: "flex",
-            flexDirection: "column",
-            gap: 20,
-          }}
-        >
+      <div className="page-wrap">
+        <div className="page-panel">
           <TickerHeader
             tickerInput={tickerInput}
             onTickerInputChange={setTickerInput}
@@ -102,22 +109,23 @@ export default function Home() {
           )}
 
           {page && (
-            <>
+            <div ref={boardRef} className="board">
+              {/* In the downloaded image only: the header is not in the picture, and a verdict picture with no company or period on it is what the image feature exists to prevent. */}
+              <div className="board-id">
+                {page.companyName} ({page.ticker}) · {page.header.fiscalQuarterLabel}, quarter ended {formatPeriodEnd(page.header.periodEndDate)} · {seller}
+              </div>
+              {/* The verdict board: what scripts/screenshots.mjs holds to the phone width. The statement tables below scroll sideways inside their own box, as before. */}
+              <div className="board" data-lens-board>
+                <VerdictCard page={page} seller={seller} boardRef={boardRef} />
+                <HealthSection page={page} />
+                <SegmentsSection page={page} />
+                <StandOutList rows={standOutRows(findings, page.verdict.filingItem)} />
+                <ExplainedFromFilings explained={page.explained} findings={findings} />
+              </div>
               <FinancialsPanel key={page.ticker} page={page} tab={tab} onTabChange={setTab} />
-              <HealthTiles
-                health={page.health}
-                segments={page.segments}
-                redFlags={page.lenses.Services.redFlags}
-                kf={page.keyFinancials}
-                liquidity={page.liquidity}
-              />
-              <LensBoard page={page} lensName={lens} onOpenTab={openTab} />
-            </>
+              <HowVerdictWorks />
+            </div>
           )}
-        </div>
-
-        <div style={{ fontSize: 12, color: "var(--text-tertiary)", textAlign: "center" }}>
-          Earnings Lens &mdash; a self-serve counterparty assessment from SEC EDGAR filings. Not investment advice.
         </div>
       </div>
     </div>

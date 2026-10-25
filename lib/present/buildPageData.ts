@@ -7,26 +7,10 @@ import { computeFinancialHealth, FinancialHealth } from "@/lib/metrics/health";
 import { nextFilingDue, NextFilingDue } from "@/lib/metrics/deadlines";
 import { extractSegmentRevenueForPeriod, SegmentRevenue } from "@/lib/xbrl/segments";
 import { evaluateLens, LensResult } from "@/lib/rules/evaluateLens";
+import { assessmentDateFor, companyVerdict } from "@/lib/present/verdictSource";
+import type { VerdictPage } from "@/lib/present/verdictPage";
+import type { RdStatus } from "@/lib/verdict/types";
 import { buildAnnualFigures, AnnualFigures } from "@/lib/present/annualFigures";
-import {
-  ALTMAN_CAP_RATIONALE,
-  ALTMAN_ZONES,
-  CASH_CASE_RULE,
-  CLAUDE_DAILY_CAP,
-  COSTS_VS_REVENUE_POINTS,
-  DPO_BAND_PCT,
-  GROSS_MARGIN_MOVE_PTS,
-  GROWTH_FLAT_BAND_PCT,
-  OPERATING_INCOME_FAST_MOVE_PCT,
-  OPERATING_INCOME_MOVE_PCT,
-  RUNWAY_NEUTRAL_CAP_QUARTERS,
-  RUNWAY_WEAK_BELOW_QUARTERS,
-  NON_OPERATING_SWING_PCT_OF_REVENUE,
-  PAYMENT_TERMS_BASELINE_DAYS,
-  PAYMENT_TERMS_CEILING_DAYS,
-  STATUTORY_TAX_RATE_PCT,
-  TAX_DIVERGENCE_PCT_OF_REVENUE,
-} from "@/lib/rules/declaredValues";
 import { buildExplanationTriggers } from "@/lib/rules/explanationTriggers";
 import { buildStandOut } from "@/lib/present/standOut";
 import { shownByExplainKey } from "@/lib/present/findingExplanations";
@@ -40,13 +24,7 @@ import { LiquidityDebt } from "@/lib/present/liquidityDebt";
 import { loadLiquidityDebt } from "@/lib/present/liquiditySources";
 import { newResultsAnnounced, NewResultsAnnounced } from "@/lib/present/resultsBanner";
 import { FilingEntry } from "@/lib/edgar/submissions";
-import {
-  ACQUISITIONS_PCT_OF_REVENUE,
-  BENCHMARKS_NOTE,
-  BORROWING_PCT_OF_REVENUE,
-  HEALTH_BENCHMARKS,
-  RETURNS_PCT_OF_REVENUE,
-} from "@/lib/rules/declaredValues";
+import { ACQUISITIONS_PCT_OF_REVENUE } from "@/lib/rules/declaredValues";
 
 export interface HeaderLine {
   periodEndDate: string;
@@ -67,16 +45,23 @@ export interface PageData {
   health: FinancialHealth;
   segments: SegmentRevenue | null;
   annual: AnnualFigures | null;
-  lenses: {
-    Services: LensResult;
-    SaaS: LensResult;
-  };
+  /**
+   * The S5 verdict (Earnings_Lens_Verdict_Rules_S5.md): health, both
+   * sellers' verdicts, terms, evidence and the potential application, as
+   * the page shows them. The only verdict on the page.
+   */
+  verdict: VerdictPage;
+  /** R&D as the verdict read it (rules 11 R6): the Key financials row says "Not separately disclosed" when it is not filed quarterly. */
+  rdStatus: RdStatus;
+  /**
+   * The filed-figure signals behind "What stands out" and the Claude
+   * layer's triggers: red flags, cash position, spending cuts, payables.
+   * Lens-independent; never a verdict.
+   */
+  signals: LensResult;
   /**
    * The flagged items, explained from filed text. Shared by both lenses:
-   * the triggers are the same figures and the same filings either way, so
-   * explaining them twice would be two calls for one answer. The one
-   * lens-specific trigger (retrenchment sets the SaaS lens's opportunity to
-   * low, but fires for both) is already the same fact.
+   * the triggers are the same figures and the same filings either way.
    */
   explained: ExplainedItem[];
   claudeDiagnostics: ExplainDiagnostics;
@@ -84,31 +69,6 @@ export interface PageData {
   flows: FlowFacts;
   /** The liquidity vs debt strip under the health tiles. Display only. */
   liquidity: LiquidityDebt;
-  footer: {
-    zSafeAbove: number;
-    zDistressBelow: number;
-    altmanCapRationale: string;
-    growthBandPct: number;
-    dpoBandPct: number;
-    paymentBaselineDays: number;
-    paymentCeilingDays: number;
-    runwayNeutralCapQuarters: number;
-    runwayWeakBelowQuarters: number;
-    cashCaseRule: string;
-    costsVsRevenuePoints: number;
-    operatingIncomeMovePct: number;
-    operatingIncomeFastMovePct: number;
-    grossMarginMovePts: number;
-    nonOperatingSwingPct: number;
-    taxDivergencePct: number;
-    statutoryTaxRatePct: number;
-    acquisitionsPct: number;
-    borrowingPct: number;
-    returnsPct: number;
-    benchmarks: typeof HEALTH_BENCHMARKS;
-    benchmarksNote: string;
-    claudeDailyCap: number;
-  };
 }
 
 export class TickerNotFoundError extends Error {}
@@ -188,8 +148,10 @@ export async function buildPageData(rawTicker: string, now: Date = new Date()): 
 
   const annual = buildAnnualFigures(facts, kf, periodic);
 
+  // The filed-figure signals for "What stands out" and the explanation
+  // triggers. They read the same inputs on either lens; the S5 verdict
+  // below is the only verdict the page shows.
   const services = evaluateLens("Services", kf, health, subs, now);
-  const saas = evaluateLens("SaaS", kf, health, subs, now);
 
   // The display-only cash-flow findings read the Cash flow tab's own rows,
   // built here from company facts. The tab's filings are read later, by
@@ -214,6 +176,16 @@ export async function buildPageData(rawTicker: string, now: Date = new Date()): 
   // The liquidity vs debt strip reads each period from a filing's own
   // balance sheet, not from the Key financials rows.
   const liquidity = await loadLiquidityDebt(kf, loadExtract);
+
+  // The S5 verdict, as of today, from the same submissions and facts.
+  const verdict = await companyVerdict({
+    cik: record.cik,
+    ticker: record.ticker,
+    submissions: subs,
+    facts,
+    assessmentDate: assessmentDateFor(now),
+    loadExtract,
+  });
   const revenueNow = kf.revenue.values[0]?.value;
   const acquisitionsFire =
     flows.acquisitions !== undefined &&
@@ -260,35 +232,12 @@ export async function buildPageData(rawTicker: string, now: Date = new Date()): 
     health,
     segments,
     annual,
-    lenses: { Services: services, SaaS: saas },
+    verdict: verdict.page,
+    rdStatus: verdict.result.inputs.rdStatus,
+    signals: services,
     explained,
     claudeDiagnostics,
     flows,
     liquidity,
-    footer: {
-      zSafeAbove: ALTMAN_ZONES.safeAbove,
-      zDistressBelow: ALTMAN_ZONES.distressBelow,
-      altmanCapRationale: ALTMAN_CAP_RATIONALE,
-      growthBandPct: GROWTH_FLAT_BAND_PCT,
-      dpoBandPct: DPO_BAND_PCT,
-      paymentBaselineDays: PAYMENT_TERMS_BASELINE_DAYS,
-      paymentCeilingDays: PAYMENT_TERMS_CEILING_DAYS,
-      runwayNeutralCapQuarters: RUNWAY_NEUTRAL_CAP_QUARTERS,
-      runwayWeakBelowQuarters: RUNWAY_WEAK_BELOW_QUARTERS,
-      cashCaseRule: CASH_CASE_RULE,
-      costsVsRevenuePoints: COSTS_VS_REVENUE_POINTS,
-      operatingIncomeMovePct: OPERATING_INCOME_MOVE_PCT,
-      operatingIncomeFastMovePct: OPERATING_INCOME_FAST_MOVE_PCT,
-      grossMarginMovePts: GROSS_MARGIN_MOVE_PTS,
-      nonOperatingSwingPct: NON_OPERATING_SWING_PCT_OF_REVENUE,
-      taxDivergencePct: TAX_DIVERGENCE_PCT_OF_REVENUE,
-      statutoryTaxRatePct: STATUTORY_TAX_RATE_PCT,
-      acquisitionsPct: ACQUISITIONS_PCT_OF_REVENUE,
-      borrowingPct: BORROWING_PCT_OF_REVENUE,
-      returnsPct: RETURNS_PCT_OF_REVENUE,
-      benchmarks: HEALTH_BENCHMARKS,
-      benchmarksNote: BENCHMARKS_NOTE,
-      claudeDailyCap: CLAUDE_DAILY_CAP,
-    },
   };
 }

@@ -1,0 +1,554 @@
+<title>Earnings Lens Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&amp;family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#e9e6df}
+a{color:#3b4ba8}a:hover{color:#1f2a6b}
+ul{margin:0;padding-left:18px}
+li{margin:3px 0}
+@media (max-width: 640px){
+  .hdr-kicker,.hdr-sub,.hdr-search{display:none !important}
+  .hdr-name{font-size:22px !important}
+  .hdr{padding:10px 12px !important;gap:8px !important}
+  .vword{font-size:52px !important}
+}
+</style>
+<style>html,body{background:#e9e6df;color:#1c1b19}</style>
+<div id="app"></div>
+<template id="tpl">
+<div style="min-height: 100vh; background: #e9e6df; font-family: 'IBM Plex Sans', system-ui, sans-serif; color: #1c1b19; padding: 24px 16px 48px; box-sizing: border-box;">
+<sc-if value="{{anyTip}}" hint-placeholder-val="{{ false }}">
+<div onClick="{{closeTip}}" aria-hidden="true" style="position: fixed; inset: 0; z-index: 14; background: transparent;"></div>
+</sc-if>
+<div style="max-width: 1280px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px;">
+
+<div style="background: #eef1f6; color: #3f4a5c; border-radius: 8px; padding: 8px 14px; font-size: 13px;">Preview of the production page · AMZN Q2 FY26 · figures as filed · verdicts hand-applied for this preview</div>
+
+<div style="background: #f6f4ef; border: 1px solid #d6d2c8; border-radius: 12px; padding: 24px 16px; display: flex; flex-direction: column; gap: 20px;">
+
+<header class="hdr" style="position: sticky; top: 0; z-index: 20; background: #f6f4ef; margin: -24px -16px 0; padding: 16px 16px 14px; border-bottom: 1px solid #d6d2c8; border-radius: 12px 12px 0 0; box-shadow: 0 6px 12px -10px rgba(28,27,25,0.35); display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px;">
+<div style="display: flex; flex-direction: column; gap: 4px;">
+<div class="hdr-kicker" style="font-size: 12px; letter-spacing: 0.08em; color: #55524c; font-weight: 600;">EARNINGS LENS</div>
+<div class="hdr-name" style="font-family: Fraunces, Georgia, serif; font-size: 34px; font-weight: 600;">AMAZON COM INC</div>
+<div class="hdr-sub" style="font-size: 14px; color: #55524c;">Financials for the quarter ended <strong style="color: #1c1b19;">Jun 30, 2026</strong> (Q2 FY26) · Next 10-Q due by <strong style="color: #1c1b19;">Nov 9, 2026</strong></div>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 10px;">
+<div class="hdr-search" style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 10px;">
+<div style="display: flex; flex-direction: column; gap: 4px;">
+<label for="tk" style="font-size: 12px; color: #55524c;">Ticker or company</label>
+<input id="tk" value="AMZN" readonly style="width: 200px; height: 44px; box-sizing: border-box; padding: 0 12px; border: 1px solid #b8b3a8; border-radius: 8px; background: #ffffff; font-size: 15px;">
+</div>
+<button type="button" style="height: 44px; padding: 0 18px; border-radius: 8px; border: none; background: #1c1b19; color: #ffffff; font-weight: 600; font-size: 14px;">Go</button>
+</div>
+<div style="display: flex; gap: 4px; background: #e9e6df; padding: 4px; border-radius: 10px;">
+<sc-for list="{{tabs}}" as="t" hint-placeholder-count="2">
+<button type="button" onClick="{{t.pick}}" style="height: 40px; padding: 0 14px; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600; background: {{t.bg}}; color: {{t.fg}};">{{t.label}}</button>
+</sc-for>
+</div>
+</div>
+</header>
+
+<section style="background: #ffffff; border: 1px solid #d6d2c8; border-top: 5px solid {{L.color}}; border-radius: 14px; box-shadow: 0 10px 30px -18px rgba(28,27,25,0.35); display: flex; flex-direction: column;">
+<div style="padding: 26px 30px 22px; display: flex; flex-direction: column; gap: 18px;">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;">
+<span style="font-size: 12px; letter-spacing: 0.1em; font-weight: 600; color: {{L.color}};">{{L.kicker}}</span>
+<span style="font-size: 12px; color: #55524c;">Evidence: <strong style="color: #1c1b19;">{{L.evidence}}</strong></span>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 18px 40px;">
+<div style="display: flex; flex-direction: column; gap: 2px; flex: 0 0 auto;">
+<span style="font-size: 13px; color: #55524c;">Verdict</span>
+<span class="vword" style="font-family: Fraunces, Georgia, serif; font-size: 72px; line-height: 1; font-weight: 600; color: {{L.vColor}};">{{L.verdict}}</span>
+</div>
+<div style="flex: 1 1 420px; min-width: 0; padding-bottom: 6px;">
+<div style="display: flex; gap: 3px; width: 100%;">
+<sc-for list="{{vtrack}}" as="s" hint-placeholder-count="4">
+<div style="flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 6px;">
+<div style="height: 12px; border-radius: {{s.r}}; background: {{s.bar}};"></div>
+<span style="font-size: 13px; font-weight: {{s.fw}}; color: {{s.fg}}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{s.mark}}{{s.label}}</span>
+</div>
+</sc-for>
+</div>
+</div>
+</div>
+</div>
+<sc-if value="{{L.hasApp}}" hint-placeholder-val="{{ false }}">
+<div style="background: #f2f3fa; border-top: 1px solid #e3e6f3; padding: 22px 30px 20px; display: flex; flex-wrap: wrap; gap: 18px 48px; align-items: flex-start;">
+<div style="flex: 0 1 300px; min-width: 220px; display: flex; flex-direction: column; gap: 6px;">
+<span style="font-size: 12px; letter-spacing: 0.1em; font-weight: 600; color: #3b4ba8;">POTENTIAL APPLICATION</span>
+<span style="font-family: Fraunces, Georgia, serif; font-size: 26px; line-height: 1.15; font-weight: 600;">{{L.app}}</span>
+</div>
+<div style="flex: 1 1 460px; min-width: 0; display: flex; flex-direction: column; gap: 10px;">
+<span style="font-size: 12px; letter-spacing: 0.1em; font-weight: 600; color: #3b4ba8;">LIKELY ROUTE</span>
+<div style="display: flex; gap: 4px; width: 100%;">
+<sc-for list="{{routeTrack}}" as="s" hint-placeholder-count="3">
+<div style="flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 6px;">
+<div style="height: 8px; border-radius: {{s.r}}; background: {{s.bar}};"></div>
+<span style="font-size: 14px; font-weight: {{s.fw}}; color: {{s.fg}};">{{s.mark}}{{s.label}}</span>
+</div>
+</sc-for>
+</div>
+</div>
+<div style="flex: 1 1 100%; font-size: 12px; color: #55524c;">Rough guide from the industry code · {{L.appSource}} · Commercial discovery, not part of the verdict</div>
+</div>
+</sc-if>
+<div style="padding: 22px 30px 24px; border-top: 1px solid #ece9e2; display: flex; flex-direction: column; gap: 16px;">
+<div style="display: flex; flex-wrap: wrap; gap: 24px;">
+<div style="flex: 1 1 360px; min-width: 0; display: flex; flex-direction: column; gap: 14px;">
+<div style="display: flex; flex-direction: column; gap: 6px;">
+<div style="font-size: 12px; letter-spacing: 0.06em; font-weight: 600; color: #55524c;">WHY</div>
+<ul style="font-size: 14px; line-height: 1.5;">
+<sc-for list="{{L.why}}" as="w" hint-placeholder-count="3"><li>{{w.t}}</li></sc-for>
+</ul>
+</div>
+</div>
+
+<div style="flex: 1 1 360px; min-width: 0; display: flex; flex-direction: column; gap: 10px; border: 1px solid #ece9e2; border-radius: 10px; padding: 14px;">
+<div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+<span style="font-size: 12px; letter-spacing: 0.06em; font-weight: 600; color: #55524c;">TERMS</span>
+<span style="font-size: 13px; font-family: 'IBM Plex Mono', monospace;">Net 30 ✓ · Net 45 on request · Net 60 ✕</span>
+</div>
+<sc-for list="{{L.terms}}" as="r" hint-placeholder-count="3">
+<div style="display: grid; grid-template-columns: 104px minmax(0, 1fr); gap: 10px; font-size: 14px; border-top: 1px solid #f1efea; padding-top: 8px;">
+<span style="font-weight: 600; color: {{L.color}};">{{r.k}}</span>
+<ul style="padding-left: 16px;"><sc-for list="{{r.v}}" as="b" hint-placeholder-count="2"><li>{{b.t}}</li></sc-for></ul>
+</div>
+</sc-for>
+</div>
+</div>
+
+
+<div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between;">
+<div style="display: flex; flex-wrap: wrap; gap: 10px;">
+<a href="#" style="display: inline-flex; align-items: center; height: 44px; padding: 0 16px; border: 1px solid {{L.color}}; border-radius: 8px; color: {{L.color}}; font-weight: 600; font-size: 14px; text-decoration: none;">Copy brief</a>
+<a href="#" style="display: inline-flex; align-items: center; height: 44px; padding: 0 16px; border: 1px solid {{L.color}}; border-radius: 8px; color: {{L.color}}; font-weight: 600; font-size: 14px; text-decoration: none;">Download image</a>
+</div>
+</div>
+</div>
+</section>
+
+<section id="health" style="scroll-margin-top: 150px; background: #ffffff; border: 1px solid #d6d2c8; border-radius: 12px; padding: 18px; display: flex; flex-direction: column; gap: 14px;">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px;">
+<span style="font-size: 12px; letter-spacing: 0.08em; color: #55524c; font-weight: 600;">FINANCIAL HEALTH</span>
+<div role="img" aria-label="Health: Resilient, on a scale of Resilient, Watch, Fragile, Critical" style="display: flex; gap: 3px; width: 360px; max-width: 100%;">
+<sc-for list="{{scale}}" as="s" hint-placeholder-count="4">
+<div style="flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 4px;">
+<div style="height: 8px; border-radius: {{s.r}}; background: {{s.bar}};"></div>
+<span style="font-size: 13px; font-weight: {{s.fw}}; color: {{s.fg}};">{{s.mark}}{{s.label}}</span>
+</div>
+</sc-for>
+</div>
+<span style="font-size: 13px; color: #55524c;">Same for both entities · No warning thresholds triggered</span>
+</div>
+<ul style="font-size: 14px; line-height: 1.5;">
+<li>Strong operating cash flow: $161.4B over the last 12 months, up 33%</li>
+<li>Capital spending ran above operating cash flow this quarter ($54.2B vs $45.4B): heavy investment, not cash burn</li>
+<li>Moved from net cash ($37.3B) to net debt ($9.6B) in a year: worth watching, far below the warning level</li>
+</ul>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px;">
+<sc-for list="{{health}}" as="h" hint-placeholder-count="5">
+<div style="position: relative; border: 1px solid #ece9e2; border-radius: 10px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px;">
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+<span style="font-size: 13px; color: #55524c;">{{h.k}}</span>
+<button type="button" onClick="{{h.toggle}}" aria-label="How this is calculated" aria-expanded="{{h.tipOn}}" style="width: 22px; height: 22px; flex: none; border-radius: 11px; border: 1px solid #b8b3a8; background: {{h.ibg}}; color: {{h.ifg}}; font-family: Georgia, serif; font-style: italic; font-size: 13px; line-height: 1; cursor: pointer; padding: 0;">i</button>
+</div>
+<div style="display: flex; gap: 2px; width: 100%; max-width: 200px;">
+<sc-for list="{{h.opts}}" as="o" hint-placeholder-count="2">
+<div style="flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 3px;">
+<div style="height: 5px; border-radius: {{o.r}}; background: {{o.bar}};"></div>
+<span style="font-size: 11px; font-weight: {{o.fw}}; color: {{o.fg}};">{{o.mark}}{{o.label}}</span>
+</div>
+</sc-for>
+</div>
+<div style="font-size: 22px; font-weight: 600;">{{h.value}}</div>
+<ul style="font-size: 13px; color: #3d3b37; line-height: 1.45;">
+<sc-for list="{{h.pts}}" as="p" hint-placeholder-count="2"><li>{{p.t}}</li></sc-for>
+</ul>
+<sc-if value="{{h.tipOn}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; top: 40px; left: {{h.pl}}; right: {{h.pr}}; width: 320px; max-width: 86vw; z-index: 15; background: #1c1b19; color: #f6f4ef; border-radius: 8px; padding: 12px 14px; font-size: 12px; line-height: 1.5; box-shadow: 0 10px 24px -8px rgba(28,27,25,0.5); display: flex; flex-direction: column; gap: 6px;">
+<div><strong style="color: #ffffff;">Formula</strong><ul style="margin: 2px 0 0; padding-left: 16px;"><sc-for list="{{h.formulaL}}" as="b" hint-placeholder-count="2"><li>{{b.t}}</li></sc-for></ul></div>
+<div><strong style="color: #ffffff;">This quarter</strong><ul style="margin: 2px 0 0; padding-left: 16px;"><sc-for list="{{h.calcL}}" as="b" hint-placeholder-count="2"><li>{{b.t}}</li></sc-for></ul></div>
+<div><strong style="color: #ffffff;">Warning when</strong><ul style="margin: 2px 0 0; padding-left: 16px;"><sc-for list="{{h.warnL}}" as="b" hint-placeholder-count="2"><li>{{b.t}}</li></sc-for></ul></div>
+</div>
+</sc-if>
+</div>
+</sc-for>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 8px; border-top: 1px solid #ece9e2; padding-top: 12px;">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; font-size: 13px;">
+<span style="color: #55524c;">Liquidity vs debt · Q2 FY26 · Jun 30, 2026</span>
+<span><strong>Net Debt $9.6B</strong> · Net Cash $37.3B a year ago</span>
+</div>
+<div style="display: grid; grid-template-columns: minmax(120px, 220px) minmax(0, 1fr) 72px; gap: 8px 12px; align-items: center; font-size: 13px;">
+<span>Cash and short-term investments</span><div style="height: 12px; background: #ece9e2; border-radius: 6px;"><div style="width: 92.8%; height: 12px; background: #1f6f5c; border-radius: 6px;"></div></div><span style="font-family: 'IBM Plex Mono', monospace; text-align: right;">$123.0B</span>
+<span>Debt</span><div style="height: 12px; background: #ece9e2; border-radius: 6px;"><div style="width: 100%; height: 12px; background: #5b6770; border-radius: 6px;"></div></div><span style="font-family: 'IBM Plex Mono', monospace; text-align: right;">$132.5B</span>
+</div>
+<ul style="font-size: 12px; color: #6b675f;">
+<li>Cash and cash equivalents $78.2B + marketable securities $44.8B</li>
+<li>Net debt $9.56B before rounding</li>
+</ul>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 8px; border-top: 1px solid #ece9e2; padding-top: 12px;">
+<div style="font-size: 12px; letter-spacing: 0.06em; font-weight: 600; color: #55524c;">OTHER RATIOS</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0;">
+<sc-for list="{{kpis}}" as="k" hint-placeholder-count="5">
+<div style="position: relative; padding: 8px 12px; border-left: 1px solid #ece9e2; display: flex; flex-direction: column; gap: 2px;">
+<div style="display: flex; align-items: center; gap: 6px;">
+<span style="font-size: 13px; color: #55524c;">{{k.k}}</span>
+<button type="button" onClick="{{k.toggle}}" aria-label="How this is calculated" aria-expanded="{{k.tipOn}}" style="width: 20px; height: 20px; flex: none; border-radius: 10px; border: 1px solid #b8b3a8; background: {{k.ibg}}; color: {{k.ifg}}; font-family: Georgia, serif; font-style: italic; font-size: 12px; line-height: 1; cursor: pointer; padding: 0;">i</button>
+</div>
+<span style="font-size: 20px; font-weight: 600;">{{k.v}}</span>
+<span style="font-size: 12px; color: #6b675f;">{{k.b}}</span>
+<sc-if value="{{k.tipOn}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; top: 34px; left: {{k.pl}}; right: {{k.pr}}; width: 300px; max-width: 86vw; z-index: 15; background: #1c1b19; color: #f6f4ef; border-radius: 8px; padding: 12px 14px; font-size: 12px; line-height: 1.5; box-shadow: 0 10px 24px -8px rgba(28,27,25,0.5); display: flex; flex-direction: column; gap: 6px;">
+<div><strong style="color: #ffffff;">Formula</strong><ul style="margin: 2px 0 0; padding-left: 16px;"><sc-for list="{{k.formulaL}}" as="b" hint-placeholder-count="2"><li>{{b.t}}</li></sc-for></ul></div>
+<div><strong style="color: #ffffff;">What it means</strong><ul style="margin: 2px 0 0; padding-left: 16px;"><sc-for list="{{k.explainL}}" as="b" hint-placeholder-count="2"><li>{{b.t}}</li></sc-for></ul></div>
+<div style="color: #c9c4b8;">{{k.foot}}</div>
+</div>
+</sc-if>
+</div>
+</sc-for>
+</div>
+</div>
+</section>
+
+<section style="background: #ffffff; border: 1px solid #d6d2c8; border-radius: 12px; padding: 18px; display: flex; flex-direction: column; gap: 10px;">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; align-items: baseline;">
+<span style="font-size: 12px; letter-spacing: 0.08em; color: #55524c; font-weight: 600;">OPERATING SEGMENTS</span>
+<span style="font-size: 13px; color: #55524c;">Revenue · Q2 FY26 · as filed</span>
+</div>
+<div role="img" aria-label="Revenue split: North America 57.9%, International 21.0%, Amazon Web Services 21.1%" style="display: flex; gap: 2px; height: 22px;">
+<sc-for list="{{segs}}" as="g" hint-placeholder-count="3">
+<div style="width: {{g.w}}; height: 22px; background: {{g.c}}; border-radius: {{g.r}};"></div>
+</sc-for>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 8px 28px; font-size: 13px;">
+<sc-for list="{{segs}}" as="g" hint-placeholder-count="3">
+<div style="display: flex; align-items: center; gap: 8px;">
+<span aria-hidden="true" style="width: 12px; height: 12px; border-radius: 3px; background: {{g.c}};"></span>
+<span>{{g.k}}</span>
+<span style="font-family: 'IBM Plex Mono', monospace;">{{g.v}}</span>
+<strong style="font-family: 'IBM Plex Mono', monospace;">{{g.p}}</strong>
+</div>
+</sc-for>
+<span style="color: #6b675f;">Total revenue $200,606M</span>
+</div>
+</section>
+
+<section style="background: #ffffff; border: 1px solid #d6d2c8; border-radius: 12px; padding: 18px; display: flex; flex-direction: column; gap: 12px;">
+<div style="font-size: 12px; letter-spacing: 0.08em; color: #55524c; font-weight: 600;">WHAT STANDS OUT</div>
+<div style="display: flex; flex-wrap: wrap; gap: 6px; align-items: center;">
+<span style="font-size: 13px; padding: 4px 12px; border-radius: 14px; background: #e8f2ee; color: #1f6f5c; font-weight: 600;">All 7</span><span style="font-size: 13px; padding: 4px 12px; border-radius: 14px; border: 1px solid #d6d2c8;">P&amp;L 4</span><span style="font-size: 13px; padding: 4px 12px; border-radius: 14px; border: 1px solid #d6d2c8;">Balance sheet 2</span><span style="font-size: 13px; padding: 4px 12px; border-radius: 14px; border: 1px solid #d6d2c8;">Cash flow 3</span>
+<span style="font-size: 12px; color: #6b675f;">A finding can appear under more than one statement</span>
+</div>
+<sc-for list="{{stand}}" as="f" hint-placeholder-count="7">
+<div style="display: grid; grid-template-columns: minmax(120px, 180px) minmax(0, 1fr); gap: 12px; border-top: 1px solid #ece9e2; padding-top: 10px;">
+<span style="font-size: 12px; font-weight: 600; letter-spacing: 0.04em; color: {{f.tone}};">{{f.k}}</span>
+<div style="display: flex; flex-direction: column; gap: 4px; font-size: 14px;">
+<strong>{{f.head}}</strong>
+<div style="font-size: 13px; color: #55524c; font-family: 'IBM Plex Mono', monospace;">{{f.detail}}</div>
+</div>
+</div>
+</sc-for>
+</section>
+
+<section style="background: #ffffff; border: 1px solid #d6d2c8; border-radius: 12px; padding: 18px; display: flex; flex-direction: column; gap: 12px;">
+<div><strong>AMAZON COM INC (AMZN)</strong> <span style="font-size: 13px; color: #6b675f;">Fiscal year Jan–Dec · latest quarter Q2 FY26, ended Jun 30, 2026</span></div>
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; border-bottom: 1px solid #ece9e2;">
+<div style="display: flex; flex-wrap: wrap; gap: 4px 20px; font-size: 14px;">
+<span style="font-weight: 600; border-bottom: 2px solid #1c1b19; padding-bottom: 8px;">Key financials</span><span style="color: #55524c;">Income statement</span><span style="color: #55524c;">Balance sheet</span><span style="color: #55524c;">Cash flow</span>
+</div>
+<div style="display: flex; gap: 4px; font-size: 13px; padding-bottom: 6px;"><span style="padding: 2px 10px; border-radius: 6px; background: #e8f2ee; color: #1f6f5c; font-weight: 600;">Quarterly</span><span style="padding: 2px 10px; border: 1px solid #d6d2c8; border-radius: 6px;">Annual</span></div>
+</div>
+<div style="overflow-x: auto;">
+<table style="width: 100%; min-width: 720px; border-collapse: collapse; font-size: 14px;">
+<thead>
+<tr style="font-size: 12px; color: #55524c; text-align: right;">
+<th style="text-align: left; padding: 8px 6px; font-weight: 500;">$ millions</th>
+<th style="padding: 8px 6px; font-weight: 600; color: #1c1b19;">Q2 FY26</th>
+<th style="padding: 8px 6px; font-weight: 500; background: #eef1f6;">Q1 FY26</th>
+<th style="padding: 8px 6px; font-weight: 500; background: #eef1f6;">Change</th>
+<th style="padding: 8px 6px; font-weight: 500; background: #f4efe6;">Q2 FY25</th>
+<th style="padding: 8px 6px; font-weight: 500; background: #f4efe6;">Change</th>
+</tr>
+</thead>
+<tbody>
+<sc-for list="{{fin}}" as="r" hint-placeholder-count="9">
+<tr style="border-top: 1px solid #ece9e2; text-align: right; font-family: 'IBM Plex Mono', monospace;">
+<td style="text-align: left; padding: 9px 6px; font-family: 'IBM Plex Sans', sans-serif; font-weight: 500;">{{r.k}}</td>
+<td style="padding: 9px 6px; font-weight: 600;">{{r.a}}</td>
+<td style="padding: 9px 6px; background: #f7f8fb;">{{r.b}}</td>
+<td style="padding: 9px 6px; background: #f7f8fb;">{{r.c}}</td>
+<td style="padding: 9px 6px; background: #faf7f1;">{{r.d}}</td>
+<td style="padding: 9px 6px; background: #faf7f1;">{{r.e}}</td>
+</tr>
+</sc-for>
+</tbody>
+</table>
+</div>
+<ul style="font-size: 12px; color: #6b675f;">
+<li>† Derived from filed lines</li>
+<li>Free cash flow (Earnings Lens basis) = operating cash flow − purchases of property and equipment; may differ from the company's own figure</li>
+<li>Gross margin excludes costs Amazon reports outside cost of sales (fulfillment, technology and infrastructure); compare on operating margin</li>
+<li>Net income includes a non-operating gain (see One-off item); operating income is the better guide to the trend</li>
+<li>5-quarter trend column unchanged (omitted from this mock)</li>
+</ul>
+</section>
+
+<section style="border-top: 1px solid #d6d2c8; padding-top: 14px; display: flex; flex-direction: column; gap: 8px; font-size: 13px; color: #3d3b37;">
+<strong>How the verdict works</strong>
+<ul style="line-height: 1.55;">
+<li>Financial health, the same for both entities, from five areas: cash generation · near-term liquidity · operating performance · funding and leverage · filing status</li>
+<li>Resilient = no warning · Watch = warnings in one area · Fragile = severe cash burn or warnings in two areas · Critical = bankruptcy, debt-acceleration or non-reliance filing in 12 months</li>
+<li>Funding and leverage warns when net debt is above 4× a year's operating cash flow, or above 10% of a year's sales while operating cash flow is 2% of sales or less, or rises sharply while operating cash flow falls</li>
+<li>CoreThread adds: R&amp;D up or down 5%+ for two quarters, restructuring filings, sales and margins falling together</li>
+<li>NexCore adds: cutting back across the business (sales and margins falling together, plus a restructuring or a cash warning)</li>
+<li>Potential application (NexCore) is a sales prompt from the industry code and filed lines; it never changes the verdict</li>
+<li>Net 30 baseline · Net 45 on request, only when health is Resilient with no caution · Net 60 never</li>
+<li>A favourable verdict = financially reasonable on these terms, not proof they need what we sell</li>
+<li>Source: SEC EDGAR filings (XBRL) · nothing estimated · missing stays missing · not investment advice</li>
+</ul>
+</section>
+
+</div>
+</div>
+</div>
+</template>
+<script>
+class DCLogic {
+  constructor(props) { this.props = props || {}; this.state = {}; }
+  setState(patch) { Object.assign(this.state, patch); render(); }
+}
+
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { lens: 'CoreThread', tip: null };
+  }
+  renderVals() {
+    var GOOD = { bg: '#e8f2ee', fg: '#1f6f5c', icon: '✓' };
+    var UNK = { bg: '#f1efea', fg: '#55524c', icon: '–' };
+    function chk(s, k, v) { return { k: k, v: v, bg: s.bg, fg: s.fg, icon: s.icon }; }
+    function L(arr) { return arr.map(function (t) { return { t: t }; }); }
+    var lenses = {
+      CoreThread: {
+        name: 'CoreThread', kicker: 'WHAT THIS MEANS FOR CORETHREAD', color: '#1f6f5c', tint: '#e8f2ee',
+        verdict: 'Pursue', vColor: '#1f6f5c', offer: 'Offer Net 30 · Net 45 on request',
+        hasApp: false, app: '', appSource: '',
+        checks: [
+          chk(GOOD, 'Financial health', 'Resilient'),
+          Object.assign(chk(UNK, 'Engineering spend (R&D)', 'Not separately disclosed'), { tipId: 'ct-rd', rule: 'Expanding when R&D is up 5% or more on the same quarter a year ago, two quarters running. Caution when it is down 5% or more two quarters running, or there is a restructuring filing (8-K 2.05) in the last 12 months, or sales and operating margin are falling together.', calc: 'Amazon does not report R&D as a separate line in its filings, so the direction cannot be read. This is why CoreThread evidence is Limited.' })
+        ],
+        why: L([
+          'Strong operating cash generation supports its capacity to fund engineering work, despite heavy capital investment',
+          'R&D is not reported separately, so the direction of product-development spend can’t be read',
+          'Supports pursuing engineering work; confirm the programme is funded before committing a team'
+        ]),
+        terms: [
+          { k: 'Milestone', v: L(['Bill at each accepted milestone', 'Written acceptance criteria and review period']) },
+          { k: 'T&M', v: L(['Billed monthly in arrears', 'Timesheets approved monthly']) },
+          { k: 'Support', v: L(['Billed in advance', 'Defined scope and service period']) }
+        ],
+        gtm: [
+          { h: 'Before committing engineers', items: L(['Is the programme funded, and who owns the budget?', 'New product (Milestone) or work on a shipped product (T&M)?', 'Team size, length and how milestones are accepted']) }
+        ],
+        evidence: 'Limited · R&D not separately disclosed'
+      },
+      NexCore: {
+        name: 'NexCore', kicker: 'WHAT THIS MEANS FOR NEXCORE', color: '#3b4ba8', tint: '#eceef8',
+        verdict: 'Pursue', vColor: '#1f6f5c', offer: 'Offer Net 30 · Net 45 on request',
+        hasApp: true, app: 'Retail and logistics operations', route: 'Operator = deploys at its own sites', appSource: 'Industry-based · SIC 5961',
+        checks: [
+          chk(GOOD, 'Financial health', 'Resilient'),
+          Object.assign(chk(GOOD, 'Cutting back across the business', 'No'), { tipId: 'nc-cut', rule: 'Yes only when sales fall 15% or more AND operating margin falls 3 points or more against the same quarter a year ago, together with either a restructuring filing (8-K 2.05) in the last 12 months or a cash-generation warning.', calc: 'Sales +19.6% · operating margin +2.3 points · restructuring filings in 12 months: none · cash-generation warnings: none.' })
+        ],
+        why: L([
+          'Cash generation and operating profit support recurring software commitments',
+          'No sign of company-wide cutting back: sales up 19.6%, margins improving',
+          'Demand for NexCore’s models is not established; sales must find the use case'
+        ]),
+        terms: [
+          { k: 'Subscription', v: L(['Monthly, quarterly or annual in advance', 'Service starts on the agreed date']) },
+          { k: 'Usage', v: L(['Metered and billed monthly', 'Usage alerts enabled']) },
+          { k: 'Onboarding', v: L(['Fee invoiced at signing']) }
+        ],
+        gtm: [
+          { h: 'Potential routes', items: L(['Operational deployment: vision, sensing or tracking in retail and logistics operations']) },
+          { h: 'Sales to confirm', items: L(['Which use case, and which device or hardware runs the model?', 'Who signs, and who owns the budget?', 'How many sites or devices?', 'Subscription, usage or a separate licence?']) }
+        ],
+        evidence: 'Adequate'
+      }
+    };
+    var self = this;
+    var lens = this.state.lens;
+    var tabs = [['CoreThread', 'Services · CoreThread', '#1f6f5c'], ['NexCore', 'SaaS · NexCore', '#3b4ba8']].map(function (x) {
+      var on = x[0] === lens;
+      return { label: x[1], bg: on ? x[2] : 'transparent', fg: on ? '#ffffff' : '#55524c', pick: function () { self.setState({ lens: x[0] }); } };
+    });
+    var tip = this.state.tip;
+    function bul(t) { return String(t || '').split(/ \u00b7 |\. (?=[A-Z$\u2212])/).map(function (x) { return { t: x.replace(/\.$/, '') }; }).filter(function (x) { return x.t; }); }
+    function withTip(item, id, side) {
+      ['formula', 'calc', 'warn', 'explain'].forEach(function (f) { if (item[f]) item[f + 'L'] = bul(item[f]); });
+      var on = tip === id;
+      item.tipOn = on;
+      item.pl = side === 'left' ? '-1px' : 'auto';
+      item.pr = side === 'right' ? '-1px' : 'auto';
+      item.ibg = on ? '#1c1b19' : '#ffffff';
+      item.ifg = on ? '#ffffff' : '#55524c';
+      item.toggle = function () { self.setState({ tip: on ? null : id }); };
+      return item;
+    }
+    // Severity tones: full colour when it is the current reading, faint tint otherwise
+    var TONE = {
+      Resilient: ['#1f6f5c', '#d3e4dd'], Clear: ['#1f6f5c', '#d3e4dd'],
+      Watch: ['#a86a00', '#efe0c2'], Warning: ['#a86a00', '#efe0c2'],
+      Fragile: ['#b8461b', '#f0d5c8'],
+      Critical: ['#9b1c1c', '#ecd0d0'], Severe: ['#9b1c1c', '#ecd0d0']
+    };
+    function track(list, pick) {
+      var n = list.length;
+      return list.map(function (x, i) {
+        var on = x === pick;
+        var r = n === 1 ? '4px' : i === 0 ? '4px 0 0 4px' : i === n - 1 ? '0 4px 4px 0' : '0';
+        return { label: x, mark: on ? '● ' : '', r: r, bar: on ? TONE[x][0] : TONE[x][1], fw: on ? 700 : 400, fg: on ? TONE[x][0] : '#8a867d' };
+      });
+    }
+    function opts(list, pick) { return track(list, pick); }
+    var CLEAR = null;
+    var scale = track(['Resilient', 'Watch', 'Fragile', 'Critical'], 'Resilient');
+    var routeTrack = ['Partner', 'Device builder', 'Site operator'].map(function (x, i) {
+      var on = x === 'Site operator';
+      var r = i === 0 ? '4px 0 0 4px' : i === 2 ? '0 4px 4px 0' : '0';
+      return { label: x, mark: on ? '● ' : '', r: r, bar: on ? '#3b4ba8' : '#d9dcef', fw: on ? 700 : 400, fg: on ? '#3b4ba8' : '#8a867d' };
+    });
+    var health = [
+      withTip({ k: 'Cash flow from operations', value: '$161.4B', opts: opts(['Clear', 'Warning', 'Severe'], 'Clear', CLEAR),
+        pts: L(['Last 12 months, up 33% on the prior 12 months', 'Free cash flow −$11.6B: capital spending above operating cash']),
+        formula: 'Net cash from operating activities, last 4 quarters added up. Free cash flow (Earnings Lens basis) = operating cash flow − purchases of property and equipment.',
+        calc: '$161.4B vs $121.1B a year earlier (+33.2%). Free cash flow $161.4B − $173.0B = −$11.6B (a year earlier +$13.5B).',
+        warn: 'Operating cash flow negative for the last 12 months and the 12 months before, with 12–24 months of cash left or runway unknown · Free cash flow negative for the last 12 months and the 12 months before, while operating cash flow falls or net debt rises. Severe: operating cash flow negative for both 12-month periods with under 12 months of cash.' }, 'cash', 'left'),
+      withTip({ k: 'Near-term liquidity', value: '$123.0B', opts: opts(['Clear', 'Warning'], 'Clear', CLEAR),
+        pts: L(['Cash and marketable securities', 'Current ratio 1.0x']),
+        formula: 'Cash and cash equivalents + marketable securities. Current ratio = current assets ÷ current liabilities.',
+        calc: '$78.2B + $44.8B = $123.0B. Current ratio 1.0x.',
+        warn: 'Current ratio below 0.8 while operating cash flow over the last 12 months is negative.' }, 'liq', 'left'),
+      withTip({ k: 'Operating performance', value: '+19.6% sales', opts: opts(['Clear', 'Warning'], 'Clear', CLEAR),
+        pts: L(['Operating margin 13.7%, from 11.4%', 'Operating income +43%']),
+        formula: 'Revenue vs the same quarter a year ago. Operating margin = operating income ÷ revenue.',
+        calc: 'Revenue $200,606M vs $167,702M = +19.6%. Operating margin 13.7% vs 11.4% = +2.3 pts.',
+        warn: 'Revenue down 15% or more AND operating margin down 3 points or more, vs the same quarter a year ago.' }, 'ops', 'left'),
+      withTip({ k: 'Funding and leverage', value: 'Net debt $9.6B', opts: opts(['Clear', 'Warning'], 'Clear', CLEAR),
+        pts: L(['Net debt ÷ 12-month operating cash flow: 0.06× (warning above 4×)', 'Net cash $37.3B a year ago']),
+        formula: 'Net debt = total debt − cash and marketable securities. Net debt ÷ 12-month operating cash flow = years of operating cash needed to repay net debt.',
+        calc: '$9.56B ÷ $161.4B = 0.06× (about 3 weeks). Operating cash flow is 20.8% of 12-month sales ($775.7B). Net debt rose $46.8B in a year (0.29× of operating cash flow), but operating cash flow also rose.',
+        warn: 'Net debt above 4× operating cash flow · or operating cash flow 2% of sales or less with net debt above 10% of sales · or net debt up by more than 10% of the size of operating cash flow (positive or negative) while operating cash flow falls, with net debt above 2× operating cash flow (or operating cash flow at or below zero).' }, 'lev', 'right'),
+      withTip({ k: 'Filing status', value: 'On time', opts: opts(['Clear', 'Warning', 'Critical'], 'Clear', CLEAR),
+        pts: L(['Q2 10-Q filed Jul 31, 2026', 'No bankruptcy, debt-acceleration or non-reliance filing in 12 months']),
+        formula: 'Latest 10-Q or 10-K filed by its SEC deadline, counted in business days; a late-filing notice (12b-25) met within its extension counts as on time. Critical = an 8-K item 1.03, 2.04 or 4.02 in the last 12 months.',
+        calc: 'Q2 10-Q filed Jul 31, 2026, within its deadline. Next 10-Q due by Nov 9, 2026. No 8-K item 1.03, 2.04 or 4.02 in 12 months.',
+        warn: 'A 10-Q or 10-K past its deadline. Critical: bankruptcy (1.03), debt acceleration (2.04) or non-reliance on past financials (4.02). A 4.02 means past financials can’t be relied on, not necessarily that the company is insolvent.' }, 'fil', 'right')
+    ];
+    var kpis = [
+      withTip({ k: 'Current ratio', v: '1.0x', b: '', formula: 'Current assets ÷ current liabilities.', explain: 'What they’ll turn into cash within a year, compared with what they have to pay within a year.', foot: 'Used only in the near-term liquidity check, when 12-month operating cash flow is negative.' }, 'k1', 'left'),
+      withTip({ k: 'Debt / equity', v: '0.24', b: '', formula: 'Long-term debt (including the part due this year) ÷ total equity.', explain: 'How much they’ve borrowed for every $1 of their own money.', foot: 'Not used in the verdict.' }, 'k2', 'left'),
+      withTip({ k: 'DSO', v: '40.0 days', b: '', formula: 'Receivables at quarter end ÷ quarterly revenue × days in the quarter.', explain: 'How many days of sales their customers still owe them.', foot: 'Not used in the verdict.' }, 'k3', 'left'),
+      withTip({ k: 'DPO', v: '140.1 days', b: '110.7 a year ago', formula: 'Payables at quarter end ÷ quarterly cost of revenue × days in the quarter.', explain: 'Their unpaid bills in days of cost of sales. Compare with their own past, not with other companies.', foot: 'Not used in the verdict.' }, 'k4', 'right'),
+      withTip({ k: 'Altman Z″', v: '2.71', b: '', formula: '6.56 × (working capital ÷ total assets) + 3.26 × (retained earnings ÷ total assets) + 6.72 × (operating income, last 12 months ÷ total assets) + 1.05 × (total equity ÷ total liabilities).', explain: 'A standard financial-strength score. Above 2.6 safe, below 1.1 distress.', foot: 'Not used in the verdict.' }, 'k5', 'right')
+    ];
+    var segs = [
+      { k: 'North America', w: '57.9%', c: '#3f4a5c', r: '4px 0 0 4px', v: '$116,177M', p: '57.9%' },
+      { k: 'International', w: '21.0%', c: '#7d8899', r: '0', v: '$42,197M', p: '21.0%' },
+      { k: 'Amazon Web Services', w: '21.1%', c: '#b3bcc8', r: '0 4px 4px 0', v: '$42,232M', p: '21.1%' }
+    ];
+    var tones = { watch: '#8a5300', info: '#5b6770', good: '#1f6f5c' };
+    var stand = [
+      { k: 'HEAVY INVESTMENT', tone: tones.watch, head: 'Capital spending above operating cash flow', detail: 'Capex $54,208M vs operating cash flow $45,387M (Q2 FY26)' },
+      { k: 'BORROWING', tone: tones.watch, head: 'Borrowing increased alongside heavy investment', detail: 'Net new debt $10,600M · free cash flow −$8,821M (Earnings Lens basis)' },
+      { k: 'ACQUISITIONS AND INVESTMENTS', tone: tones.watch, head: 'Large spending on acquisitions and investments', detail: '$24,359M vs $1,700M in Q2 FY25 · OpenAI $13.7B, Anthropic $10.0B (10-Q, MD&A)' },
+      { k: 'ONE-OFF ITEM', tone: tones.info, head: 'A non-operating gain lifted net income', detail: 'Pre-tax $80,857M vs operating $27,461M · Anthropic stake revaluation (10-Q, Notes)' },
+      { k: 'PAYABLES', tone: tones.info, head: 'Payables days up', detail: '140.1 days of cost of revenue, from 110.7 a year ago' },
+      { k: 'COSTS', tone: tones.good, head: 'Overhead growing slower than sales', detail: 'SG&A +1% vs revenue +20%' },
+      { k: 'PROFITS', tone: tones.good, head: 'Operating profit rising', detail: 'Operating income $27,461M, from $19,171M · margin 13.7%, from 11.4%' }
+    ];
+    var fin = [
+      { k: 'Revenue', a: '200,606', b: '181,519', c: '+10.5%', d: '167,702', e: '+19.6%' },
+      { k: 'Gross margin', a: '52.3%†', b: '51.8%†', c: '+0.5 pts', d: '51.8%†', e: '+0.5 pts' },
+      { k: 'R&D expense', a: 'Not separately disclosed', b: '—', c: '—', d: '—', e: '—' },
+      { k: 'SG&A', a: '14,486†', b: '12,901†', c: '+12.3%', d: '14,381†', e: '+0.7%' },
+      { k: 'Operating income', a: '27,461', b: '23,852', c: '+15.1%', d: '19,171', e: '+43.2%' },
+      { k: 'Operating margin', a: '13.7%', b: '13.1%', c: '+0.6 pts', d: '11.4%', e: '+2.3 pts' },
+      { k: 'Net income', a: '62,647', b: '30,255', c: '+107.1%', d: '18,164', e: '+244.9%' },
+      { k: 'FCF (Earnings Lens basis)', a: '−8,821†', b: '−18,171†', c: '+9,350', d: '332†', e: '−9,153' },
+      { k: 'Cash & equivalents', a: '78,213', b: '101,816', c: '−23.2%', d: '57,741', e: '+35.5%' }
+    ];
+    var VT = [['Pursue', '#1f6f5c', '#d3e4dd'], ['Pursue with guardrails', '#a86a00', '#efe0c2'], ['Monitor', '#b8461b', '#f0d5c8'], ['Limit exposure', '#9b1c1c', '#ecd0d0']];
+    var vtrack = VT.map(function (x, i) {
+      var on = x[0] === lenses[lens].verdict;
+      return { label: x[0], mark: on ? '\u25cf ' : '', r: i === 0 ? '5px 0 0 5px' : i === 3 ? '0 5px 5px 0' : '0', bar: on ? x[1] : x[2], fw: on ? 700 : 400, fg: on ? x[1] : '#8a867d' };
+    });
+    var chips = lenses[lens].checks.slice(1).map(function (c) { var i = 1;
+      var item = { k: c.k, v: c.v, fg: c.fg, mark: c.icon === '\u2713' ? '\u25cf ' : '', isLink: i === 0, isTip: i !== 0, rule: c.rule || '', calc: c.calc || '' };
+      if (i !== 0) { withTip(item, c.tipId, 'left'); item.ibg = item.tipOn ? '#ece9e2' : '#f6f4ef'; }
+      return item;
+    });
+    return { vtrack: vtrack, chips: chips, routeTrack: routeTrack, anyTip: tip !== null, closeTip: function () { self.setState({ tip: null }); }, L: lenses[lens], tabs: tabs, scale: scale, health: health, kpis: kpis, segs: segs, stand: stand, fin: fin };
+  }
+}
+
+const HOLE = /\{\{\s*([\w.$]+)\s*\}\}/g;
+const ONE = /^\s*\{\{\s*([\w.$]+)\s*\}\}\s*$/;
+function look(path, scopes) {
+  const parts = path.split('.');
+  for (let i = scopes.length - 1; i >= 0; i--) {
+    const sc = scopes[i];
+    if (sc && Object.prototype.hasOwnProperty.call(sc, parts[0])) {
+      let v = sc[parts[0]];
+      for (let j = 1; j < parts.length; j++) v = v == null ? undefined : v[parts[j]];
+      return v;
+    }
+  }
+  return undefined;
+}
+function raw(text, scopes) { const m = ONE.exec(text || ''); return m ? look(m[1], scopes) : text; }
+function fill(text, scopes) { return text.replace(HOLE, (_, p) => { const v = look(p, scopes); return v == null ? '' : String(v); }); }
+function build(node, scopes) {
+  const out = [];
+  node.childNodes.forEach(ch => {
+    if (ch.nodeType === 3) { out.push(document.createTextNode(fill(ch.nodeValue, scopes))); return; }
+    if (ch.nodeType !== 1) return;
+    const tag = ch.tagName.toLowerCase();
+    if (tag === 'sc-for') {
+      const list = raw(ch.getAttribute('list'), scopes) || [];
+      const as = ch.getAttribute('as');
+      list.forEach(item => out.push(...build(ch, scopes.concat([{ [as]: item }]))));
+      return;
+    }
+    if (tag === 'sc-if') {
+      if (raw(ch.getAttribute('value'), scopes)) out.push(...build(ch, scopes));
+      return;
+    }
+    const el = document.createElement(tag);
+    for (const a of ch.attributes) {
+      if (a.name.startsWith('hint-')) continue;
+      if (a.name === 'onclick') {
+        const fn = raw(a.value, scopes);
+        if (typeof fn === 'function') el.addEventListener('click', e => { e.preventDefault(); fn(e); });
+        continue;
+      }
+      el.setAttribute(a.name, fill(a.value, scopes));
+    }
+    build(ch, scopes).forEach(n => el.appendChild(n));
+    out.push(el);
+  });
+  return out;
+}
+const comp = new Component({});
+const tpl = document.getElementById('tpl').content;
+function render() {
+  const vals = comp.renderVals();
+  document.getElementById('app').replaceChildren(...build(tpl, [vals]));
+}
+document.addEventListener('click', e => { const a = e.target.closest('a[href="#"]'); if (a) e.preventDefault(); });
+render();
+</script>

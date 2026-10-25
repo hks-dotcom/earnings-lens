@@ -1,15 +1,16 @@
-// Unit tests for the build-2 follow-ups to "What stands out" and the verdict
-// wording. No network calls.
+// Unit tests for the build-2 follow-ups to "What stands out". No network
+// calls.
 //
 // - RETURNS fires only when buybacks plus dividends over four quarters
 //   exceed free cash flow over the same quarters AND exceed 5% of the latest
 //   quarter's revenue: below the size test it stays quiet, above both it
 //   fires with its rule line.
 // - Spending cuts name every restructuring filing in the window, each with
-//   its own explanation key; the Why box and the Summary name the latest
-//   and count the earlier ones. No fixture has two, so they are built here.
+//   its own explanation key. No fixture has two, so they are built here.
 // - A zero comparison amount reads "none".
-// - Risk reads low / medium / high; the payables clause states the fact.
+// - Spending cuts raise a low risk reading to medium in the rules module.
+//   (The S5 verdict replaced the hero, Why box and Summary these once
+//   checked; their tests went with them. See scripts/test-verdict-*.ts.)
 // - Liquidity vs debt, read from each filing's balance sheet: AMZN's check
 //   values, equity securities excluded, a combined debt-and-equity line,
 //   cash including short-term investments, finance leases as filed and
@@ -27,8 +28,6 @@ import { computeRisk, riskReading } from "@/lib/rules/matrix";
 import { ladderForReading, LadderResult } from "@/lib/rules/ladder";
 import { computeDealStructure } from "@/lib/rules/dealStructure";
 import { termsSentence } from "@/lib/present/termsSentence";
-import { heroSubline, whyThisVerdict } from "@/lib/present/verdictReasons";
-import { buildSummary } from "@/lib/present/summary";
 import { RetrenchmentSignal } from "@/lib/rules/signals";
 import { FinancialHealth } from "@/lib/metrics/health";
 import {
@@ -163,38 +162,7 @@ function lens(over: Partial<LensResult> & { rung: "Strong" | "Neutral" | "Weak" 
 
 const HEALTH = { grossMarginPct: [], operatingMarginPct: [] } as unknown as FinancialHealth;
 
-// --- risk wording -------------------------------------------------------------
-check("hero: Strong reads low", heroSubline(lens({ rung: "Strong" })), "Risk: low · Opportunity: high · Offer Net 30; Net 45 if pushed");
-check("hero: Neutral reads medium", heroSubline(lens({ rung: "Neutral" })), "Risk: medium · Opportunity: high · Offer Net 30 and hold it");
-check(
-  "hero: Weak reads high",
-  heroSubline(lens({ rung: "Weak" })),
-  "Risk: high · Opportunity: high · Offer Net 30 · escalate before signing"
-);
-
-// --- the payables clause states the fact --------------------------------------
 const kfPlain = kfWith({ revenue: line(1_000, 900) });
-check(
-  "Why: payables falling beyond the band states both day counts",
-  whyThisVerdict(
-    lens({ rung: "Strong", altmanZone: { z: 12.17, scored: "safe", zone: "safe", capped: false, ttmOperatingIncome: undefined, ttmFreeCashFlow: undefined }, paymentBehavior: { state: "falling", dpoCurrent: 56.9, dpoYearAgo: 64.0, yoyPctChange: -11.1 } }),
-    kfPlain
-  ).risk,
-  {
-    label: "Risk: low.",
-    text: "The balance sheet is safe (Z'' 12.17), there are no red flags and payables are falling: 56.9 days of cost of revenue, from 64.0 a year ago.",
-  }
-);
-check(
-  "Why: payables within the band say so",
-  whyThisVerdict(lens({ rung: "Strong" }), kfPlain).risk.text,
-  "The balance sheet is safe (Z'' 3.50), there are no red flags and payables are within the ±10% band."
-);
-check(
-  "Why: grey zone, payables within the band",
-  whyThisVerdict(lens({ rung: "Neutral", altmanZone: { z: 2.1, scored: "grey", zone: "grey", capped: false, ttmOperatingIncome: undefined, ttmFreeCashFlow: undefined } }), kfPlain).risk.text,
-  "The balance sheet is in the grey zone (Z'' 2.10). There are no red flags and payables are within the ±10% band."
-);
 
 // --- spending cuts: every restructuring filing --------------------------------
 function cutsLens(filings: { filingDate: string; accessionNumber: string }[], causes: string[] = []): LensResult {
@@ -262,54 +230,9 @@ check(
 
 // FDX's shape: a Strong rung, one restructuring filing, revenue up, R&D not filed.
 const fdxServices = cutsLens(TWO.slice(1));
-const fdxSaaS = lens({ ...fdxServices, lens: "SaaS", rung: "Strong", opportunity: { high: false, rule: "", rdNotFiled: true }, quadrant: "Limit exposure" });
-check("hero: cuts raise low to medium, terms follow", heroSubline(fdxServices), "Risk: medium, raised by spending cuts · Opportunity: high · Offer Net 30 and hold it");
-check("hero: NexCore the same, opportunity low", heroSubline(fdxSaaS), "Risk: medium, raised by spending cuts · Opportunity: low · Offer Net 30 and hold it");
-check("Why: the label says the cuts raised it", whyThisVerdict(fdxServices, kfPlain).risk.label, "Risk: medium, raised by spending cuts.");
 check("terms: Net 30 and hold it, no Net 45", [termsSentence(fdxServices), fdxServices.ladder.net45], ["Offer Net 30 and hold it; expect pressure for longer terms.", false]);
 const fdxTerms = buildStandOut(fdxServices, kfPlain, HEALTH).find((i) => i.kind === "terms");
 check("terms finding: marks and billing phrase", [fdxTerms?.terms?.map((t) => t.ok), fdxTerms?.sentence.split(" ").slice(0, 2).join(" ")], [[true, false, false], "T&M monthly."]);
-// SNAP's shape: a Weak rung with the same cuts.
-const snapLike = lens({ rung: "Weak", retrenchment: fdxServices.retrenchment, risk: { high: true, rule: "" } as LensResult["risk"] });
-check("hero: already high with cuts reads as today", heroSubline(snapLike), "Risk: high, with spending cuts · Opportunity: high · Offer Net 30 · escalate before signing");
-
-// --- the Summary follows each lens ---------------------------------------------
-const tail = (l: LensResult) => buildSummary(l, kfPlain, HEALTH).parts.slice(-3);
-check("Summary, CoreThread: cuts that raise the risk go on the risk side", tail(fdxServices), [
-  "Spending cuts, including a restructuring filing (8-K Item 2.05) on 29 Jan 2026, raise the risk.",
-  "Growth points to an expanding customer; R&D is not filed.",
-  "Offer Net 30 and hold it; expect pressure for longer terms.",
-]);
-check("Summary, NexCore: cuts that set opportunity low point to a shrinking customer", tail(fdxSaaS).slice(-2), [
-  "Spending cuts, including a restructuring filing (8-K Item 2.05) on 29 Jan 2026, point to a shrinking customer.",
-  "Offer Net 30 and hold it; expect pressure for longer terms.",
-]);
-check("Summary, CoreThread: cuts on an already-high reading add to the risk", tail(snapLike).slice(0, 2), [
-  "Spending cuts, including a restructuring filing (8-K Item 2.05) on 29 Jan 2026, add to the risk.",
-  "Growth points to an expanding customer; R&D is not filed.",
-]);
-check("Summary: no cuts, no risk-side sentence", tail(lens({ rung: "Strong" })).slice(-2), [
-  "Growth points to an expanding customer; R&D is not filed.",
-  "Offer Net 30; go to Net 45 only if pushed.",
-]);
-
-check(
-  "Why: names the latest filing and counts the earlier one",
-  whyThisVerdict(cutsLens(TWO), kfPlain).risk.text.split(". ")[0],
-  "A restructuring filing (8-K Item 2.05) on 3 Jun 2026 and 1 earlier put it in the higher-risk half of the matrix"
-);
-check("Why: label with spending cuts that raise the reading", whyThisVerdict(cutsLens(TWO), kfPlain).risk.label, "Risk: medium, raised by spending cuts.");
-check(
-  "Summary: names the latest filing and counts the earlier ones",
-  buildSummary(cutsLens(THREE), kfPlain, HEALTH).parts.find((p) => p.startsWith("Spending cuts")),
-  "Spending cuts, including a restructuring filing (8-K Item 2.05) on 10 Aug 2026 and 2 earlier, raise the risk."
-);
-check(
-  "Summary: one filing, no count",
-  buildSummary(cutsLens(TWO.slice(1)), kfPlain, HEALTH).parts.find((p) => p.startsWith("Spending cuts")),
-  "Spending cuts, including a restructuring filing (8-K Item 2.05) on 29 Jan 2026, raise the risk."
-);
-
 // --- a zero comparison amount reads "none" ------------------------------------
 const kfAcq = kfWith({ revenue: line(2_000, 1_800) });
 const acq = buildStandOut(lens({ rung: "Strong" }), kfAcq, HEALTH, {

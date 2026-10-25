@@ -85,7 +85,7 @@ const METHOD_TEXT: Record<string, string> = {
 
 export function cellTitle(row: StatementRow, col: StatementColumn, cell: StatementCell, unit: Unit): string {
   const head = `${row.label} · ${col.label} (${formatPeriodEnd(col.periodEnd)})`;
-  if (!isValue(cell)) return `${head}\nMISSING: ${cell.missing}`;
+  if (!isValue(cell)) return `${head}\nNot available: ${cell.missing}`;
   const lines = [head];
   const tag = cell.concept.replace(/^us-gaap:/, "");
   lines.push(`XBRL: ${tag}${cell.companyTag ? " (the company's own tag, read from the filing)" : ""}`);
@@ -162,7 +162,7 @@ export function statementFootnote(s: Statements, tab: StatementTab, annual: bool
     parts.push("Lines between revenue and operating income are the company's own, with its captions and order; lines on its own tags are read from each filing.");
   }
   if (tab === "cashFlow" && s.cashFlow.some((r) => cells(r).some((c) => !isValue(c) && c.missing === "filed under the company's own tag"))) {
-    parts.push("Acquisitions: where a filing puts the line under the company's own tag, that column is MISSING.");
+    parts.push("Acquisitions: where a filing puts the line under the company's own tag, that column is not available.");
   }
   parts.push(
     `Small figures under each number: change on the ${annual ? "previous fiscal year" : "previous quarter"}. A percentage when both figures are positive; otherwise the change in ${unit.label}. For costs and payments the change is on the amount, so +9.5% means the cost grew. Changes are never coloured.`

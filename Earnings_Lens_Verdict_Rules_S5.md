@@ -111,7 +111,7 @@ Why: a customer's R&D is what ties to outsourced engineering; a new product can 
 | EXPANDING | R&D Y/Y (q0) ≥ +5% AND R&D Y/Y (q1) ≥ +5% |
 | R&D CAUTION | R&D Y/Y (q0) ≤ −5% AND R&D Y/Y (q1) ≤ −5% |
 | CAUTION | R&D CAUTION OR a restructuring filing (8-K 2.05, 12 months) OR OPERATING DETERIORATION |
-| MIXED | CAUTION is true AND EXPANDING is true (because of a 2.05 or OPERATING DETERIORATION). Shown as "Caution · Mixed"; **counts as caution** |
+| MIXED | CAUTION is true AND EXPANDING is true (because of a 2.05 or OPERATING DETERIORATION). Represented as direction CAUTION with a mixed-evidence indicator = true and its reasons (expanding R&D plus the restructuring or operating-deterioration leg); verdict behaviour identical to CAUTION. Shown as "Caution · Mixed". Never a separate category in the matrix |
 | UNKNOWN | R&D not filed quarterly (not filed, annual only, or not in the window), or R&D direction not measurable, and no CAUTION leg fired |
 | FLAT | Otherwise |
 
@@ -196,17 +196,19 @@ Shown quietly under the verdict; a separate statement, never another risk score.
 
 - Positive-only commercial discovery for Sales/GTM, shown directly under the NexCore verdict with "Commercial discovery · not part of the verdict" and its source.
 - Never appears in "What decided it", never changes a verdict, never labels a company "no devices".
-- Industry-code mapping (from S4):
+- Industry-code mapping (from S4), with the likely route (approved Oct 25, 2026):
 
-| SIC range | Line |
-|---|---|
-| 3670–3679 | Chip/platform integration |
-| 3400–3999 (other) | Devices and equipment |
-| 4000–4799, 5200–5999 | Retail and logistics operations |
-| 4800–4999 | Network and energy infrastructure |
-| 0100–0999 | Agriculture operations |
-| None of these | Not established from filed information (line hidden) |
+| SIC range | Line | Likely route |
+|---|---|---|
+| 3670–3679 | Chip/platform integration | Partner |
+| 3400–3999 (other) | Devices and equipment | Device builder |
+| 4000–4799, 5200–5999 | Retail and logistics operations | Site operator |
+| 4800–4999 | Network and energy infrastructure | Site operator |
+| 0100–0999 | Agriculture operations | Site operator |
+| None of these | Not established from filed information | — |
 
+- When no range matches, nothing is shown: no application line and no route line.
+- The route is displayed as a three-step bar (Partner · Device builder · Site operator) with the likely one marked and no descriptions, captioned "Rough guide from the industry code". Meaning (for reference, not displayed): Partner = chip or platform vendor that bundles models for its own customers; Device builder = ships models inside the products it sells; Site operator = runs models at its own sites. It is a rough guess at the company type, shown as such; it is GTM information only and never affects a verdict, the terms or evidence.
 - Wording comes from the industry-code mapping only; no refinement from filed income-statement lines (D1). Display: "Potential application: Retail and logistics operations" over "Industry-based · SIC 5961 · Commercial discovery, not part of the verdict".
 
 ## 10. Shown, not scored (LOCKED)
@@ -224,7 +226,7 @@ Shown quietly under the verdict; a separate statement, never another risk score.
 | R1 Filing calendar | The next expected filing is projected from periods actually filed (52/53-week aware). Not measurable when: a 10-KT/10-QT was filed in the last two years; the last two 10-K period ends are not 357–371 days apart; the latest 10-K end is more than 7 days from the stated fiscal-year end; the last two period ends are not 80–100 days apart; projections disagree on form or by more than 7 days; or an 8-K (2.02, 5.03, 7.01, 8.01) after the latest period announces a fiscal-year change (sentence-level match, the Item 5.03 caption excluded). FedEx must read "not measurable" |
 | R2 Deadlines | Deadlines by filer category, counted with business-day roll-forward (weekends and SEC holidays). A valid 12b-25 extends a 10-Q by 5 and a 10-K by 15 calendar days, from the rolled deadline. Filed within the extension → informational. Extension still open → shown as outstanding, not a flag. Deadline passed with no report → MISSED FILING. Xerox FY2025 10-K must read within its extension (deadline Sunday Mar 1, 2026 → Mon Mar 2; extension to Tue Mar 17; filed Mar 17). Filed after the extended deadline: see Section 14 D2 |
 | R3 Finance arms (Ford, GM) | Cash and debt on the same scope (both ex-finance, or both consolidated). If operating-company cash and debt cannot be extracted consistently, net debt is shown as unavailable and evidence is Limited ("finance-arm debt not separable") |
-| R4 Restricted cash | Use the face cash line. If restricted cash cannot be separated, note it and set evidence Limited ("restricted cash not separated") |
+| R4 Restricted cash | Three cases, as simulated in S4: (1) restricted cash disclosed as a separate fact at the same date (filing instance first, then company facts; tags in order RestrictedCashAndCashEquivalentsCurrent, RestrictedCashCurrent, RestrictedCashAndCashEquivalentsAtCarryingValue, RestrictedCashAndCashEquivalents, RestrictedCash) → subtract it (HPQ); (2) a cash line with no restricted component in its element → use as filed; (3) a face line whose element includes restricted cash with no separate fact → use the face value, label the liquidity figure "includes restricted cash not separately disclosed" so it is never shown as confirmed unrestricted liquidity, and set evidence Limited ("restricted cash not separated") (SBUX, LULU, MMM) |
 | R5 Stale quarters | Quarterly operating cash flow is rebuilt from year-to-date values in the latest filing's XBRL instance, with fiscal-period and reconciliation checks. EDGAR frames alone are not sufficient (KO, F, PYPL, AAL) |
 | R6 R&D tags | Precedence: ResearchAndDevelopmentExpense, then …ExcludingAcquiredInProcessCost, then …SoftwareExcludingAcquiredInProcessCost. The first tag with at least one quarterly value in the 12-quarter window is used for every quarter, never summed |
 | D Missing debt | No debt line is not zero debt. Zero only when no debt concept appears anywhere in the filing; otherwise net debt is not measurable |
@@ -377,3 +379,92 @@ The current fixture and showcase set is NVDA, MSFT, WMT, AMZN, GOOGL, FDX, SNAP,
 - **BA or VZ**: Watch on leverage above 4× (BA 7.11×; VZ 4.21× with a not-measurable flag and Limited evidence).
 
 Whether to add them, and what they replace, is the owner's call, evaluated separately from the engine.
+
+## 16. Page design (LOCKED Oct 25, 2026)
+
+The page follows the mock "Earnings Lens Verdict v2 Mock", Version 24 (files: Main.dc.html, and its clickable preview earnings-lens-preview.html). Decisions made in the mock rounds:
+- Top card: "What this means for <seller>" with evidence top right; the verdict word large, beside a four-step verdict bar (Pursue · Pursue with guardrails · Monitor · Limit exposure) with the current step marked by a dot. No tags under the verdict; the Why bullets carry what decided it.
+- NexCore only, when the industry code maps: a full-width band with Potential application and the Likely route bar (Partner · Device builder · Site operator, dot on the likely one), captioned "Rough guide from the industry code · Industry-based · SIC <code> · Commercial discovery, not part of the verdict". Hidden when no code maps.
+- No Sales/GTM box (generic deal questions belong in the sales playbook). No "Offer Net 30" line under the verdict; payment terms appear only in Terms.
+- Financial health: the four-state bar with a dot on the current state; five area cards each with its own bar and dot; every ⓘ is bullets under short headings (Formula / This quarter / Warning when; ratios: Formula / What it means / footer), closes on a click outside it.
+- No prose anywhere in the page: bullets only.
+
+## 17. Build B content rules (LOCKED Oct 25, 2026)
+
+### 17.1 Build A findings (accepted)
+- American Airlines: Watch · LEVERAGE (4.23×) · Pursue with guardrails / Pursue with guardrails on its newly incorporated quarter. Accepted.
+- Greenlane: reported borrowings are never zero; "no debt line" with debt concepts in the filing = net debt not measurable. Rule D stands.
+- Finance-arm detection: S4's signal (finance-receivable, finance cash-flow or revenue tags at the current period ends; finance-named segment members; finance-named entity members on debt concepts) is the rule for "finance-arm debt not separable". It lowers evidence to Limited only; never a verdict.
+- Ford: fair-value disclosures are never substituted for a consistent debt-and-cash scope. Where scope cannot be reconciled, net debt is unavailable (R3).
+
+### 17.2 Display rules
+- Filing status card shows **Critical** (dot on Critical) when any 8-K item 1.03, 2.04 or 4.02 is filed in the 12 months before the assessment date. Its ⓘ names the item and date, and for 4.02 says it is a reporting-reliability problem, not necessarily insolvency.
+- **Not fully measurable:** a health card where no flag fired but at least one of its flags is not measurable shows a grey "Not fully measurable" tag, no step selected on its bar, and its ⓘ names each test that could not run and why.
+
+### 17.3 Explained from the filings (Claude layer)
+- Kept, placed directly below What stands out. Its triggers, sources, verbatim quote check, caching and fallback stay as built.
+- It is AI-assisted interpretation of filed text, labelled with its source (form, filing date, section). It never feeds the verdict, the health state, the terms or evidence, and never invents, restates or overrides a figure.
+
+### 17.4 Why bullets (three per seller, deterministic, in this order)
+**Bullet 1 — financial health (same facts for both entities):**
+- Resilient: "Financial health Resilient: no warning thresholds triggered", plus " · capital spending above operating cash flow" when 12-month free cash flow is negative.
+- Watch or Fragile: "Financial health <state>: " followed by each fired warning, joined by " · ", in these words:
+  - SEVERE BURN: "operating cash flow negative for two 12-month periods, under 12 months of cash"
+  - CAUTION BURN: "operating cash flow negative for two 12-month periods, 12–24 months of cash"
+  - PERSISTENT BURN, RUNWAY UNKNOWN: "operating cash flow negative for two 12-month periods; runway cannot be measured"
+  - INVESTMENT CASH PRESSURE: "free cash flow negative for two 12-month periods while <operating cash flow fell | net debt rose>"
+  - WEAK LIQUIDITY: "current ratio <x.x>x with negative operating cash flow"
+  - OPERATING DETERIORATION: "sales <a>% and operating margin <b> points on a year ago"
+  - LEVERAGE: "net debt <x.xx>× operating cash flow, above 4×"
+  - LOW-CASH DEBT: "operating cash flow <x>% of sales with net debt at <y>% of sales"
+  - FUNDING SUBSTITUTION: "net debt up $<n> while operating cash flow fell"
+  - MISSED FILING: "<form> for <period> overdue since <deadline>"
+- Critical: "Critical filing: 8-K <item> on <date> (<bankruptcy | debt acceleration | reporting reliability, not necessarily insolvency>)".
+
+**Bullet 2 — seller condition:**
+- CoreThread:
+  - Expanding: "Engineering spend expanding: R&D +a% and +b% on a year ago"
+  - Caution: "Engineering spend under pressure: " + each reason (R&D a% / b% · restructuring filing <date> · sales and operating margin falling together)
+  - Mixed: "Mixed signals: R&D up a% / b%, but " + (restructuring filing <date> | sales and operating margin falling together)
+  - Flat: "Engineering spend steady: R&D a% / b% on a year ago"
+  - Unknown, by its actual reason: not filed → "R&D not separately disclosed"; annual only → "R&D reported annually only; quarterly trend cannot be determined"; not in the 12-quarter window → "No R&D reported in the last 12 quarters"; otherwise → "Quarterly R&D trend cannot be determined from the available filings"
+- NexCore:
+  - Caution: "Cutting-back warning triggered: sales a%, operating margin b points on a year ago, plus " + (restructuring filing <date> | cash-generation warning)
+  - No caution, all inputs measurable: "Cutting-back warning not triggered: sales a% year over year, operating margin ±b points"
+  - Not measurable: "Cutting-back warning not fully measurable: <missing input>"
+
+**Bullet 3 — what it means (fixed line per verdict):**
+
+| Verdict | CoreThread | NexCore |
+|---|---|---|
+| Pursue | Supports engineering work on standard terms | Supports subscription and usage commitments on standard terms |
+| Pursue with guardrails | Smaller funded milestones and capped unbilled work, per Terms | Cash before material activation; usage alerts or prepaid credits, per Terms |
+| Monitor | Short funded discovery or a small prepaid milestone only | Small funded pilot only, collected before activation |
+| Limit exposure | No new unsecured work; funds or security before delivery | No material service before collection or security |
+
+Numbers in bullets come from the engine's computed values (one decimal for % and points, two for ×); a missing number is never filled in.
+
+### 17.5 Financial health summary bullets (owner-approved Oct 25, 2026)
+- First, for a Critical classification, the deciding Critical filing, in the §17.4 Critical wording.
+- Then one bullet per fired Layer 1 warning, in the §17.4 Bullet 1 wording.
+- Then up to three computed facts, in this order, neutral wording, no judgement words:
+  - "Operating cash flow $<X> over the last 12 months (<±y>% on the prior 12)"
+  - "Free cash flow $<Z> over the last 12 months (Earnings Lens basis)"
+  - "Net debt $<N> (net debt $<M> a year ago)", a negative value shown as net cash, e.g. "Net debt $9.6B (net cash $37.3B a year ago)"
+- A missing value drops that bullet; never filled in. Money in $B with one decimal ($M below $1B).
+- The Financial health summary bullet count is therefore variable. The seller Why sections stay exactly three bullets.
+
+### 17.6 Build B review rulings (Oct 25, 2026)
+- ⓘ boxes: plain financial language with engine-computed figures. No internal flag names in capitals, no operators. Formula = what each measure is; This quarter = each value with a plain label; Warning when = one plain bullet per condition; Could not run = plain test name and the missing input.
+- Missing values show "—" with "Not available"; never "MISSING".
+- Evidence line: human-readable reasons (e.g. "investment cash test could not run"), never internal flag names.
+- Operating-cash-flow change in the health summary: when the two 12-month values have opposite signs, or the prior value is zero or negative, show dollars ("from $183.0M the prior 12"), never a percentage.
+- Net debt / net cash wording is set from both balances (now and a year ago):
+  - both net cash (negative net debt): "net cash up/down $X";
+  - both net debt (positive): "net debt up/down $X";
+  - crossing zero: "moved from net cash $A to net debt $B" or "moved from net debt $A to net cash $B";
+  - a zero balance is neither net debt nor net cash ("net debt of zero");
+  - no movement is ever described in a way that contradicts the displayed balances. This applies to §17.4, §17.5, the area cards and the ⓘ.
+- The old missed-deadline red flag in What stands out is retired; the §14 D2 filing-status item is the single filing-status authority.
+- Operating segments are shown only when the filed segment amounts sum to total revenue within $1M; otherwise the section is hidden (no reconciling-items entry).
+- Build B open questions 1, 2, 3, 7, 10, 11 are accepted as implemented; a year-ago DPO is not added.

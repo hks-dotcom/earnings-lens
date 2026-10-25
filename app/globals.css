@@ -54,13 +54,6 @@ body {
   font-family: var(--font-ibm-plex-mono), monospace;
 }
 
-.hsub {
-  font-size: 12px;
-  color: var(--text-tertiary);
-  line-height: 1.35;
-  overflow-wrap: break-word;
-}
-
 .table-scroll {
   width: 100%;
   overflow-x: auto;
@@ -116,110 +109,6 @@ body {
   .scroll-fade {
     transition: none;
   }
-}
-
-/* Tooltip: opens on hover, tap (click toggles), and keyboard focus. */
-.tip {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 15px;
-  height: 15px;
-  margin-left: 5px;
-  border: 1px solid #9c978c;
-  border-radius: 50%;
-  font-size: 10px;
-  font-weight: 600;
-  font-style: normal;
-  color: var(--text-tertiary);
-  cursor: help;
-  vertical-align: 1px;
-  outline: none;
-  background: none;
-  padding: 0;
-  font-family: inherit;
-}
-.tip:hover,
-.tip:focus-visible {
-  border-color: var(--text-primary);
-  color: var(--text-primary);
-}
-/*
- * "The box is wide enough for the Z'' formula and never wider than 80% of
- * the screen." The Z'' formula is the longest string any tip carries, so
- * it sets the width: at 360px it wraps to about three lines instead of the
- * seven it took at 240px. 80vw is the hard ceiling, so on a phone the box
- * still leaves the page edge visible and never sits under the viewport.
- */
-.tipbox {
-  display: none;
-  position: absolute;
-  top: 22px;
-  left: -8px;
-  z-index: 10;
-  width: 360px;
-  max-width: 80vw;
-  padding: 10px 12px;
-  border-radius: 8px;
-  background: var(--text-primary);
-  color: #f4f2ee;
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 1.5;
-  white-space: normal;
-  text-align: left;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
-}
-.tipbox-formula,
-.tipbox-explanation {
-  display: block;
-}
-/* Formula first, then a gap, then the plain-English explanation. */
-.tipbox-explanation {
-  margin-top: 7px;
-}
-.tipbox-term {
-  font-weight: 600;
-  color: #ffffff;
-}
-.tip.tip-right .tipbox {
-  left: auto;
-  right: -8px;
-}
-.tip:hover .tipbox,
-.tip:focus-visible .tipbox,
-.tip[data-open="true"] .tipbox {
-  display: block;
-}
-
-/*
- * On a phone the 80vw cap already governs, so the fixed width only needs
- * to stop being larger than the screen; the cap does the rest.
- */
-@media (max-width: 480px) {
-  .tipbox {
-    width: 80vw;
-  }
-}
-
-.health-tiles {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 16px 0;
-}
-
-.health-tile {
-  min-width: 0;
-}
-
-/*
- * While "Download image" is capturing, hide the board's own buttons: they
- * are controls, not content, and a picture of a button invites a click
- * that can't happen. Everything else on the board stays in the image.
- */
-[data-capturing="true"] .board-actions {
-  display: none !important;
 }
 
 /* An open citation is a control's state, not content: never in the picture. */
@@ -281,146 +170,6 @@ body {
   padding: 10px;
   font-size: 13px;
   color: var(--text-tertiary);
-}
-
-/*
- * The lens board's top row: the verdict and its matrix on the left, the
- * Summary beside them. Below 760px the two stack -- verdict and matrix at
- * full width, then the Summary -- and the matrix scales down to fit.
- *
- * Every column is minmax(0, ...), never a bare 1fr. A bare 1fr is
- * minmax(auto, 1fr), and "auto" there means "no narrower than the widest
- * thing inside": the 330px matrix. On a 375px phone that held the column
- * open past the board's border and dragged the Summary out with it, and
- * because html and body clip horizontal overflow, the page never showed a
- * scrollbar to give it away.
- */
-.lens-top {
-  display: grid;
-  grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
-  gap: 28px;
-  align-items: start;
-}
-
-/*
- * The verdict hero: the quadrant in large serif type, then risk,
- * opportunity and terms in one line. The rule under it separates the
- * verdict from the reasoning that follows.
- */
-.verdict-hero {
-  font-size: 36px;
-  font-weight: 600;
-  line-height: 1.15;
-  padding: 4px 0 14px;
-  border-bottom: 1px solid var(--border-subtle);
-  overflow-wrap: break-word;
-}
-
-.verdict-hero-sub {
-  font-family: var(--font-ibm-plex-sans), system-ui, sans-serif;
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--text-tertiary);
-  margin-top: 6px;
-}
-
-@media (max-width: 760px) {
-  .verdict-hero {
-    font-size: 28px;
-  }
-}
-
-.why-box {
-  background: var(--neutral-tint-bg);
-  border-radius: 10px;
-  padding: 14px 16px;
-}
-
-.why-box p {
-  margin: 0 0 6px;
-  font-size: 14.5px;
-  line-height: 1.5;
-}
-
-.why-box p:last-child {
-  margin-bottom: 0;
-}
-
-/* The board's footnotes: data, verdict rules, explanations, limits. */
-.board-footnotes {
-  border-top: 1px solid var(--border-subtle);
-  padding-top: 12px;
-  font-size: 12px;
-  line-height: 1.6;
-  color: var(--text-tertiary);
-}
-
-.board-footnotes p {
-  margin: 0 0 5px;
-}
-
-.board-footnotes b {
-  font-weight: 600;
-}
-
-@media (max-width: 760px) {
-  .lens-top {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 18px;
-    align-items: start;
-  }
-}
-
-/*
- * One "What stands out" row: the tag in its own column, everything else in
- * the next. The coloured bar is set per item (tone) as an inline style.
- */
-.stand-item {
-  display: grid;
-  grid-template-columns: 150px minmax(0, 1fr);
-  gap: 14px;
-  align-items: baseline;
-  padding: 12px 0 12px 14px;
-  border-bottom: 1px solid var(--border-subtle);
-}
-
-@media (max-width: 640px) {
-  .stand-item {
-    grid-template-columns: 1fr;
-    gap: 4px;
-  }
-}
-
-/*
- * A finding's text column. Positioned so an open citation box is laid out
- * across the column's width, under the line it was opened from, rather
- * than from the citation itself -- which can sit anywhere on the line and
- * would push a fixed-width box past the board's edge on a phone.
- */
-.stand-text {
-  position: relative;
-  min-width: 0;
-  font-size: 14px;
-  line-height: 1.5;
-  overflow-wrap: break-word;
-}
-
-.stand-figures {
-  display: block;
-  margin-top: 3px;
-  font-size: 13px;
-  color: var(--text-tertiary);
-}
-
-.stand-rule {
-  display: block;
-  margin-top: 5px;
-  font-size: 12px;
-  color: var(--text-tertiary);
-}
-
-.stand-rule b {
-  font-weight: 600;
 }
 
 /* The citation after an explanation: "10-Q, MD&A". */
@@ -491,71 +240,6 @@ body {
   .cite-wrap:hover .cite-box {
     display: block;
   }
-}
-
-/* The statement tags under a finding's name: each opens its tab. */
-.stand-srcs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  margin-top: 6px;
-  letter-spacing: 0;
-}
-
-.stand-src {
-  border: 1px solid var(--border-card);
-  background: var(--bg-white);
-  color: var(--text-tertiary);
-  font: 500 10.5px var(--font-ibm-plex-sans), system-ui, sans-serif;
-  border-radius: 5px;
-  padding: 1px 6px;
-  cursor: pointer;
-}
-
-button.stand-src:hover,
-button.stand-src:focus-visible {
-  border-color: var(--core-strong);
-  color: var(--core-strong);
-  outline: none;
-}
-
-.stand-src-fixed {
-  cursor: default;
-}
-
-/* Filter chips: All, P&L, Balance sheet, Cash flow, each with its count. */
-.stand-filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin: 0 0 8px;
-}
-
-.stand-filters button {
-  border: 1px solid var(--border-card);
-  background: var(--bg-white);
-  color: var(--text-tertiary);
-  font: 500 13px var(--font-ibm-plex-sans), system-ui, sans-serif;
-  border-radius: 16px;
-  padding: 4px 12px;
-  cursor: pointer;
-}
-
-.stand-filters button span {
-  color: #9c978c;
-  margin-left: 3px;
-}
-
-.stand-filters button[aria-pressed="true"] {
-  background: var(--core-tint-bg);
-  border-color: var(--core-strong);
-  color: var(--core-strong);
-  font-weight: 600;
-}
-
-.stand-filters button:focus-visible {
-  outline: 2px solid var(--nova-strong);
-  outline-offset: 2px;
 }
 
 /* The financials panel: company and fiscal year, tabs, the shared toggle. */
@@ -802,97 +486,739 @@ button.stand-src:focus-visible {
   display: block;
 }
 
-/*
- * Liquidity vs debt, under the health tiles: the latest quarter only, two
- * full-width bars on one scale. Teal for liquidity, slate for debt.
- */
-.liq {
-  padding-top: 16px;
-  border-top: 1px solid var(--border-subtle);
+/* ===================================================================
+ * S5 verdict page (mock V24, Earnings_Lens_Verdict_S5_Mock.html).
+ * =================================================================== */
+
+.page-wrap {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
 }
-.liq-head {
+
+.page-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: 12px;
+  padding: 24px 16px;
   display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 4px 12px;
-  flex-wrap: wrap;
-  margin-bottom: 10px;
+  flex-direction: column;
+  gap: 20px;
 }
-.liq-k {
-  font-size: 12.5px;
-  color: var(--text-tertiary);
-}
-.liq-per {
-  font-size: 11.5px;
-  margin-left: 8px;
-  white-space: nowrap;
-}
-.liq-net {
-  font-size: 15px;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-}
-.liq-net span {
-  font-weight: 400;
-  font-size: 13px;
-  color: var(--text-tertiary);
-}
-.liq-bar {
-  display: grid;
-  grid-template-columns: 230px minmax(0, 1fr) 80px;
-  align-items: center;
-  gap: 10px;
-  font-size: 13px;
-  margin: 7px 0;
-}
-.liq-name {
-  color: #4a4741;
+
+.board {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
   min-width: 0;
 }
-.liq-track {
-  height: 12px;
-  background: #f3f1ec;
-  border-radius: 3px;
-  overflow: hidden;
+
+/* The identity line exists for the downloaded image only. */
+.board-id {
+  display: none;
+  font-size: 12px;
+  color: var(--text-tertiary);
 }
-.liq-fill {
-  height: 100%;
-  border-radius: 3px;
+[data-capturing] .board-id {
+  display: block;
 }
-.liq-cash {
-  background: var(--core-strong);
+[data-capturing] .itip-box,
+[data-capturing] .cite-box {
+  display: none !important;
 }
-.liq-debt {
-  background: var(--info-strong);
+
+/* Header: sticky; compact on phone (company name and lens switch only). */
+.hdr {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--bg-card);
+  margin: -24px -16px 0;
+  padding: 16px 16px 14px;
+  border-bottom: 1px solid var(--border-card);
+  border-radius: 12px 12px 0 0;
+  box-shadow: 0 6px 12px -10px rgba(28, 27, 25, 0.35);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
 }
-.liq-amt {
-  text-align: right;
+.hdr-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.hdr-kicker {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--text-secondary);
   font-weight: 600;
-  font-variant-numeric: tabular-nums;
+}
+.hdr-name {
+  margin: 0;
+  font-size: 34px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.hdr-sub {
+  font-size: 14px;
+  color: var(--text-secondary);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.hdr-sub strong {
+  color: var(--text-primary);
+}
+.hdr-muted {
+  font-size: 13px;
+  color: var(--text-tertiary);
+}
+.hdr-right {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 10px;
+}
+.hdr-search {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.hdr-search label {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.lens-switch {
+  display: flex;
+  gap: 4px;
+  background: var(--bg-page);
+  padding: 4px;
+  border-radius: 10px;
+}
+.lens-switch button {
+  height: 40px;
+  padding: 0 14px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
   white-space: nowrap;
 }
-.liq-none {
-  grid-column: 2 / 4;
-  font-size: 12.5px;
-  color: var(--text-tertiary);
+.hdr-phone {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
-.liq-parts {
-  font-size: 11.5px;
-  color: var(--text-tertiary);
-  margin-top: 10px;
-  line-height: 1.5;
-  overflow-wrap: break-word;
-}
-/* Phone: the label takes its own row, so the bar keeps the strip's full width. */
-@media (max-width: 760px) {
-  .liq-bar {
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 3px 10px;
-    font-size: 12px;
-    margin: 8px 0;
+@media (max-width: 640px) {
+  .hdr {
+    padding: 10px 12px;
+    gap: 8px;
+    margin: -24px -16px 0;
   }
-  .liq-name,
-  .liq-none {
+  .hdr-kicker {
+    display: none;
+  }
+  .hdr-name {
+    font-size: 22px;
+  }
+  .lens-switch button {
+    padding: 0 10px;
+    font-size: 13px;
+  }
+}
+
+/* Shared section shell and small-caps heading. */
+.v5-section {
+  background: var(--bg-white);
+  border: 1px solid var(--border-card);
+  border-radius: 12px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+.v5-k {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+.v5-section ul,
+.vcard ul,
+.how ul,
+.hstrip ul {
+  margin: 0;
+  padding-left: 18px;
+}
+.v5-section li,
+.vcard li,
+.how li {
+  margin: 3px 0;
+}
+
+/* Verdict card. */
+.vcard {
+  background: var(--bg-white);
+  border: 1px solid var(--border-card);
+  border-radius: 14px;
+  box-shadow: 0 10px 30px -18px rgba(28, 27, 25, 0.35);
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.vcard-top {
+  padding: 26px 30px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.vcard-kick {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+}
+.vcard-evidence {
+  letter-spacing: 0;
+  font-weight: 400;
+  color: var(--text-secondary);
+}
+.vcard-evidence strong {
+  color: var(--text-primary);
+}
+.vcard-verdict {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 18px 40px;
+}
+.vcard-word {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 0 1 auto;
+  min-width: 0;
+}
+.vcard-word-k {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+.vword {
+  font-size: 72px;
+  line-height: 1;
+  font-weight: 600;
+}
+.vcard-bar {
+  flex: 1 1 420px;
+  min-width: 0;
+  padding-bottom: 6px;
+}
+.step-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.vcard-band {
+  background: #f2f3fa;
+  border-top: 1px solid #e3e6f3;
+  padding: 22px 30px 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px 48px;
+  align-items: flex-start;
+}
+.vcard-app {
+  flex: 0 1 300px;
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.vcard-route {
+  flex: 1 1 460px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.vcard-band-k {
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  color: var(--nova-strong);
+}
+.vcard-app-v {
+  font-size: 26px;
+  line-height: 1.15;
+  font-weight: 600;
+}
+.vcard-band-cap {
+  flex: 1 1 100%;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.vcard-body {
+  padding: 22px 30px 24px;
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.vcard-cols {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+.vcard-why {
+  flex: 1 1 360px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.vcard-h {
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+.vcard-terms {
+  flex: 1 1 360px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 14px;
+}
+.vcard-terms-head {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.vcard-net {
+  font-size: 13px;
+}
+.vcard-term {
+  display: grid;
+  grid-template-columns: 104px minmax(0, 1fr);
+  gap: 10px;
+  font-size: 14px;
+  border-top: 1px solid #f1efea;
+  padding-top: 8px;
+}
+.vcard-term ul {
+  padding-left: 16px;
+}
+.vcard-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.vbtn {
+  height: 44px;
+  padding: 0 16px;
+  border: 1px solid;
+  border-radius: 8px;
+  background: #ffffff;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+}
+@media (max-width: 640px) {
+  .vword {
+    font-size: 52px;
+  }
+  .vcard-top,
+  .vcard-band,
+  .vcard-body {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  .vcard-app {
+    min-width: 0;
+  }
+  .vcard-term {
+    grid-template-columns: 88px minmax(0, 1fr);
+  }
+}
+
+/* Financial health. */
+.hsec {
+  gap: 14px;
+  scroll-margin-top: 150px;
+}
+.hsec-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+.hsec-scale {
+  width: 360px;
+  max-width: 100%;
+}
+.hsec-sub {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+.hsec-summary {
+  font-size: 14px;
+  line-height: 1.5;
+}
+.hcards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 10px;
+}
+.hcard {
+  position: relative;
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.hcard-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+.hcard-value {
+  font-size: 22px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.hcard-pts {
+  font-size: 13px;
+  color: #3d3b37;
+  line-height: 1.45;
+}
+.nfm-tag {
+  align-self: flex-start;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: var(--neutral-tint-bg);
+  color: var(--text-secondary);
+}
+
+/* The ⓘ: non-modal, bullets under short headings. */
+.itip-wrap {
+  position: static;
+  display: inline-flex;
+}
+.itip {
+  width: 22px;
+  height: 22px;
+  flex: none;
+  border-radius: 11px;
+  border: 1px solid var(--border-medium);
+  background: #ffffff;
+  color: var(--text-secondary);
+  font-family: Georgia, serif;
+  font-style: italic;
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+}
+.itip[data-open="true"] {
+  background: var(--text-primary);
+  color: #ffffff;
+}
+.itip-box {
+  position: absolute;
+  width: 320px;
+  max-width: 86vw;
+  z-index: 15;
+  background: var(--text-primary);
+  color: var(--bg-card);
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 12px;
+  line-height: 1.5;
+  box-shadow: 0 10px 24px -8px rgba(28, 27, 25, 0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.itip-left {
+  left: -1px;
+}
+.itip-right {
+  right: -1px;
+}
+.itip-sec strong {
+  color: #ffffff;
+}
+.itip-sec ul {
+  margin: 2px 0 0;
+  padding-left: 16px;
+}
+.itip-foot {
+  color: #c9c4b8;
+}
+
+/* Liquidity strip. */
+.hstrip {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 12px;
+}
+.hstrip-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 13px;
+}
+.hstrip-bars {
+  display: grid;
+  grid-template-columns: minmax(120px, 220px) minmax(0, 1fr) 72px;
+  gap: 8px 12px;
+  align-items: center;
+  font-size: 13px;
+}
+.hstrip-track {
+  height: 12px;
+  background: var(--border-subtle);
+  border-radius: 6px;
+}
+.hstrip-track > div {
+  height: 12px;
+  border-radius: 6px;
+}
+.hstrip-amt {
+  text-align: right;
+}
+.hstrip-notes {
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+@media (max-width: 640px) {
+  .hstrip-bars {
+    grid-template-columns: minmax(0, 1fr) 72px;
+  }
+  .hstrip-bars > span:not(.hstrip-amt) {
     grid-column: 1 / -1;
   }
+  .hstrip-bars > .hstrip-track {
+    grid-column: 1;
+  }
+}
+
+/* Other ratios. */
+.hratios-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 12px;
+}
+.hratios {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+.hratio {
+  position: relative;
+  padding: 8px 12px;
+  border-left: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.hratio-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+.hratio .itip {
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  font-size: 12px;
+}
+.hratio-v {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* Operating segments. */
+.seg-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: baseline;
+}
+.seg-bar {
+  display: flex;
+  gap: 2px;
+  height: 22px;
+}
+.seg-bar > div {
+  height: 22px;
+}
+.seg-key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 28px;
+  font-size: 13px;
+}
+.seg-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.seg-item > span:first-child {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+/* What stands out and Explained from the filings. */
+.so-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+.so-filters button {
+  font-family: inherit;
+  font-size: 13px;
+  padding: 4px 12px;
+  border-radius: 14px;
+  border: 1px solid var(--border-card);
+  background: #ffffff;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+.so-filters button[aria-pressed="true"] {
+  background: var(--core-tint-bg);
+  border-color: var(--core-tint-bg);
+  color: var(--core-strong);
+  font-weight: 600;
+}
+.so-note {
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+.so-none {
+  font-size: 13px;
+  color: var(--text-tertiary);
+}
+.so-row {
+  display: grid;
+  grid-template-columns: minmax(120px, 180px) minmax(0, 1fr);
+  gap: 12px;
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 10px;
+}
+.so-tag {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.so-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 14px;
+  min-width: 0;
+}
+.so-detail {
+  font-size: 13px;
+  color: var(--text-secondary);
+  overflow-wrap: anywhere;
+}
+.exf-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  align-items: baseline;
+}
+.exf-list {
+  font-size: 13px;
+  color: #3d3b37;
+}
+@media (max-width: 640px) {
+  .so-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+  }
+}
+
+/* How the verdict works. */
+.how {
+  border-top: 1px solid var(--border-card);
+  padding-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 13px;
+  color: #3d3b37;
+}
+.how ul {
+  line-height: 1.55;
+}
+
+.kf-notes {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--text-tertiary);
+}
+.hratio-b {
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+ul.fin-note {
+  padding-left: 18px;
+}
+.hcard-note {
+  margin-top: -6px;
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+.na {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-end;
+  color: #9c978c;
+  line-height: 1.2;
+}
+.na small {
+  font-size: 10.5px;
 }

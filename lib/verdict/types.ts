@@ -245,9 +245,14 @@ export interface SellerResult {
   evidence: EvidenceResult;
 }
 
+/** Rules section 9: a rough guide to the company type, from the industry code. */
+export type LikelyRoute = "Partner" | "Device builder" | "Site operator";
+
 export interface PotentialApplication {
   shown: boolean;
   line: string | null;
+  /** The likely route; null whenever nothing is shown. */
+  route: LikelyRoute | null;
   sic: number | null;
   display: string | null;
   source: string | null;

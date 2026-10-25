@@ -2,103 +2,83 @@
 
 **Live: https://earnings-lens-sigma.vercel.app**
 
-A ticker in, a counterparty verdict and payment terms out.
+A ticker in, a counterparty verdict and contract terms out.
 
 Type any US-listed ticker (or a company name). The app pulls that company's
-filings from SEC EDGAR, runs a fixed set of rules over the filed figures, and
-shows what the numbers mean for doing business with them: a verdict on a
-two-axis matrix, the reasons that decided it, a short written commentary on
-what it means, the handful of things that stand out in the figures, and the
-payment terms that follow. Beside it sit the company's own statements --
-the income statement as it presents it, the balance sheet and the cash flow
--- for five quarters or three fiscal years. The credit exposure and the GTM
-handover travel with the Copy brief, for the readers who need them.
+filings from SEC EDGAR, runs a fixed, locked set of rules over the filed
+figures (`Earnings_Lens_Verdict_Rules_S5.md`), and answers one question per
+seller: **is it financially reasonable to do business with this company on
+these terms?** It shows one shared financial-health read, then a verdict, the
+three reasons behind it, the payment terms and the contract protections that
+follow, how complete the evidence is, and the handful of things that stand
+out in the figures. Below sit the company's own statements -- the income
+statement as it presents it, the balance sheet and the cash flow -- for five
+quarters or three fiscal years.
 
-The same company is read through two lenses:
+The same company is read for two sellers:
 
 | | CoreThread (services) | NexCore (SaaS) |
 |---|---|---|
-| **The question** | Can we safely do business with them, and on what structure? | Can they become a durable, expanding customer? |
-| **Billing** | Monthly, in arrears | Annual, in advance |
-| **So the exposure is** | About two months of billing | The invoice window on the annual fee |
+| **Sells** | Embedded engineering and software development | Edge AI software |
+| **Contract types** | Milestone, T&M, Support | Subscription, Usage, Onboarding |
+| **Its own test** | Engineering spend: R&D up or down 5%+ two quarters running, restructuring filings, sales and margins falling together | Cutting back across the business: sales and margins falling together, plus a restructuring or a cash warning |
 
-**CoreThread and NexCore are fictional companies**: a services firm and a
-SaaS vendor, standing in for two kinds of seller. They exist to make the point
-that a counterparty assessment is not a property of the counterparty alone:
-the same balance sheet, the same payables trend and the same growth produce a
-different deal depending on who is selling and how they bill.
+**CoreThread and NexCore are fictional companies**, standing in for two kinds
+of seller. The financial health read is the same for both; what changes is
+what each seller is exposed to, so the same company can be Pursue for one and
+Pursue with guardrails for the other.
 
-![The CoreThread lens for Amazon on desktop](docs/amzn-services-desktop.png)
+![The CoreThread view of Amazon on desktop](docs/amzn-services-desktop.png)
 
-Amazon, read as a counterparty in the quarter ended 30 June 2026. The board
-opens with the verdict, and the two lines that decided it:
+Amazon, read as a counterparty on its quarter ended 30 June 2026 (screenshot
+taken with the Claude layer off, so "Explained from the filings" shows its
+fallback line). The page opens with the verdict card:
 
-> ## Verdict: Pursue with guardrails
-> Risk: medium · Opportunity: high · Offer Net 30 and hold it
+> **WHAT THIS MEANS FOR CORETHREAD** · Evidence: Limited · R&D not separately disclosed
 >
-> **Why this verdict**<br>
-> **Risk: medium.** Payables are up 27% on last year, beyond the ±10% band.
-> The balance sheet is safe (Z'' 2.71) and there are no red flags.<br>
-> **Opportunity: high.** Revenue is up 20% on last year, beyond the ±2% flat
-> band; R&D is not filed, so revenue decides alone.
+> ## Pursue
+> Pursue · Pursue with guardrails · Monitor · Limit exposure
+>
+> **Why**
+> - Financial health Resilient: no warning thresholds triggered · capital spending above operating cash flow
+> - R&D not separately disclosed
+> - Supports engineering work on standard terms
+>
+> **Terms** Net 30 ✓ · Net 45 on request · Net 60 ✕
+> - Milestone: bill at each accepted milestone · written acceptance criteria and review period
+> - T&M: billed monthly in arrears · timesheets approved monthly
+> - Support: billed in advance · defined scope and service period
 
-Beside them, the Summary says what it means in one paragraph:
+For NexCore the verdict is also Pursue, with evidence Adequate, and the second
+reason is "Cutting-back warning not triggered: sales +19.6% year over year,
+operating margin +2.3 points". NexCore's card adds a commercial-discovery
+band from the industry code: *Potential application: Retail and logistics
+operations*, with the likely route (Partner · Device builder · **Site
+operator**) -- a rough guide for sales, never part of the verdict.
 
-> The balance sheet is strong and profits are growing, but investment is
-> currently running ahead of cash from operations. A one-off non-operating item
-> moved net income this quarter; see below. The one thing to watch is payables
-> stretching. Growth points to an expanding customer; R&D is not filed. Offer
-> Net 30 and hold it; expect pressure for longer terms.
+Every word of the card is deterministic: the engine (`lib/verdict/`) decides
+the health state, each seller's condition, the verdict, the terms, the
+protections and the evidence, and `lib/verdict/why.ts` words the three Why
+bullets from its result in the rules' own words (rules §17.4). A missing
+number is never filled in.
 
-Then the seven things the rules found worth saying, before the payment terms.
-Where the filing says why, its reason closes the finding, with a citation:
-
-| | |
-|---|---|
-| **HEAVY INVESTMENT** | **Investing more than it generates.** Capital spending of $54,208M this quarter against operating cash flow of $45,387M.<br>*Capex $54,208M (Q2 FY26), $32,183M (Q2 FY25) · operating cash flow $45,387M (Q2 FY26), $32,515M (Q2 FY25)* |
-| **BORROWING** | **Borrowing while investment runs ahead of cash.** Net new debt of $10,600M this quarter, with free cash flow at −$8,821M.<br>*Long-term debt raised $13,557M, repaid $2,752M · short-term debt raised $9,368M, repaid $9,573M · long-term debt $132,995M, from $56,082M in Q2 FY25* |
-| **ACQUISITIONS AND INVESTMENTS** | **Large spending on acquisitions and investments.** $24,359M this quarter, against $1,700M in Q2 FY25. Investments of $13.7 billion in OpenAI’s Series C Preferred Stock and $10.0 billion in Anthropic nonvoting preferred stock were made during Q2 2026, alongside other acquisition and investment activity. <sub>10-Q, MD&A</sub><br>*AMZN's line: "Acquisitions, net of cash acquired, non-marketable investments, and other, net" · 12.1% of revenue* |
-| **ONE-OFF ITEM** | **A non-operating item moved net income.** Pre-tax income is $53.4B above operating income. Upward adjustments to Amazon's nonvoting preferred stock in Anthropic, recorded in "Other income (expense), net" to reflect observable changes in price related to Anthropic's fundings, drove the non-operating result. <sub>10-Q, Notes</sub><br>*Operating income $27,461M · pre-tax income $80,857M (Q2 FY26)* |
-| **PAYABLES** | **Payables stretching.** Payables are up 27% on last year, beyond the ±10% band.<br>*Payables ≈ 140.1 days of cost of revenue, from 110.7 a year ago* |
-| **COSTS** | **Overhead growing slower than sales.** SG&A up 1% on last year against revenue up 20%.<br>*SG&A $14,486M, from $14,381M · revenue $200,606M, from $167,702M* |
-| **PROFITS** | **Operating profit rising.** Operating income is up 43% on last year.<br>*Operating income $27,461M, from $19,171M in Q2 FY25 · margin 13.7%, from 11.4%* |
-| **TERMS** | Net 30 ✓ · Net 45 ✕ · Net 60 ✕ — **Offer Net 30 and hold it; expect pressure for longer terms.** T&M monthly. Payables ≈ 140.1 days of cost of revenue, up 27% on last year. |
-
-Each finding carries small tags for the statements it reads -- Cash flow,
-Balance sheet, P&L, or Filings for a red flag or a restructuring 8-K -- and a
-tag opens that statement's tab. Chips above the list filter the findings by
-statement (All 7, P&L 4, Balance sheet 2, Cash flow 3 here); the terms and
-any red flag stay visible under every filter, so a filter never hides a
-reason to escalate. Borrowing, acquisitions and investments, and returns
-(buybacks plus dividends over the last four quarters above free cash flow
-over the same quarters, and above 5% of quarterly revenue) are display only:
-they never
-move the ladder or the quadrant and are not in the Summary.
-
-On the page every finding also ends with its rule, e.g. for the one-off item:
-*Rule: flagged when pre-tax income differs from operating income by more than
-5% of quarterly revenue ($10.0B here).* The citation opens, on hover or tap,
-to the filing date, the section, the accession number and the passages the
-sentence was checked against. The filing gives no reason for the payables
-move, so that finding ends at its own sentence.
-
-Every figure there is filed. Amazon's free cash flow is negative this
-quarter, and the rules deliberately do not call that burning cash: $45bn came
-in from operations and $54bn went out to capital, so nothing is running out
-and no runway is quoted. A company whose *operations* consume cash is a
-different case with a different item and a real runway behind it — Rivian, in
-the same set of fixtures. Same negative number, opposite meaning.
+Below the card, in order: Financial health, Operating segments, What stands
+out, Explained from the filings, the statements, and How the verdict works.
+The page has no running prose: bullets, labels and table cells only.
 
 ### The statements
 
 ![Amazon's income statement tab on desktop](docs/amzn-income-statement.png)
 
-Above the board, the financials panel names the company and its fiscal year
--- "Fiscal year runs January to December, so FY26 = Jan–Dec 2026", taken from
-EDGAR's fiscal year end and the filer's own 10-K period ends, because a
-company's FY26 or Q4 is not the calendar's -- and the board's identity line
-repeats it ("fiscal year Jan–Dec"). Four tabs share one Quarterly / Annual
-toggle: Key financials, Income statement, Balance sheet and Cash flow.
+Below the findings, the financials panel names the company and its fiscal
+year -- "Fiscal year runs January to December, so FY26 = Jan–Dec 2026", taken
+from EDGAR's fiscal year end and the filer's own 10-K period ends, because a
+company's FY26 or Q4 is not the calendar's. Four tabs share one Quarterly /
+Annual toggle: Key financials, Income statement, Balance sheet and Cash flow.
+Key financials reads "Not separately disclosed" on the R&D row when the
+company files no quarterly R&D, and labels free cash flow "FCF (Earnings Lens
+basis)": operating cash flow − purchases of property and equipment, which may
+differ from the company's own figure.
 
 - **The income statement is the company's own.** Every line between revenue
   and operating income is read from each filing's instance and linkbases, in
@@ -129,171 +109,104 @@ toggle: Key financials, Income statement, Balance sheet and Cash flow.
   is the latest presentation. Its hover names both filings: "Recast in 10-K
   filed Feb 13, 2026; originally −$77M in 10-K filed Feb 14, 2025." A
   restatement filing (8-K Item 4.02) is a different thing, and a red flag.
-- **The tabs never hold up the board.** They load after it; the first time a
+- **The tabs never hold up the page.** They load after the verdict; the first time a
   filing is read the panel says "Reading filing 3 of 8", one filing per
   request, and each filing's extract is stored so it is read once.
 
 ### Financial health
 
-Under the statements, six tiles: current ratio, debt / equity, DSO, DPO,
-Altman Z'' and red flags in the last 12 months. Each tile is the metric and
-one benchmark line, and nothing else; the formula is in its (i), which opens
-on hover, focus or tap and states the formula first.
+Shared by both sellers (rules §4). Five areas, each with its own warning
+tests:
 
-| Tile | Benchmark |
+| Area | Warns when |
 |---|---|
-| Current ratio | above 1.0x |
-| Debt / equity | below 1.0 |
-| DSO | within 45 days |
-| DPO | within 45 days (the terms ceiling) |
-| Altman Z'' | above 2.6 (the rules' own safe zone) |
-| Red flags, 12 mo | the count only |
+| Cash flow from operations | operating cash flow negative for two 12-month periods (Severe under 12 months of cash, a warning at 12–24 months or when runway can't be measured); or free cash flow negative for two 12-month periods while operating cash flow fell or net debt rose |
+| Near-term liquidity | current ratio below 0.8 while 12-month operating cash flow is negative |
+| Operating performance | sales down 15% or more and operating margin down 3 points or more, on a year ago |
+| Funding and leverage | net debt above 4× 12-month operating cash flow; or operating cash flow at or below 2% of sales with net debt above 10% of sales; or net debt up by more than 10% of the size of operating cash flow while it falls |
+| Filing status | a required 10-Q or 10-K past its deadline, counted in business days with 12b-25 extensions |
 
-Benchmarks are reference points, not rules, and vary by industry: retailers
-often run a current ratio below 1.0x by design. They carry no colour and no
-tick or cross, move nothing, and are declared in the board's footnotes with
-the other values. The zone and DPO's year-ago figure live where the rules use
-them -- the Why box, the payables finding and the terms line.
+No warnings is **Resilient**; warnings in one area **Watch**; severe burn or
+warnings in two areas **Fragile**; an 8-K Item 1.03, 2.04 or 4.02 in the last
+12 months **Critical**. Every test is true, false or not measurable: a clearly
+false condition wins over missing data, and a test that can't run never
+counts as passed. A card with no warning but a test that couldn't run shows
+a grey "Not fully measurable" tag with no step selected, and its ⓘ names each
+test and the input it lacked.
 
-Beneath the tiles, **liquidity vs debt** for the latest quarter: two
-full-width bars on one scale -- cash and short-term investments (teal)
-against debt (slate), never red or green -- with the period beside the
-title and last year's net figure as a short clause in the header.
+Under the state bar, the summary bullets (rules §17.5): the Critical filing
+first when there is one, then each warning that fired, then operating cash
+flow over 12 months against the prior 12, free cash flow (Earnings Lens basis)
+and net debt now and a year ago. For Amazon: *Operating cash flow $161.4B over
+the last 12 months (+33.2% on the prior 12) · Free cash flow −$11.6B over the
+last 12 months (Earnings Lens basis) · Net debt $9.6B (net cash $37.3B a year
+ago)*.
 
-Both periods are read from a filing's own balance sheet, not from Key
-financials: the latest-filed filing whose balance sheet presents that date,
-the same latest-presentation rule the income statement uses. A retailer's
-10-Q presents the same quarter last year as well, so Target's and Walmart's
-year-ago figures come from their latest 10-Q. The extractor
-reads the balance sheet's lines, captions and dates, and every instant
-figure the filing reports at those dates, notes included; each filing's
-extract is stored and read once.
+Each card's ⓘ says, in plain words, what each measure is, this quarter's
+values, and when it warns, with every figure read from the same computed
+result the verdict used; it is non-modal and closes on any click outside it.
+Net debt and net cash are always worded from both balances, so a company
+with net cash on both dates reads "net cash down $2.2B", never "net debt
+up". A missing value reads "—" with "Not available".
 
-- **Liquidity** is the balance sheet's cash line, whatever element carries
-  it, plus current-asset lines that are marketable debt securities or
-  short-term investments. Equity securities and restricted cash are
-  excluded, and the line under the bars names them. A line that combines
-  debt and equity securities and can't be split (NVIDIA's 10-K "Marketable
-  securities") leaves that period's net figure MISSING, and the line says
-  why. A cash line whose element or caption already includes short-term
-  investments (Target's) is complete liquidity, and the bar reads "Cash and
-  short-term investments".
-- **Debt** is short-term borrowings (commercial paper included), the current
-  portion of long-term debt and long-term debt, non-current, at the carrying
-  amounts in that filing for that date, on the face of the balance sheet or
-  only in the notes. A combined element is read only when its components
-  aren't filed, and never on top of them; a face-value or principal figure
-  never stands in for a filed carrying amount. Leases are excluded. Where a
-  debt line includes finance leases, the notes' figure without them is used
-  when the filing has one (FedEx); otherwise the line is used as filed and
-  says "includes finance leases, as filed" (Target). A company-specific
-  element counts only when its caption plainly names borrowings, debt, notes
-  or commercial paper. No debt element at all reads "No debt on the balance
-  sheet", with no debt bar and no net figure.
-- **The header** states the net position, "Net Debt $9.6B" when debt is the
-  larger and "Net Cash" when liquidity is, only when both sides are complete
-  for the period, otherwise "Net MISSING"; then, muted, the same a year ago:
-  "Net Debt $9.6B · Net Cash $37.3B a year ago". When the two periods' debt
-  differ in lease treatment, the clause says so: FedEx's latest quarter reads
-  its long-term debt without finance leases and its year-ago comparative
-  only with them, so it reads "Net Debt $10.9B · Net Debt $15.1B a year ago,
-  including finance leases". Under the bars, the latest quarter's
-  components in the company's own captions: "Cash and cash equivalents
-  $78.2B + Marketable securities $44.8B · short-term debt $0.3B + long-term
-  debt, current maturities $3.3B + long-term debt $128.9B. Leases
-  excluded."
+Beneath the cards, **liquidity vs debt** for the latest quarter: liquidity
+(cash plus short-term marketable securities), debt, and net debt now and a
+year ago, on the same scope the verdict used (rules §11: restricted cash,
+finance arms, missing debt lines), with the net figure "before rounding" and
+the company's own captions when the balance sheet gives the same totals.
 
-The strip's debt is the carrying amount, so it can differ from the Balance
-sheet tab's long-term debt, which is Key financials' one tag across time:
-Amazon's "Notes outstanding" is the face value, $771M above the carrying
-amounts on its balance sheet. Key financials, debt / equity and the runway
-keep their own figures.
+**Other ratios** -- current ratio, debt / equity, DSO, DPO and Altman Z'' --
+are shown with their formula and meaning in an ⓘ and are never scored; the
+current ratio's ⓘ says it is used only in the near-term liquidity check.
 
-Amounts are set per period: $M when the larger of the period's liquidity
-and debt is under $1B (whole numbers, or one decimal when quarterly revenue is under
-$100M), otherwise $B with one decimal. The strip is display only: it has no
-effect on the ladder, the quadrant, the Summary or the findings. The Copy
-brief carries it as one line: "Liquidity vs debt: $123.0B vs $132.5B, Net
-Debt $9.6B (Net Cash $37.3B a year ago)."
+**Operating segments** have their own section: one bar split by share of
+revenue, the key below it and total revenue. The section shows only when the
+filed segment amounts sum to total revenue within $1M; otherwise it is
+hidden. They never feed the verdict.
 
 ## How it works
 
 ```
-ticker → SEC EDGAR → rules → verdict, why, Summary, what stands out, terms
-                              └→ Claude explains the flagged items, inside their findings
+ticker → SEC EDGAR → data repairs → S5 engine → health, verdict, why, terms, evidence
+                                  └→ What stands out → Claude explains the flagged items, below it
 ```
 
 1. **EDGAR.** XBRL company facts supply the figures; the submissions feed
-   supplies the filing list, 8-K item numbers, the filer category and the
-   fiscal year end. Segment revenue, the income statement's own lines and
-   the liquidity vs debt strip's balance sheets come from each filing's XBRL
-   instance and linkbases, found through the filing index, because the
-   aggregated APIs strip dimensional facts and company tags.
-2. **Rules.** Fixed, declared rules turn those figures into signals (revenue
-   and R&D growth, payment behaviour, spending cuts, red-flag filings), an
-   Altman Z'' score, a cash position (a burn, with a runway of cash plus
-   short-term investments over the burn, when operations consume cash; heavy
-   investment, with none, when capital spending outruns positive operating
-   cash flow), a payment-terms ladder, a matrix position
-   and a deal structure. Nothing here is a model output. Given the same
-   filings and the same date, it returns the same answer.
-3. **Verdict and why.** The board opens with the verdict in large type and one
-   line under it: risk as low, medium or high (the ladder's three rungs, in
-   the reader's words: "Risk: low · Opportunity: high · Offer Net 30; Net 45
-   if pushed"); high or low opportunity; and the terms. A restructuring
-   filing or an R&D or SG&A cut puts the company in the higher-risk half of
-   the matrix, and the risk reading follows it: spending cuts raise a low
-   reading to medium ("Risk: medium, raised by spending cuts", as for FedEx)
-   and leave medium or high as they are ("Risk: high, with spending cuts").
-   The terms follow the reading, not the bare rung: Net 45 is offered only
-   when the reading is low. The matrix's axes name the scale ("Counterparty
-   risk →", "lower risk" and "higher risk" under the columns, "Relationship
-   opportunity ↑"), not the company's reading of it, which stays in that
-   line and the Why box. Beside the matrix, "Why this verdict"
-   gives the input that decided each axis, with its figure — payables up
-   27%, Z'' 2.71, revenue up 20% — using the rules' own values, and states
-   the payables fact rather than a reading of it ("payables are falling:
-   56.9 days of cost of revenue, from 64.0 a year ago"). Where there are
-   restructuring filings it names the latest and counts the rest ("on 3 Jun
-   2026 and 1 earlier"). The rules themselves are in the board's footnotes.
-4. **Summary.** The Summary beside the matrix is commentary, templated from
-   the rules' own output and carrying no ratio values. The verdict is its
-   first part; on the page it starts at the second, because the verdict is
-   already above it (the Copy brief keeps it). In order: the verdict;
-   the balance sheet as strong, in the grey zone or distressed (the zone after
-   the distress cap, so never "cash-rich" — Z'' is not a cash measure); which
-   way operating income is moving, called "fast" only past 50% year on year;
-   the cash position — a runway in years or quarters when operations are
-   burning cash, or "investment is currently running ahead of cash from
-   operations" when capital spending outruns positive operating cash flow; a
-   one-line pointer ("see below") when a one-off tax item or non-operating
-   item moved net income; the one thing to watch; what it means for the
-   relationship, following each lens's own opportunity reading -- growth
-   pointing to an expanding customer, or, where spending cuts set
-   opportunity low (NexCore), cuts pointing to a shrinking one; where cuts
-   only move risk (CoreThread), a sentence before it says they "raise the
-   risk" or "add to the risk"; and the terms. The first three form one
-   sentence, joined with "and" or "but". The figures stay in the table, the
-   health tiles and "What stands out".
-5. **What stands out.** Rule-based observations about how the figures relate
-   and move, not their levels — a red flag, cash burn with its runway or heavy
+   supplies the filing list, 8-K item numbers, the filer category, the SIC
+   code and the fiscal year end. Segment revenue, the income statement's own
+   lines and the balance sheets behind net debt come from each filing's XBRL
+   instance and linkbases, found through the filing index.
+2. **Inputs, as of a date.** `lib/verdict/inputs.ts` builds the engine's
+   inputs from that data as of the assessment date (today for the page),
+   using nothing filed after it, with the data-integrity rules applied
+   (rules §11): quarterly cash flow rebuilt from the newest filing when
+   company facts lag, R&D tag precedence, restricted cash, finance arms,
+   missing debt never read as zero, the filing calendar and business-day
+   deadlines.
+3. **The engine.** `lib/verdict/` is pure: flags, areas and the health state
+   (§4), each seller's condition (§5), the verdict matrix (§6), payment terms
+   and protections (§7), evidence (§8), the potential application and likely
+   route (§9), filing status (§14 D2). Nothing here is a model output; given
+   the same filings and the same date it returns the same answer.
+4. **Verdict card.** Four verdicts, strictest first: Limit exposure, Monitor,
+   Pursue with guardrails, Pursue. Net 30 is the baseline; Net 45 is
+   available on request only for Pursue; Net 60 never. The protections are
+   additive to normal billing, cell for cell from rules §7.2; NexCore's
+   Monitor for a Fragile company states its condition (collected before
+   activation, prepaid usage, paid onboarding). Evidence reads Exception,
+   Limited or Adequate, with its reasons.
+5. **What stands out.** Rule-based findings about how the figures relate and
+   move: the filing-status item (overdue, filed within an extension,
+   extension open, filed late), red flags, cash burn with its runway or heavy
    investment with none, borrowing, acquisitions and investments, returns, a
-   one-off item, spending cuts, payables stretching, overhead outrunning
-   sales, losses or profits turning, gross margin moving, and payment terms,
-   which are always the last item. Each appears only when
-   its declared threshold fires; each carries one headline, one sentence, the
-   figures behind it and a "Rule:" line stating the threshold that fired.
-   The **one-off item** appears when something below operating income moved
-   net income: pre-tax income more than 5% of quarterly revenue away from
-   operating income; income tax more than 5% of quarterly revenue away from
-   21% of pre-tax income, when the same quarter last year was not also that
-   far away (a tax position that repeats every year, such as a full valuation
-   allowance, is not a one-off); or net income and operating income with
-   opposite signs.
+   one-off item, spending cuts, payables, overhead against sales, operating
+   profit or loss turning, gross margin moving. Each appears only when its
+   threshold fires, as a tag, a headline and the figures behind it. They
+   inform and never score.
 6. **Claude.** One job the rules cannot do: say *why*, from the filed text,
-   for the specific items the rules flagged. The answer is the finding's own
-   closing sentence, followed by a small citation (form and section, e.g.
-   "10-Q, MD&A").
+   for the items the rules flagged, in its own block directly below What
+   stands out, each answer with its citation (form and section, e.g. "10-Q,
+   MD&A").
 
 ### What Claude does, and what it is not allowed to do
 
@@ -303,9 +216,8 @@ release, and CFO commentary or prepared remarks when a company files them),
 the latest 10-Q or 10-K management discussion and notes, a Form 12b-25
 late-filing notice, and any 8-K behind a flag. Each restructuring filing
 (8-K Item 2.05) in the window is its own question, read from that 8-K and
-cached under it; the spending-cuts finding lists every one ("Restructuring
-filings (8-K Item 2.05) on 29 Jan 2026 and 3 Jun 2026") and each filing's
-answer closes it as its own sentence with its own citation.
+cached under it, and each filing's answer is its own line with its own
+citation.
 
 Every answer comes back with the verbatim passages it relied on, and the app
 checks them before anything is shown:
@@ -321,23 +233,24 @@ answer closes a finding the reader has just read, Claude is also shown that
 finding's sentence and figures and told to leave them out: the answer starts
 with the cause, never restates the gap or any figure already shown, and is
 one sentence, two at most. If the filing gives no reason, or nothing survives
-the check, the finding simply ends at its own rule-based sentence. **Claude
-never computes a number and never decides anything.** The verdict, the terms
-and every figure on the page come from the rules.
+the check, the line reads "Not explained in the filing." **Claude never
+computes a number and never decides anything.** The verdict, the health
+state, the terms, the evidence and every figure on the page come from the
+rules; the block is labelled as AI-assisted interpretation of filed text.
 
 Answers are cached per filing and trigger, under a version number that is
 bumped whenever the prompt changes, so every stored answer is regenerated
 under the current instructions.
 
 The page is complete without Claude. With the layer disabled, the API key
-absent, the daily cap reached, or the call failing, every finding still
-renders in full, without the closing sentence, and everything else renders
-exactly as before.
+absent, the daily cap reached, or the call failing, the block reads
+"Explanations unavailable" and everything else renders exactly as before.
 
 ## Design principles
 
 - **A missing value stays missing.** A figure that isn't filed is shown as
-  missing — never zero, never estimated. Anything that depends on it is
+  missing — never zero, never estimated; the page shows "—" with "Not
+  available". Anything that depends on it is
   missing too (free cash flow without capex).
 - **One tag per row.** Each line item uses one XBRL tag across all five
   quarters, chosen by a declared priority order. A cell may come from a second
@@ -357,30 +270,25 @@ exactly as before.
     so a moved cost is never counted twice.
   - **A derived payment can't be negative.** A payment or proceeds quarter
     derived by subtraction that comes out negative means the filings don't
-    reconcile; it shows MISSING, and so does everything computed from it.
-- **Declared values are on the page.** Every threshold the rules use — the
-  Z'' zones, the growth band, the payables band, the payment-terms ceiling,
-  the two runway thresholds and the rule that decides between a cash burn and
-  heavy investment, the "What stands out" thresholds, the explanation
-  triggers, the daily call cap — is printed on the page, in the board's
-  footnotes or on the finding it governs, so a reader can check
-  the verdict against the rule that produced it. So is the one place the rules
-  override a published score: Z'' punishes accumulated deficits and
-  buyback-driven negative equity, so a profitable, cash-generating company
-  scoring in the distress zone is read as grey rather than distressed, and the
-  page says so where it happens. The page reads them from the
-  same constants the rules do, so the two can never disagree.
+    reconcile; it shows as not available, and so does everything computed
+    from it.
+- **Declared values are in one place.** Every threshold the verdict uses is
+  in `lib/verdict/rulesConfig.ts`, stated in the locked rules document, and
+  read from there by both the calculation and the explanations -- every ⓘ
+  and "How the verdict works" -- so the page can never disagree with the
+  rule that produced it.
 - **Quotes are verified, not trusted.** See above. The check runs on every
   sentence, every time, and the test suite includes a deliberately altered
   quote to prove it is dropped.
 - **A percentage only when both figures are positive.** Otherwise the change
   is shown in dollars.
-- **No judgement words.** Every line states a fact about the filings
-  ("Overhead growing faster than sales. SG&A up 30% on last year against
-  revenue up 12%."), never an inference about demand, intent or what they
-  might buy.
+- **No judgement words, no prose.** Every line is a bullet, a label or a
+  table cell stating a fact about the filings, never an inference about
+  demand, intent or what they might buy. A favourable verdict means
+  financially reasonable on these terms, not proof they need what the
+  seller sells.
 
-![The same board at phone width](docs/amzn-services-phone.png)
+![The same page at phone width](docs/amzn-services-phone.png)
 
 ## Data sources and limits
 
@@ -397,22 +305,21 @@ price feed or a data vendor.
 - **Going concern is not checked.** Filers do not tag it: a company with
   going-concern language in its 10-K had no going-concern tag anywhere in its
   XBRL instance — the paragraph is untagged prose. Scanning prose is out of
-  scope, so the red-flags count is never presented as a clean going-concern
-  check: the tile's own explanation and the board's footnotes both say it was
-  not checked.
+  scope, and nothing on the page presents going concern as checked.
 - **Company-extension XBRL tags are read on the income statement and in the
   liquidity vs debt strip only.** The income statement's lines come from each
   filing, own tags included; the strip reads a company's own balance-sheet
   line only when its caption plainly says what it is. The Balance sheet tab,
   the cash flow and Key financials use standard tags only, because company
   facts exposes nothing else: a filer that moves a line to its own tag there
-  shows that cell as MISSING ("filed under the company's own tag") rather
+  shows that cell as not available ("filed under the company's own tag") rather
   than wrong.
 - **No stock prices.** The Altman Z'' variant used here is the book-equity one,
   which needs no market capitalisation.
-- **Red flags are a live, trailing-12-month window from today**, not from the
-  reporting period, so the same quarter can produce a different result later.
-  That is intended.
+- **Filing windows run from the assessment date.** Red flags, restructuring
+  filings and Critical filings are read over the 12 months before today, not
+  before the reporting period, so the same quarter can produce a different
+  result later. That is intended.
 - **Not investment advice.** It is a counterparty assessment for commercial
   terms, not a view on a security.
 
@@ -432,7 +339,7 @@ them ever belongs in the repo):
 |---|---|
 | `EDGAR_CONTACT_EMAIL` | SEC's fair-access policy requires a contact email in the User-Agent on every EDGAR request. |
 | `DATABASE_URL` | Postgres (Neon). Holds the explanation cache, the daily call count, per-filing segment data and per-filing statement extracts. The pooled connection string is all that is needed. |
-| `ANTHROPIC_API_KEY` | The explanation layer. Without it the app runs, and every finding renders without its closing explanation. |
+| `ANTHROPIC_API_KEY` | The explanation layer. Without it the app runs, and "Explained from the filings" shows its fallback line. |
 
 Optional: `CLAUDE_ENABLED=false` turns the explanation layer off outright,
 `CLAUDE_MODEL` overrides the model, `CLAUDE_DAILY_CAP` overrides the declared
@@ -449,31 +356,38 @@ only ever read once, so the stronger model costs little.
 npm run check
 ```
 
-That runs the type check, the linter, the filing-deadline unit tests (every
-filer category × 10-Q/10-K × normal and 52/53-week fiscal years), the cash
-tests (a burn versus heavy investment, including operating cash flow of
-exactly zero or unfiled; which burn measure the runway divides by; and the two
-thresholds that cap the payment-terms ladder), the quote verification tests
-including the altered-quote case, the ladder tests (every Altman zone × red
-flag × payables trend × runway, and the distress cap), the fiscal-calendar and
-debt-window tests, the one-off item tests (each trigger alone and all three
-together, the unusual-tax repeat rule, and the wording and precision the board
-shows), the resolution tests (the nil rule, splice recency, cross-tag
-year-to-date subtraction, zeros proving nothing, negative derived payments),
-a footing test that checks every income statement column of every fixture
-adds up to operating income, a recast check that lists every income
-statement cell whose presentation differs from Key financials, the findings
-tests (the returns threshold below and above its size test, every
-restructuring filing in the window, "none" for a zero comparison, risk as
-low / medium / high, the payables clause, and liquidity vs debt against
-Amazon's figures, read from each filing's balance sheet: equity securities,
-a combined debt-and-equity line, finance leases as filed and split out, face
-values never read, no debt, company-specific captions and the per-period
-units), and three snapshot diffs over thirteen real companies — one over
-every Key financials figure with its full provenance, one over every rules
-output, one over every statement cell. All report per-cell and per-field
-changes, so a change in what EDGAR returns shows up as a diff rather than
-as a quietly different verdict.
+That runs the type check, the linter, and:
+
+- **The verdict engine** (`test:verdict`): the 90 regression fixtures of
+  rules §12 (today's 41, 8 distress cases, 41 a year back) match exactly on
+  state, fired and not-measurable flags, CoreThread direction, both verdicts
+  and both evidence levels; the synthetic boundary fixtures F1–F11; the five
+  filing-status cases; the as-of rule; and unit tests for logic, matrix,
+  terms and evidence.
+- **Display states** (`test:verdict-display`): the likely route for every
+  industry-code range, Filing status Critical (1.03, 2.04, 4.02 with its
+  wording), and "Not fully measurable" (Verizon's cash area, FedEx's filing
+  area).
+- **Why bullets and health summary** (`test:verdict-why`): every warning
+  phrase, every CoreThread direction and each unknown reason, NexCore
+  caution, no caution and not measurable, every verdict line for both
+  sellers, Amazon's exact bullets, and the health-summary order with a
+  missing fact dropped.
+- **The page model** (`test:verdict-page`): on all 90 fixtures, what the page
+  shows (state, verdicts, Why bullets, evidence, terms, protections, the
+  NexCore condition) equals the engine's result, and every protections row,
+  terms line and the Fragile condition equal the rules document's own text.
+- **Input repairs** (`test:verdict-inputs`): one or more tests per
+  data-integrity rule, on fixed inputs.
+- The filing-deadline tests, the runway tests, the fiscal-calendar tests, the
+  one-off item tests, the findings tests, the resolution tests, the quote
+  verification tests including the altered-quote case, a footing test, a
+  recast check, and two snapshot diffs over thirteen real companies -- every
+  Key financials figure with its provenance, and every statement cell.
+
+`scripts/verdict-page-live.ts` (report only, network, not in `check`) builds
+the page's verdict for today's 41 through the page's own path and compares it
+with the engine pipeline's recorded result.
 
 The thirteen are chosen so that between them they exercise every branch worth
 exercising: a derived Q4 from a just-filed 10-K (MSFT, FDX), an operating loss
@@ -481,18 +395,18 @@ whose change reads in dollars (SNAP, RIVN), a cash burn with a runway figure
 (RIVN), heavy investment with none (AMZN, GOOGL), a one-off non-operating
 item (NVDA, AMZN, GOOGL, UBER, ZM), a tax position that repeats from a year
 earlier and so is not a one-off (RIVN), a company with no debt on its balance sheet (ZM), a
-restructuring filing (FDX, SNAP), the grey zone (WMT, TGT), the one path from
-grey to high risk (TGT) and the Altman distress cap (UBER). Where no real filer
-reaches a rule, the rule gets unit tests instead of a ticker — the two runway
-thresholds, a first-year unusual tax item and net income against operating
-income with opposite signs are in that position. A rule nothing exercises is a rule
+restructuring filing (FDX, SNAP) and a filing calendar that can't be projected
+(FDX). The verdict's own branches are covered by the 90 regression fixtures
+and synthetic cases above. Where no real filer reaches a rule, the rule gets
+unit tests instead of a ticker — a first-year unusual tax item and net income
+against operating income with opposite signs are in that position. A rule nothing exercises is a rule
 nothing checks.
 
 The phone layout is checked separately, because it needs a browser:
-`node scripts/screenshots.mjs http://localhost:3000` opens the board at 375px in
+`node scripts/screenshots.mjs http://localhost:3000` opens the page at 375px in
 both Chromium and WebKit, for AMZN, RIVN and NAII on both lenses, and fails if
-any element inside the board extends past its right edge — before it takes a
-single screenshot, so a broken layout never reaches the README. Add
+any element inside the page body extends past its right edge — before it
+takes a single screenshot, so a broken layout never reaches the README. Add
 `--check-only` to run the check without the screenshots.
 
 Other commands:
@@ -501,11 +415,13 @@ Other commands:
 |---|---|
 | `npm run explain-report -- NVDA` | The whole Claude layer for a ticker: triggers, sources read, explanation, citation, verified passages, what was dropped, tokens spent. |
 | `npm run audit-explanations` | Re-fetches every cited filing and re-verifies every stored explanation from scratch. Makes no Claude call. |
-| `npm run snapshot` / `npm run rules-snapshot` / `npm run statements-snapshot` | Regenerate the snapshot baselines (never without reviewing the diff). |
+| `npm run snapshot` / `npm run statements-snapshot` | Regenerate the snapshot baselines (never without reviewing the diff). |
+| `npm run test:ladder` / `npm run test:rules-snapshot` | The retired S0 ladder and rules snapshot, kept runnable but out of `check`: the S5 engine replaced the verdict they test. |
 
 ---
 
 Built with [Claude Code](https://claude.com/claude-code) from my own written
-spec (`Earnings_Lens_Build_Spec.md`). The visual target is
-`Earnings_Lens_Statements_Mock.html` (v1.5): the statement tabs, the lens
-board and its findings.
+spec (`Earnings_Lens_Build_Spec.md`) and the locked verdict rules
+(`Earnings_Lens_Verdict_Rules_S5.md`). The visual target is
+`Earnings_Lens_Verdict_S5_Mock.html` (mock V24); `Earnings_Lens_Statements_Mock.html`
+still describes the statement tabs.

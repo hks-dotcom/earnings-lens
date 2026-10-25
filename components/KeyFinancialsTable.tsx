@@ -24,13 +24,13 @@ export const ROW_LABELS: Record<string, string> = {
   revenue: "Revenue",
   costOfRevenue: "Cost of revenue",
   grossProfit: "Gross profit",
-  researchAndDevelopment: "R&D (engineering spend)",
+  researchAndDevelopment: "R&D expense",
   sga: "SG&A",
   operatingIncome: "Operating income",
   netIncome: "Net income",
   operatingCashFlow: "Operating cash flow",
   capitalExpenditures: "Capital expenditures",
-  freeCashFlow: "Free cash flow",
+  freeCashFlow: "FCF (Earnings Lens basis)",
   cash: "Cash & equivalents",
 };
 
@@ -42,7 +42,12 @@ interface MoneyRow {
   bold?: boolean;
   /** Rendered under the row label, e.g. the generated net income note. */
   note?: string;
+  /** R&D the company does not report as a line: one "Not separately disclosed" cell across the row. */
+  notDisclosed?: boolean;
 }
+
+export const NOT_SEPARATELY_DISCLOSED = "Not separately disclosed";
+export const NOT_AVAILABLE = "Not available";
 interface MarginRow {
   kind: "margin";
   key: string;
@@ -75,7 +80,7 @@ function MoneyCell({
   quarterLabel?: string;
   periodEnd?: string;
 }) {
-  if (!cell) return <span style={{ color: "#9C978C" }}>MISSING</span>;
+  if (!cell) return <NotAvailable />;
   return (
     <span
       title={cellProvenance(cell, quarterLabel ?? "", periodEnd ?? "")}
@@ -87,6 +92,15 @@ function MoneyCell({
   );
 }
 
+/** A missing figure (rules 17.6): a dash, with "Not available" under it. Missing stays missing. */
+export function NotAvailable() {
+  return (
+    <span className="na">
+      —<small>{NOT_AVAILABLE}</small>
+    </span>
+  );
+}
+
 /** A change column's value; with either figure missing there is no change, shown as a muted dash. */
 function ChangeText({ text }: { text: string }) {
   if (text === NO_CHANGE) return <span style={{ color: "#9C978C" }}>{NO_CHANGE}</span>;
@@ -94,7 +108,7 @@ function ChangeText({ text }: { text: string }) {
 }
 
 function MarginCell({ value, derived, bold }: { value: number | undefined; derived?: boolean; bold?: boolean }) {
-  if (value === undefined) return <span style={{ color: "#9C978C" }}>MISSING</span>;
+  if (value === undefined) return <NotAvailable />;
   return (
     <span style={{ fontWeight: bold ? 600 : 400, color: value < 0 ? "var(--bad-text)" : undefined }}>
       {value < 0 ? MINUS : ""}
@@ -124,11 +138,14 @@ export function KeyFinancialsTable({
   health,
   annual,
   showAnnual,
+  rdNotQuarterly = false,
 }: {
   kf: KeyFinancials;
   health: FinancialHealth;
   annual: AnnualFigures | null;
   showAnnual: boolean;
+  /** The verdict read no quarterly R&D (rules 11 R6): a row with no figure then says so instead of MISSING. */
+  rdNotQuarterly?: boolean;
 }) {
 
   // "When the latest quarter's revenue is under $100M, figures show one
@@ -148,7 +165,13 @@ export function KeyFinancialsTable({
   const rows: Row[] = [
     { kind: "money", key: "revenue", label: ROW_LABELS.revenue, line: kf.revenue, bold: true },
     { kind: "margin", key: "grossMargin", label: "Gross margin", values: grossMargin, derived: marginDerived(kf.grossProfit) },
-    { kind: "money", key: "researchAndDevelopment", label: ROW_LABELS.researchAndDevelopment, line: kf.researchAndDevelopment },
+    {
+      kind: "money",
+      key: "researchAndDevelopment",
+      label: ROW_LABELS.researchAndDevelopment,
+      line: kf.researchAndDevelopment,
+      notDisclosed: rdNotQuarterly && [0, 1, 4].every((i) => kf.researchAndDevelopment.values[i]?.value === undefined),
+    },
     { kind: "money", key: "sga", label: ROW_LABELS.sga, line: kf.sga },
     { kind: "money", key: "operatingIncome", label: ROW_LABELS.operatingIncome, line: kf.operatingIncome },
     { kind: "margin", key: "operatingMargin", label: "Operating margin", values: operatingMargin, derived: marginDerived(kf.operatingIncome) },
@@ -209,17 +232,12 @@ export function KeyFinancialsTable({
         )}
       </ScrollHint>
 
-      {!showAnnual && derivedNotes.length > 0 && (
-        <div style={{ fontSize: 11, lineHeight: 1.55, color: "var(--text-tertiary)" }}>
-          <span style={{ fontWeight: 600 }}>{DERIVED_MARK} Derived:</span>{" "}
-          {derivedNotes.map((n) => n.text).join(" ")}
-        </div>
-      )}
-      {showAnnual && (
-        <div style={{ fontSize: 11, lineHeight: 1.55, color: "var(--text-tertiary)" }}>
-          Full fiscal years as filed in each 10-K, not a sum of the quarterly columns above.
-        </div>
-      )}
+      <ul className="kf-notes">
+        {!showAnnual && derivedNotes.length > 0 && <li>{DERIVED_MARK} Derived from filed lines</li>}
+        {!showAnnual && derivedNotes.map((n, i) => <li key={i}>{n.text.replace(/\.$/, "")}</li>)}
+        <li>Free cash flow (Earnings Lens basis) = operating cash flow − purchases of property and equipment; may differ from the company&apos;s own figure</li>
+        {showAnnual && <li>Full fiscal years as filed in each 10-K, not a sum of the quarterly columns above</li>}
+      </ul>
     </div>
   );
 }
@@ -260,6 +278,17 @@ function RowRender({ row, unit, quarters }: { row: Row; unit: Unit; quarters: Ke
     );
   }
 
+  if (row.notDisclosed) {
+    return (
+      <tr style={{ borderTop: "1px solid var(--border-subtle)" }}>
+        {labelCell}
+        <td colSpan={7} style={{ padding: 8, color: "var(--text-secondary)" }}>
+          {NOT_SEPARATELY_DISCLOSED}
+        </td>
+      </tr>
+    );
+  }
+
   const v = row.line.values;
   const qoq = formatChange(v[0]?.value, v[1]?.value, unit);
   const yoy = formatChange(v[0]?.value, v[4]?.value, unit);
@@ -286,7 +315,7 @@ function RowRender({ row, unit, quarters }: { row: Row; unit: Unit; quarters: Ke
 }
 
 function annualCellNode(cell: AnnualCell | null, unit: Unit, bold?: boolean) {
-  if (!cell) return <span style={{ color: "#9C978C" }}>MISSING</span>;
+  if (!cell) return <NotAvailable />;
   return (
     <span style={{ fontWeight: bold ? 600 : 400, color: isNegative(cell.value) ? "var(--bad-text)" : undefined }}>
       {formatMoney(cell.value, unit)}

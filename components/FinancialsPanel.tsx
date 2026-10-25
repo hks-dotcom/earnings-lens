@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { PageData } from "@/lib/present/buildPageData";
-import { KeyFinancialsTable } from "@/components/KeyFinancialsTable";
+import { KeyFinancialsTable, NotAvailable } from "@/components/KeyFinancialsTable";
 import { ScrollHint } from "@/components/ScrollHint";
 import { chooseUnit, formatMoney, formatPeriodEnd, Unit } from "@/lib/present/format";
 import { fiscalYearInfo } from "@/lib/present/fiscalYear";
@@ -176,7 +176,7 @@ function Row({ r, cols, annual, unit }: { r: StatementRow; cols: StatementColumn
           if (!isValue(c)) {
             return (
               <td key={i} className="st-missing" title={title}>
-                MISSING
+                <NotAvailable />
               </td>
             );
           }
@@ -240,11 +240,18 @@ export function FinancialsPanel({
       <div className="fin-unit">{unit.label.toUpperCase()}</div>
 
       {tab === "kf" ? (
-        <KeyFinancialsTable kf={page.keyFinancials} health={page.health} annual={page.annual} showAnnual={annual} />
+        <KeyFinancialsTable kf={page.keyFinancials} health={page.health} annual={page.annual} showAnnual={annual} rdNotQuarterly={page.rdStatus !== "quarterly"} />
       ) : statements.status === "ready" ? (
         <>
           <StatementTable s={statements.statements} tab={tab} annual={annual} unit={unit} />
-          <p className="fin-note">{statementFootnote(statements.statements, tab, annual, unit)}</p>
+          {/* The footnote's sentences as bullets: the page carries no running prose (rules §16). */}
+          <ul className="fin-note">
+            {statementFootnote(statements.statements, tab, annual, unit)
+              .split(/(?<=\.) (?=[A-Zⁿᶜ])/)
+              .map((t, i) => (
+                <li key={i}>{t.replace(/\.$/, "")}</li>
+              ))}
+          </ul>
         </>
       ) : (
         <p className="fin-loading" role="status">

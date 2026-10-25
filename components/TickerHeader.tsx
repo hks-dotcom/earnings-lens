@@ -1,5 +1,6 @@
 "use client";
 
+import { useSyncExternalStore } from "react";
 import { PageData } from "@/lib/present/buildPageData";
 import { CompanySearch } from "@/components/CompanySearch";
 import { Lens } from "@/lib/rules/dealStructure";
@@ -12,6 +13,63 @@ function formatDate(iso: string): string {
   return `${months[m - 1]} ${d}, ${y}`;
 }
 
+const PHONE = "(max-width: 640px)";
+
+/** True at phone width; false on the server and on wider screens. */
+function usePhone(): boolean {
+  return useSyncExternalStore(
+    (cb) => {
+      const mq = window.matchMedia(PHONE);
+      mq.addEventListener("change", cb);
+      return () => mq.removeEventListener("change", cb);
+    },
+    () => window.matchMedia(PHONE).matches,
+    () => false
+  );
+}
+
+/** The period line, and the results banner and awaiting-figures note beside it. */
+function PeriodLines({ page }: { page: PageData }) {
+  const due = page.header.dueBy;
+  return (
+    <div className="hdr-sub">
+      <span>
+        Financials for the quarter ended <strong>{formatDate(page.header.periodEndDate)}</strong> ({page.header.fiscalQuarterLabel})
+        {due && (
+          <>
+            {" "}
+            · Next {due.form} due by{" "}
+            <strong>
+              {due.isEstimated ? "~" : ""}
+              {formatDate(due.dueDate)}
+            </strong>
+          </>
+        )}
+      </span>
+      {/* Results announced for a newer quarter than the one shown: beside the period line, never in place of it. */}
+      {page.header.newResultsAnnounced && (
+        <span className="hdr-note">
+          New results announced <strong>{formatDate(page.header.newResultsAnnounced.date)}</strong> · full figures arrive with the{" "}
+          {page.header.newResultsAnnounced.form ?? "next periodic filing"}
+        </span>
+      )}
+      {/* A filing EDGAR lists but has not published figures for yet: the board shows the quarter before it. */}
+      {page.header.awaitingFigures && (
+        <span className="hdr-note hdr-muted">
+          {page.header.awaitingFigures.form} for the quarter ended {formatDate(page.header.awaitingFigures.periodEnd)} filed{" "}
+          {formatDate(page.header.awaitingFigures.filingDate)} · figures not yet published by EDGAR · showing the quarter before it
+        </span>
+      )}
+    </div>
+  );
+}
+
+/**
+ * The sticky page header (mock V24): kicker, company name, period line,
+ * search and the lens switch. At phone width the sticky bar is compact --
+ * company name and lens switch only -- and the period line and search sit
+ * just below it, so they scroll away but are still there.
+ */
 export function TickerHeader({
   tickerInput,
   onTickerInputChange,
@@ -28,89 +86,45 @@ export function TickerHeader({
   lens: Lens;
   onLensChange: (l: Lens) => void;
 }) {
-  const due = page?.header.dueBy;
-  return (
-    <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 24, flexWrap: "wrap" }}>
-      <div style={{ display: "flex", flexDirection: "column", gap: 6, minWidth: 0 }}>
-        <div style={{ fontSize: 12, fontWeight: 600, letterSpacing: "0.08em", color: "var(--text-tertiary)" }}>EARNINGS LENS</div>
-        <h1 className="font-serif" style={{ margin: 0, fontWeight: 600, fontSize: 32, overflowWrap: "break-word" }}>
-          {page ? page.companyName : "Enter a ticker"}
-        </h1>
-        {page && (
-          <div style={{ fontSize: 14, color: "var(--text-secondary)" }}>
-            <span>
-              Financials for the quarter ended{" "}
-              <strong style={{ color: "var(--text-primary)" }}>{formatDate(page.header.periodEndDate)}</strong> ({page.header.fiscalQuarterLabel})
-              {due && (
-                <>
-                  {" "}&middot; Next {due.form} due by{" "}
-                  <strong style={{ color: "var(--text-primary)" }}>
-                    {due.isEstimated ? "~" : ""}
-                    {formatDate(due.dueDate)}
-                  </strong>
-                </>
-              )}
-            </span>
-            {/*
-              Results announced for a newer quarter than the one shown: an
-              addition beside the period line, never in place of it.
-            */}
-            {page.header.newResultsAnnounced && (
-              <div style={{ marginTop: 4 }}>
-                New results announced{" "}
-                <strong style={{ color: "var(--text-primary)" }}>{formatDate(page.header.newResultsAnnounced.date)}</strong>. Full
-                figures arrive with the {page.header.newResultsAnnounced.form ?? "next periodic filing"}.
-              </div>
-            )}
-            {/*
-              A filing EDGAR lists but has not published figures for yet.
-              Without this line the board shows the previous quarter under
-              no explanation at all, which is how a stale board passes for
-              a current one.
-            */}
-            {page.header.awaitingFigures && (
-              <div style={{ marginTop: 4, fontSize: 13, color: "var(--text-tertiary)" }}>
-                A {page.header.awaitingFigures.form} for the quarter ended{" "}
-                {formatDate(page.header.awaitingFigures.periodEnd)} was filed{" "}
-                {formatDate(page.header.awaitingFigures.filingDate)}; EDGAR has not published its figures yet, so
-                the board shows the quarter before it.
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-
-      <div style={{ display: "flex", alignItems: "flex-end", gap: 16, flexWrap: "wrap" }}>
-        <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-          <label htmlFor="tk" style={{ fontSize: 12, fontWeight: 500, color: "var(--text-secondary)" }}>
-            Ticker or company
-          </label>
-          <CompanySearch value={tickerInput} onChange={onTickerInputChange} onSubmit={onSubmit} />
-        </div>
-        <div style={{ display: "flex", padding: 4, gap: 4, background: "#EAE6DD", borderRadius: 10 }}>
-          {(["Services", "SaaS"] as Lens[]).map((l) => (
-            <button
-              key={l}
-              data-lens={l}
-              onClick={() => onLensChange(l)}
-              style={{
-                height: 40,
-                padding: "0 14px",
-                border: 0,
-                borderRadius: 7,
-                background: lens === l ? (l === "Services" ? "#1F6F5C" : "#3B4BA8") : "transparent",
-                color: lens === l ? "#FFFFFF" : "var(--text-secondary)",
-                fontFamily: "inherit",
-                fontSize: 14,
-                fontWeight: lens === l ? 600 : 400,
-                cursor: "pointer",
-              }}
-            >
-              {lensToggleLabel(l)}
-            </button>
-          ))}
-        </div>
-      </div>
+  const phone = usePhone();
+  const search = (
+    <div className="hdr-search">
+      <label htmlFor="tk">Ticker or company</label>
+      <CompanySearch value={tickerInput} onChange={onTickerInputChange} onSubmit={onSubmit} />
     </div>
+  );
+  return (
+    <>
+      <header className="hdr">
+        <div className="hdr-left">
+          <div className="hdr-kicker">EARNINGS LENS</div>
+          <h1 className="hdr-name font-serif">{page ? page.companyName : "Enter a ticker"}</h1>
+          {page && !phone && <PeriodLines page={page} />}
+        </div>
+        <div className="hdr-right">
+          {!phone && search}
+          <div className="lens-switch">
+            {(["Services", "SaaS"] as Lens[]).map((l) => (
+              <button
+                key={l}
+                type="button"
+                data-lens={l}
+                aria-pressed={lens === l}
+                onClick={() => onLensChange(l)}
+                style={{ background: lens === l ? (l === "Services" ? "#1F6F5C" : "#3B4BA8") : "transparent", color: lens === l ? "#FFFFFF" : "var(--text-secondary)" }}
+              >
+                {lensToggleLabel(l)}
+              </button>
+            ))}
+          </div>
+        </div>
+      </header>
+      {phone && (
+        <div className="hdr-phone">
+          {page && <PeriodLines page={page} />}
+          {search}
+        </div>
+      )}
+    </>
   );
 }

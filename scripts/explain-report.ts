@@ -1,6 +1,6 @@
 // The Claude layer, end to end, for one or more tickers.
 //
-// Prints, per ticker: the Summary as a reader sees it, every trigger that
+// Prints, per ticker: the S5 verdict for both sellers, every trigger that
 // fired with the computed fact behind it, the filed text that was read
 // (including which exhibits the results 8-K carries), the explanation and
 // its citation, the passages it was verified against, what the verifier
@@ -10,7 +10,6 @@
 //        CLAUDE_ENABLED=false npm run explain-report -- NVDA   (no calls)
 
 import { buildPageData } from "@/lib/present/buildPageData";
-import { summaryText } from "@/lib/present/summary";
 import { claudeCallsToday, storeCounts, storeConfigured } from "@/lib/db/store";
 import { resolveTicker } from "@/lib/edgar/tickers";
 import { getSubmissions, periodicFilings, resultsEightKForPeriod } from "@/lib/edgar/submissions";
@@ -34,12 +33,12 @@ async function reportOne(ticker: string) {
   const d = page.claudeDiagnostics;
 
   console.log(`  ${page.companyName} (${page.ticker}) · ${page.header.fiscalQuarterLabel}, quarter ended ${page.header.periodEndDate}`);
-  console.log(`  Ladder: ${page.lenses.Services.ladder.rung} · Services ${page.lenses.Services.quadrant} · SaaS ${page.lenses.SaaS.quadrant}`);
-
-  console.log(`\n  SUMMARY (Services lens)`);
-  console.log(indent(summaryText(page.lenses.Services, page.keyFinancials, page.health), "    "));
-  console.log(`\n  SUMMARY (SaaS lens)`);
-  console.log(indent(summaryText(page.lenses.SaaS, page.keyFinancials, page.health), "    "));
+  const v = page.verdict;
+  console.log(`  Health: ${v.state} · ${v.subtitle}`);
+  for (const sp of [v.coreThread, v.nexCore]) {
+    console.log(`\n  ${sp.seller.toUpperCase()}: ${sp.verdict} · evidence ${sp.evidence.shown}`);
+    for (const w of sp.why) console.log(`    - ${w}`);
+  }
 
   // What filed text exists for this ticker, listed whether or not a call
   // was needed -- a cached answer still has to be attributable to a source.

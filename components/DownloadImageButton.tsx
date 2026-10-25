@@ -72,7 +72,7 @@ export function DownloadImageButton({
       onClick={handleDownload}
       disabled={state === "working"}
       style={{
-        height: 40,
+        height: 44,
         padding: "0 16px",
         border: `1px solid ${color}`,
         borderRadius: 8,
