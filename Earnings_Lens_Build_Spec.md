@@ -1,5 +1,6 @@
 # Earnings Lens — Build Spec (v1.4)
 
+*Verdict rules S5, 25 Oct 2026: the verdict rules are being replaced by `Earnings_Lens_Verdict_Rules_S5.md`. Build A adds the engine and its tests (`lib/verdict/`, not yet used by the page); the page is wired in Build B.*
 *v1.1, 21 Sep 2026: updated after the step 3 checkpoint. Mock figures now come from the 10-Q; rules revised for segments, DPO, equity and caching.*
 *v1.4, 22 Sep 2026: Z'' cap for profitable cash generators; negative free cash flow split into cash burn and heavy investment; filings placed by date; broader debt tags; famous-company fixtures; Summary wording rules completed. The redesign mock now shows Amazon.*
 *v1.3, 21 Sep 2026: lens section redesigned as commentary (Summary without ratios, "What stands out", terms as the last item), runway added to the ladder, "retrenchment" renamed "spending cuts" on screen. The layout target is `Earnings_Lens_Lens_Redesign_Mock.html`; it supersedes the lens section of `Earnings_Lens_Mock.html`.*

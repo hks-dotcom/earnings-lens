@@ -1,0 +1,3401 @@
+[
+ {
+  "set": "year-back",
+  "ticker": "NVDA",
+  "cik": "0001045810",
+  "vantage": "2025-08-27",
+  "assessmentDate": "2025-08-27",
+  "source": "verdict-s4/out/partd4-D3.json",
+  "x": {
+   "ticker": "NVDA",
+   "sic": 3674,
+   "revYoY": [
+    55.60252996005326,
+    69.18292121025956
+   ],
+   "marginChangePts0": -1.3,
+   "rdYoY": [
+    38.86731391585761,
+    46.654411764705884
+   ],
+   "rdStatus": "quarterly",
+   "rdTag": "ResearchAndDevelopmentExpense",
+   "rdQuarters": 12,
+   "ocfTTM": [
+    77035000000,
+    48664000000
+   ],
+   "fcfTTM": [
+    72023000000,
+    46786000000
+   ],
+   "capexTTM": [
+    5012000000,
+    1878000000
+   ],
+   "revTTM0": 165218000000,
+   "currentRatio0": 4.2140000824504265,
+   "netDebt": [
+    -48325000000,
+    -26339000000
+   ],
+   "runwayQuarters": null,
+   "runwayCase": "none",
+   "critical": [],
+   "missedFiling": false,
+   "missedFilingWhy": "10-Q for 2025-10-26 due 2025-12-05, not yet due",
+   "restructuring205": [],
+   "stale": false,
+   "financeArm": false,
+   "financeArmSeparable": false,
+   "restrictedNotSeparated": false
+  },
+  "expected": {
+   "state": "Resilient",
+   "deciding": "no flags",
+   "fired": [],
+   "unmeasurable": [],
+   "flags": {
+    "SEVERE BURN": false,
+    "CAUTION BURN": false,
+    "PERSISTENT BURN, RUNWAY UNKNOWN": false,
+    "INVESTMENT CASH PRESSURE": false,
+    "WEAK LIQUIDITY": false,
+    "OPERATING DETERIORATION": false,
+    "LEVERAGE": false,
+    "FUNDING SUBSTITUTION": false,
+    "LOW-CASH DEBT": false,
+    "MISSED FILING": false
+   },
+   "ct": {
+    "direction": "EXPANDING",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Adequate"
+   },
+   "nc": {
+    "direction": "UNKNOWN",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Adequate"
+   }
+  }
+ },
+ {
+  "set": "year-back",
+  "ticker": "MSFT",
+  "cik": "0000789019",
+  "vantage": "2025-07-30",
+  "assessmentDate": "2025-07-30",
+  "source": "verdict-s4/out/partd4-D3.json",
+  "x": {
+   "ticker": "MSFT",
+   "sic": 7372,
+   "revYoY": [
+    18.09754816382653,
+    13.269100197225905
+   ],
+   "marginChangePts0": 1.8,
+   "rdYoY": [
+    9.595332671300893,
+    7.121390304455769
+   ],
+   "rdStatus": "quarterly",
+   "rdTag": "ResearchAndDevelopmentExpense",
+   "rdQuarters": 12,
+   "ocfTTM": [
+    136162000000,
+    118548000000
+   ],
+   "fcfTTM": [
+    71611000000,
+    74071000000
+   ],
+   "capexTTM": [
+    64551000000,
+    44477000000
+   ],
+   "revTTM0": 281724000000,
+   "currentRatio0": 1.3534464445042416,
+   "netDebt": [
+    -51414000000,
+    -23913000000
+   ],
+   "runwayQuarters": null,
+   "runwayCase": "none",
+   "critical": [],
+   "missedFiling": false,
+   "missedFilingWhy": "10-Q for 2025-09-30 due 2025-11-09, not yet due",
+   "restructuring205": [],
+   "stale": false,
+   "financeArm": false,
+   "financeArmSeparable": false,
+   "restrictedNotSeparated": false
+  },
+  "expected": {
+   "state": "Resilient",
+   "deciding": "no flags",
+   "fired": [],
+   "unmeasurable": [],
+   "flags": {
+    "SEVERE BURN": false,
+    "CAUTION BURN": false,
+    "PERSISTENT BURN, RUNWAY UNKNOWN": false,
+    "INVESTMENT CASH PRESSURE": false,
+    "WEAK LIQUIDITY": false,
+    "OPERATING DETERIORATION": false,
+    "LEVERAGE": false,
+    "FUNDING SUBSTITUTION": false,
+    "LOW-CASH DEBT": false,
+    "MISSED FILING": false
+   },
+   "ct": {
+    "direction": "EXPANDING",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Adequate"
+   },
+   "nc": {
+    "direction": "UNKNOWN",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Adequate"
+   }
+  }
+ },
+ {
+  "set": "year-back",
+  "ticker": "WMT",
+  "cik": "0000104169",
+  "vantage": "2025-08-29",
+  "assessmentDate": "2025-08-29",
+  "source": "verdict-s4/out/partd4-D3.json",
+  "x": {
+   "ticker": "WMT",
+   "sic": 5331,
+   "revYoY": [
+    4.763929488882983,
+    2.5391931049855114
+   ],
+   "marginChangePts0": -0.6,
+   "rdYoY": [
+    null,
+    null
+   ],
+   "rdStatus": "not filed",
+   "rdTag": null,
+   "rdQuarters": 0,
+   "ocfTTM": [
+    38438000000,
+    33882000000
+   ],
+   "fcfTTM": [
+    13753000000,
+    11985000000
+   ],
+   "capexTTM": [
+    24685000000,
+    21897000000
+   ],
+   "revTTM0": 693153000000,
+   "currentRatio0": 0.7920842747619875,
+   "netDebt": [
+    34057000000,
+    31243000000
+   ],
+   "runwayQuarters": null,
+   "runwayCase": "none",
+   "critical": [],
+   "missedFiling": false,
+   "missedFilingWhy": "10-Q for 2025-10-31 due 2025-12-10, not yet due",
+   "restructuring205": [],
+   "stale": false,
+   "financeArm": false,
+   "financeArmSeparable": false,
+   "restrictedNotSeparated": false
+  },
+  "expected": {
+   "state": "Resilient",
+   "deciding": "no flags",
+   "fired": [],
+   "unmeasurable": [],
+   "flags": {
+    "SEVERE BURN": false,
+    "CAUTION BURN": false,
+    "PERSISTENT BURN, RUNWAY UNKNOWN": false,
+    "INVESTMENT CASH PRESSURE": false,
+    "WEAK LIQUIDITY": false,
+    "OPERATING DETERIORATION": false,
+    "LEVERAGE": false,
+    "FUNDING SUBSTITUTION": false,
+    "LOW-CASH DEBT": false,
+    "MISSED FILING": false
+   },
+   "ct": {
+    "direction": "UNKNOWN (R&D not filed)",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Limited"
+   },
+   "nc": {
+    "direction": "UNKNOWN",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Adequate"
+   }
+  }
+ },
+ {
+  "set": "year-back",
+  "ticker": "UFPT",
+  "cik": "0000914156",
+  "vantage": "2025-08-11",
+  "assessmentDate": "2025-08-11",
+  "source": "verdict-s4/out/partd4-D3.json",
+  "x": {
+   "ticker": "UFPT",
+   "sic": 3841,
+   "revYoY": [
+    37.211940786189494,
+    41.08124065556286
+   ],
+   "marginChangePts0": -0.2,
+   "rdYoY": [
+    null,
+    null
+   ],
+   "rdStatus": "annual only",
+   "rdTag": null,
+   "rdQuarters": 0,
+   "ocfTTM": [
+    83366000,
+    53102000
+   ],
+   "fcfTTM": [
+    72539000,
+    43060000
+   ],
+   "capexTTM": [
+    10827000,
+    10042000
+   ],
+   "revTTM0": 588559000,
+   "currentRatio0": 2.765951297059036,
+   "netDebt": [
+    148733000,
+    18472000
+   ],
+   "runwayQuarters": null,
+   "runwayCase": "none",
+   "critical": [],
+   "missedFiling": false,
+   "missedFilingWhy": "10-Q for 2025-09-30 due 2025-11-09, not yet due",
+   "restructuring205": [],
+   "stale": false,
+   "financeArm": false,
+   "financeArmSeparable": false,
+   "restrictedNotSeparated": false
+  },
+  "expected": {
+   "state": "Resilient",
+   "deciding": "no flags",
+   "fired": [],
+   "unmeasurable": [],
+   "flags": {
+    "SEVERE BURN": false,
+    "CAUTION BURN": false,
+    "PERSISTENT BURN, RUNWAY UNKNOWN": false,
+    "INVESTMENT CASH PRESSURE": false,
+    "WEAK LIQUIDITY": false,
+    "OPERATING DETERIORATION": false,
+    "LEVERAGE": false,
+    "FUNDING SUBSTITUTION": false,
+    "LOW-CASH DEBT": false,
+    "MISSED FILING": false
+   },
+   "ct": {
+    "direction": "UNKNOWN (R&D annual only)",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Limited"
+   },
+   "nc": {
+    "direction": "UNKNOWN",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Adequate"
+   }
+  }
+ },
+ {
+  "set": "year-back",
+  "ticker": "NAII",
+  "cik": "0000787253",
+  "vantage": "2025-09-23",
+  "assessmentDate": "2025-09-23",
+  "source": "verdict-s4/out/partd4-D3.json",
+  "x": {
+   "ticker": "NAII",
+   "sic": 2833,
+   "revYoY": [
+    null,
+    null
+   ],
+   "marginChangePts0": null,
+   "rdYoY": [
+    null,
+    null
+   ],
+   "rdStatus": "annual only",
+   "rdTag": null,
+   "rdQuarters": 0,
+   "ocfTTM": [
+    5932000,
+    null
+   ],
+   "fcfTTM": [
+    2318000,
+    null
+   ],
+   "capexTTM": [
+    3614000,
+    null
+   ],
+   "revTTM0": 129860000,
+   "currentRatio0": 2.0579086238022497,
+   "netDebt": [
+    -1492000,
+    4400000
+   ],
+   "runwayQuarters": null,
+   "runwayCase": "none",
+   "critical": [],
+   "missedFiling": false,
+   "missedFilingWhy": "10-Q for 2025-09-30 due 2025-11-14, not yet due",
+   "restructuring205": [],
+   "stale": false,
+   "financeArm": false,
+   "financeArmSeparable": false,
+   "restrictedNotSeparated": false
+  },
+  "expected": {
+   "state": "Resilient",
+   "deciding": "no flags",
+   "fired": [],
+   "unmeasurable": [
+    "OPERATING DETERIORATION"
+   ],
+   "flags": {
+    "SEVERE BURN": false,
+    "CAUTION BURN": false,
+    "PERSISTENT BURN, RUNWAY UNKNOWN": false,
+    "INVESTMENT CASH PRESSURE": false,
+    "WEAK LIQUIDITY": false,
+    "OPERATING DETERIORATION": null,
+    "LEVERAGE": false,
+    "FUNDING SUBSTITUTION": false,
+    "LOW-CASH DEBT": false,
+    "MISSED FILING": false
+   },
+   "ct": {
+    "direction": "UNKNOWN (R&D annual only)",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Limited"
+   },
+   "nc": {
+    "direction": "UNKNOWN",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Limited"
+   }
+  }
+ },
+ {
+  "set": "year-back",
+  "ticker": "AMZN",
+  "cik": "0001018724",
+  "vantage": "2025-08-01",
+  "assessmentDate": "2025-08-01",
+  "source": "verdict-s4/out/partd4-D3.json",
+  "x": {
+   "ticker": "AMZN",
+   "sic": 5961,
+   "revYoY": [
+    13.329774221669583,
+    8.620292646166083
+   ],
+   "marginChangePts0": 1.5,
+   "rdYoY": [
+    null,
+    null
+   ],
+   "rdStatus": "not filed",
+   "rdTag": null,
+   "rdQuarters": 0,
+   "ocfTTM": [
+    121137000000,
+    107952000000
+   ],
+   "fcfTTM": [
+    13481000000,
+    48340000000
+   ],
+   "capexTTM": [
+    107656000000,
+    59612000000
+   ],
+   "revTTM0": 670038000000,
+   "currentRatio0": 1.0240689917130767,
+   "netDebt": [
+    -37284000000,
+    -26698000000
+   ],
+   "runwayQuarters": null,
+   "runwayCase": "none",
+   "critical": [],
+   "missedFiling": false,
+   "missedFilingWhy": "10-Q for 2025-09-30 due 2025-11-09, not yet due",
+   "restructuring205": [],
+   "stale": false,
+   "financeArm": false,
+   "financeArmSeparable": false,
+   "restrictedNotSeparated": false
+  },
+  "expected": {
+   "state": "Resilient",
+   "deciding": "no flags",
+   "fired": [],
+   "unmeasurable": [],
+   "flags": {
+    "SEVERE BURN": false,
+    "CAUTION BURN": false,
+    "PERSISTENT BURN, RUNWAY UNKNOWN": false,
+    "INVESTMENT CASH PRESSURE": false,
+    "WEAK LIQUIDITY": false,
+    "OPERATING DETERIORATION": false,
+    "LEVERAGE": false,
+    "FUNDING SUBSTITUTION": false,
+    "LOW-CASH DEBT": false,
+    "MISSED FILING": false
+   },
+   "ct": {
+    "direction": "UNKNOWN (R&D not filed)",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Limited"
+   },
+   "nc": {
+    "direction": "UNKNOWN",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Adequate"
+   }
+  }
+ },
+ {
+  "set": "year-back",
+  "ticker": "GOOGL",
+  "cik": "0001652044",
+  "vantage": "2025-07-24",
+  "assessmentDate": "2025-07-24",
+  "source": "verdict-s4/out/partd4-D3.json",
+  "x": {
+   "ticker": "GOOGL",
+   "sic": 7370,
+   "revYoY": [
+    13.790092280097236,
+    12.03764635766523
+   ],
+   "marginChangePts0": 0,
+   "rdYoY": [
+    16.42495784148398,
+    13.88725531378644
+   ],
+   "rdStatus": "quarterly",
+   "rdTag": "ResearchAndDevelopmentExpense",
+   "rdQuarters": 12,
+   "ocfTTM": [
+    133708000000,
+    105059000000
+   ],
+   "fcfTTM": [
+    66728000000,
+    60787000000
+   ],
+   "capexTTM": [
+    66980000000,
+    44272000000
+   ],
+   "revTTM0": 371399000000,
+   "currentRatio0": 1.9037452754552744,
+   "netDebt": [
+    -67541000000,
+    -87487000000
+   ],
+   "runwayQuarters": null,
+   "runwayCase": "none",
+   "critical": [],
+   "missedFiling": false,
+   "missedFilingWhy": "10-Q for 2025-09-30 due 2025-11-09, not yet due",
+   "restructuring205": [],
+   "stale": false,
+   "financeArm": false,
+   "financeArmSeparable": false,
+   "restrictedNotSeparated": false
+  },
+  "expected": {
+   "state": "Resilient",
+   "deciding": "no flags",
+   "fired": [],
+   "unmeasurable": [],
+   "flags": {
+    "SEVERE BURN": false,
+    "CAUTION BURN": false,
+    "PERSISTENT BURN, RUNWAY UNKNOWN": false,
+    "INVESTMENT CASH PRESSURE": false,
+    "WEAK LIQUIDITY": false,
+    "OPERATING DETERIORATION": false,
+    "LEVERAGE": false,
+    "FUNDING SUBSTITUTION": false,
+    "LOW-CASH DEBT": false,
+    "MISSED FILING": false
+   },
+   "ct": {
+    "direction": "EXPANDING",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Adequate"
+   },
+   "nc": {
+    "direction": "UNKNOWN",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Adequate"
+   }
+  }
+ },
+ {
+  "set": "year-back",
+  "ticker": "FDX",
+  "cik": "0001048911",
+  "vantage": "2025-07-21",
+  "assessmentDate": "2025-07-21",
+  "source": "verdict-s4/out/partd4-D3.json",
+  "x": {
+   "ticker": "FDX",
+   "sic": 4513,
+   "revYoY": [
+    0.5020579854357954,
+    1.9413009476492777
+   ],
+   "marginChangePts0": 1.1,
+   "rdYoY": [
+    null,
+    null
+   ],
+   "rdStatus": "not filed",
+   "rdTag": null,
+   "rdQuarters": 0,
+   "ocfTTM": [
+    7036000000,
+    8312000000
+   ],
+   "fcfTTM": [
+    2981000000,
+    3136000000
+   ],
+   "capexTTM": [
+    4055000000,
+    5176000000
+   ],
+   "revTTM0": 87926000000,
+   "currentRatio0": 1.193043929660632,
+   "netDebt": [
+    14397000000,
+    13702000000
+   ],
+   "runwayQuarters": null,
+   "runwayCase": "none",
+   "critical": [],
+   "missedFiling": false,
+   "missedFilingWhy": "10-Q for 2025-08-31 due 2025-10-10, not yet due",
+   "restructuring205": [],
+   "stale": false,
+   "financeArm": false,
+   "financeArmSeparable": false,
+   "restrictedNotSeparated": false
+  },
+  "expected": {
+   "state": "Resilient",
+   "deciding": "no flags",
+   "fired": [],
+   "unmeasurable": [],
+   "flags": {
+    "SEVERE BURN": false,
+    "CAUTION BURN": false,
+    "PERSISTENT BURN, RUNWAY UNKNOWN": false,
+    "INVESTMENT CASH PRESSURE": false,
+    "WEAK LIQUIDITY": false,
+    "OPERATING DETERIORATION": false,
+    "LEVERAGE": false,
+    "FUNDING SUBSTITUTION": false,
+    "LOW-CASH DEBT": false,
+    "MISSED FILING": false
+   },
+   "ct": {
+    "direction": "UNKNOWN (R&D not filed)",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Limited"
+   },
+   "nc": {
+    "direction": "UNKNOWN",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Adequate"
+   }
+  }
+ },
+ {
+  "set": "year-back",
+  "ticker": "SNAP",
+  "cik": "0001564408",
+  "vantage": "2025-08-06",
+  "assessmentDate": "2025-08-06",
+  "source": "verdict-s4/out/partd4-D3.json",
+  "x": {
+   "ticker": "SNAP",
+   "sic": 7370,
+   "revYoY": [
+    8.745536753861678,
+    14.098410325643448
+   ],
+   "marginChangePts0": 1.2,
+   "rdYoY": [
+    9.140661158652472,
+    -5.690603189708266
+   ],
+   "rdStatus": "quarterly",
+   "rdTag": "ResearchAndDevelopmentExpense",
+   "rdQuarters": 12,
+   "ocfTTM": [
+    586609000,
+    244330000
+   ],
+   "fcfTTM": [
+    392378000,
+    14666000
+   ],
+   "capexTTM": [
+    194231000,
+    229664000
+   ],
+   "revTTM0": 5638004000,
+   "currentRatio0": 3.8840401805950933,
+   "netDebt": [
+    682927000,
+    557459000
+   ],
+   "runwayQuarters": null,
+   "runwayCase": "none",
+   "critical": [],
+   "missedFiling": false,
+   "missedFilingWhy": "10-Q for 2025-09-30 due 2025-11-09, not yet due",
+   "restructuring205": [],
+   "stale": false,
+   "financeArm": false,
+   "financeArmSeparable": false,
+   "restrictedNotSeparated": false
+  },
+  "expected": {
+   "state": "Resilient",
+   "deciding": "no flags",
+   "fired": [],
+   "unmeasurable": [],
+   "flags": {
+    "SEVERE BURN": false,
+    "CAUTION BURN": false,
+    "PERSISTENT BURN, RUNWAY UNKNOWN": false,
+    "INVESTMENT CASH PRESSURE": false,
+    "WEAK LIQUIDITY": false,
+    "OPERATING DETERIORATION": false,
+    "LEVERAGE": false,
+    "FUNDING SUBSTITUTION": false,
+    "LOW-CASH DEBT": false,
+    "MISSED FILING": false
+   },
+   "ct": {
+    "direction": "FLAT",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Adequate"
+   },
+   "nc": {
+    "direction": "UNKNOWN",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Adequate"
+   }
+  }
+ },
+ {
+  "set": "year-back",
+  "ticker": "RIVN",
+  "cik": "0001874178",
+  "vantage": "2025-08-05",
+  "assessmentDate": "2025-08-05",
+  "source": "verdict-s4/out/partd4-D3.json",
+  "x": {
+   "ticker": "RIVN",
+   "sic": 3711,
+   "revYoY": [
+    12.521588946459413,
+    2.990033222591362
+   ],
+   "marginChangePts0": 33.2,
+   "rdYoY": [
+    -4.205607476635514,
+    -17.35357917570499
+   ],
+   "rdStatus": "quarterly",
+   "rdTag": "ResearchAndDevelopmentExpense",
+   "rdQuarters": 12,
+   "ocfTTM": [
+    183000000,
+    -4007000000
+   ],
+   "fcfTTM": [
+    -1221000000,
+    -5032000000
+   ],
+   "capexTTM": [
+    1404000000,
+    1025000000
+   ],
+   "revTTM0": 5151000000,
+   "currentRatio0": 3.438668025823989,
+   "netDebt": [
+    -3072000000,
+    -2341000000
+   ],
+   "runwayQuarters": null,
+   "runwayCase": "heavy-investment",
+   "critical": [],
+   "missedFiling": false,
+   "missedFilingWhy": "10-Q for 2025-09-30 due 2025-11-09, not yet due",
+   "restructuring205": [],
+   "stale": false,
+   "financeArm": false,
+   "financeArmSeparable": false,
+   "restrictedNotSeparated": false
+  },
+  "expected": {
+   "state": "Resilient",
+   "deciding": "no flags",
+   "fired": [],
+   "unmeasurable": [],
+   "flags": {
+    "SEVERE BURN": false,
+    "CAUTION BURN": false,
+    "PERSISTENT BURN, RUNWAY UNKNOWN": false,
+    "INVESTMENT CASH PRESSURE": false,
+    "WEAK LIQUIDITY": false,
+    "OPERATING DETERIORATION": false,
+    "LEVERAGE": false,
+    "FUNDING SUBSTITUTION": false,
+    "LOW-CASH DEBT": false,
+    "MISSED FILING": false
+   },
+   "ct": {
+    "direction": "FLAT",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Adequate"
+   },
+   "nc": {
+    "direction": "UNKNOWN",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Adequate"
+   }
+  }
+ },
+ {
+  "set": "year-back",
+  "ticker": "UBER",
+  "cik": "0001543151",
+  "vantage": "2025-08-06",
+  "assessmentDate": "2025-08-06",
+  "source": "verdict-s4/out/partd4-D3.json",
+  "x": {
+   "ticker": "UBER",
+   "sic": 7389,
+   "revYoY": [
+    18.233644859813083,
+    13.838712861514166
+   ],
+   "marginChangePts0": 4.1,
+   "rdYoY": [
+    10.526315789473683,
+    3.1645569620253164
+   ],
+   "rdStatus": "quarterly",
+   "rdTag": "ResearchAndDevelopmentExpense",
+   "rdQuarters": 12,
+   "ocfTTM": [
+    8789000000,
+    5025000000
+   ],
+   "fcfTTM": [
+    8540000000,
+    4753000000
+   ],
+   "capexTTM": [
+    249000000,
+    272000000
+   ],
+   "revTTM0": 47331000000,
+   "currentRatio0": 1.1120132429449787,
+   "netDebt": [
+    3358000000,
+    3187000000
+   ],
+   "runwayQuarters": null,
+   "runwayCase": "none",
+   "critical": [],
+   "missedFiling": false,
+   "missedFilingWhy": "10-Q for 2025-09-30 due 2025-11-09, not yet due",
+   "restructuring205": [],
+   "stale": false,
+   "financeArm": false,
+   "financeArmSeparable": false,
+   "restrictedNotSeparated": false
+  },
+  "expected": {
+   "state": "Resilient",
+   "deciding": "no flags",
+   "fired": [],
+   "unmeasurable": [],
+   "flags": {
+    "SEVERE BURN": false,
+    "CAUTION BURN": false,
+    "PERSISTENT BURN, RUNWAY UNKNOWN": false,
+    "INVESTMENT CASH PRESSURE": false,
+    "WEAK LIQUIDITY": false,
+    "OPERATING DETERIORATION": false,
+    "LEVERAGE": false,
+    "FUNDING SUBSTITUTION": false,
+    "LOW-CASH DEBT": false,
+    "MISSED FILING": false
+   },
+   "ct": {
+    "direction": "FLAT",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Adequate"
+   },
+   "nc": {
+    "direction": "UNKNOWN",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Adequate"
+   }
+  }
+ },
+ {
+  "set": "year-back",
+  "ticker": "TGT",
+  "cik": "0000027419",
+  "vantage": "2025-08-29",
+  "assessmentDate": "2025-08-29",
+  "source": "verdict-s4/out/partd4-D3.json",
+  "x": {
+   "ticker": "TGT",
+   "sic": 5331,
+   "revYoY": [
+    -0.9468804023259468,
+    -2.792385145326322
+   ],
+   "marginChangePts0": -1.2,
+   "rdYoY": [
+    null,
+    null
+   ],
+   "rdStatus": "not filed",
+   "rdTag": null,
+   "rdQuarters": 0,
+   "ocfTTM": [
+    6386000000,
+    8562000000
+   ],
+   "fcfTTM": [
+    2944000000,
+    5268000000
+   ],
+   "capexTTM": [
+    3442000000,
+    3294000000
+   ],
+   "revTTM0": 105640000000,
+   "currentRatio0": 0.9901680278832649,
+   "netDebt": [
+    12115000000,
+    11797000000
+   ],
+   "runwayQuarters": null,
+   "runwayCase": "none",
+   "critical": [],
+   "missedFiling": false,
+   "missedFilingWhy": "10-Q for 2025-11-01 due 2025-12-11, not yet due",
+   "restructuring205": [],
+   "stale": false,
+   "financeArm": false,
+   "financeArmSeparable": false,
+   "restrictedNotSeparated": false
+  },
+  "expected": {
+   "state": "Resilient",
+   "deciding": "no flags",
+   "fired": [],
+   "unmeasurable": [],
+   "flags": {
+    "SEVERE BURN": false,
+    "CAUTION BURN": false,
+    "PERSISTENT BURN, RUNWAY UNKNOWN": false,
+    "INVESTMENT CASH PRESSURE": false,
+    "WEAK LIQUIDITY": false,
+    "OPERATING DETERIORATION": false,
+    "LEVERAGE": false,
+    "FUNDING SUBSTITUTION": false,
+    "LOW-CASH DEBT": false,
+    "MISSED FILING": false
+   },
+   "ct": {
+    "direction": "UNKNOWN (R&D not filed)",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Limited"
+   },
+   "nc": {
+    "direction": "UNKNOWN",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Adequate"
+   }
+  }
+ },
+ {
+  "set": "year-back",
+  "ticker": "ZM",
+  "cik": "0001585521",
+  "vantage": "2025-08-22",
+  "assessmentDate": "2025-08-22",
+  "source": "verdict-s4/out/partd4-D3.json",
+  "x": {
+   "ticker": "ZM",
+   "sic": 7370,
+   "revYoY": [
+    4.70589753294567,
+    2.933754164351921
+   ],
+   "marginChangePts0": 9,
+   "rdYoY": [
+    -0.1494515274042833,
+    -0.06908025958610223
+   ],
+   "rdStatus": "quarterly",
+   "rdTag": "ResearchAndDevelopmentExpense",
+   "rdQuarters": 12,
+   "ocfTTM": [
+    1912984000,
+    1881903000
+   ],
+   "fcfTTM": [
+    1845290000,
+    1720634000
+   ],
+   "capexTTM": [
+    67694000,
+    161269000
+   ],
+   "revTTM0": 4753621000,
+   "currentRatio0": 4.4479616774829545,
+   "netDebt": [
+    -7778649000,
+    -1539457000
+   ],
+   "runwayQuarters": null,
+   "runwayCase": "none",
+   "critical": [],
+   "missedFiling": false,
+   "missedFilingWhy": "10-Q for 2025-10-31 due 2025-12-10, not yet due",
+   "restructuring205": [],
+   "stale": false,
+   "financeArm": false,
+   "financeArmSeparable": false,
+   "restrictedNotSeparated": false
+  },
+  "expected": {
+   "state": "Resilient",
+   "deciding": "no flags",
+   "fired": [],
+   "unmeasurable": [],
+   "flags": {
+    "SEVERE BURN": false,
+    "CAUTION BURN": false,
+    "PERSISTENT BURN, RUNWAY UNKNOWN": false,
+    "INVESTMENT CASH PRESSURE": false,
+    "WEAK LIQUIDITY": false,
+    "OPERATING DETERIORATION": false,
+    "LEVERAGE": false,
+    "FUNDING SUBSTITUTION": false,
+    "LOW-CASH DEBT": false,
+    "MISSED FILING": false
+   },
+   "ct": {
+    "direction": "FLAT",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Adequate"
+   },
+   "nc": {
+    "direction": "UNKNOWN",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Adequate"
+   }
+  }
+ },
+ {
+  "set": "year-back",
+  "ticker": "INTC",
+  "cik": "0000050863",
+  "vantage": "2025-07-24",
+  "assessmentDate": "2025-07-24",
+  "source": "verdict-s4/out/partd4-D3.json",
+  "x": {
+   "ticker": "INTC",
+   "sic": 3674,
+   "revYoY": [
+    0.20260266500428584,
+    -0.4479723357434769
+   ],
+   "marginChangePts0": -9.4,
+   "rdYoY": [
+    -13.092710544939845,
+    -16.93290734824281
+   ],
+   "rdStatus": "quarterly",
+   "rdTag": "ResearchAndDevelopmentExpense",
+   "rdQuarters": 12,
+   "ocfTTM": [
+    10082000000,
+    11517000000
+   ],
+   "fcfTTM": [
+    -10943000000,
+    -12584000000
+   ],
+   "capexTTM": [
+    21025000000,
+    24101000000
+   ],
+   "revTTM0": 53070000000,
+   "currentRatio0": 1.2404907624549562,
+   "netDebt": [
+    29551000000,
+    23756000000
+   ],
+   "runwayQuarters": null,
+   "runwayCase": "heavy-investment",
+   "critical": [],
+   "missedFiling": false,
+   "missedFilingWhy": "10-Q for 2025-09-27 due 2025-11-06, not yet due",
+   "restructuring205": [
+    "2025-07-24",
+    "2025-04-24",
+    "2024-10-31"
+   ],
+   "stale": false,
+   "financeArm": false,
+   "financeArmSeparable": false,
+   "restrictedNotSeparated": true
+  },
+  "expected": {
+   "state": "Fragile",
+   "deciding": "2 areas: INVESTMENT CASH PRESSURE + FUNDING SUBSTITUTION",
+   "fired": [
+    "INVESTMENT CASH PRESSURE",
+    "FUNDING SUBSTITUTION"
+   ],
+   "unmeasurable": [],
+   "flags": {
+    "SEVERE BURN": false,
+    "CAUTION BURN": false,
+    "PERSISTENT BURN, RUNWAY UNKNOWN": false,
+    "INVESTMENT CASH PRESSURE": true,
+    "WEAK LIQUIDITY": false,
+    "OPERATING DETERIORATION": false,
+    "LEVERAGE": false,
+    "FUNDING SUBSTITUTION": true,
+    "LOW-CASH DEBT": false,
+    "MISSED FILING": false
+   },
+   "ct": {
+    "direction": "CAUTION (R&D -13.1%/-16.9%, 8-K 2.05 2025-07-24, 2025-04-24, 2024-10-31)",
+    "caution": true,
+    "verdict": "Limit exposure",
+    "conf": "Limited"
+   },
+   "nc": {
+    "direction": "UNKNOWN",
+    "caution": false,
+    "verdict": "Monitor",
+    "conf": "Limited"
+   }
+  }
+ },
+ {
+  "set": "year-back",
+  "ticker": "PFE",
+  "cik": "0000078003",
+  "vantage": "2025-08-05",
+  "assessmentDate": "2025-08-05",
+  "source": "verdict-s4/out/partd4-D3.json",
+  "x": {
+   "ticker": "PFE",
+   "sic": 2834,
+   "revYoY": [
+    10.313935105021455,
+    -7.823106391558572
+   ],
+   "marginChangePts0": null,
+   "rdYoY": [
+    -7.937685459940654,
+    -11.632571199358203
+   ],
+   "rdStatus": "quarterly",
+   "rdTag": "ResearchAndDevelopmentExpenseExcludingAcquiredInProcessCost",
+   "rdQuarters": 12,
+   "ocfTTM": [
+    15188000000,
+    8005000000
+   ],
+   "fcfTTM": [
+    12438000000,
+    4810000000
+   ],
+   "capexTTM": [
+    2750000000,
+    3195000000
+   ],
+   "revTTM0": 63833000000,
+   "currentRatio0": 1.158431850713036,
+   "netDebt": [
+    48548000000,
+    62350000000
+   ],
+   "runwayQuarters": 9,
+   "runwayCase": "burn",
+   "critical": [],
+   "missedFiling": false,
+   "missedFilingWhy": "10-Q for 2025-09-29 due 2025-11-08, not yet due",
+   "restructuring205": [
+    "2025-04-29"
+   ],
+   "stale": false,
+   "financeArm": false,
+   "financeArmSeparable": false,
+   "restrictedNotSeparated": false
+  },
+  "expected": {
+   "state": "Resilient",
+   "deciding": "no flags",
+   "fired": [],
+   "unmeasurable": [],
+   "flags": {
+    "SEVERE BURN": false,
+    "CAUTION BURN": false,
+    "PERSISTENT BURN, RUNWAY UNKNOWN": false,
+    "INVESTMENT CASH PRESSURE": false,
+    "WEAK LIQUIDITY": false,
+    "OPERATING DETERIORATION": false,
+    "LEVERAGE": false,
+    "FUNDING SUBSTITUTION": false,
+    "LOW-CASH DEBT": false,
+    "MISSED FILING": false
+   },
+   "ct": {
+    "direction": "CAUTION (R&D -7.9%/-11.6%, 8-K 2.05 2025-04-29)",
+    "caution": true,
+    "verdict": "Pursue with guardrails",
+    "conf": "Adequate"
+   },
+   "nc": {
+    "direction": "UNKNOWN",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Adequate"
+   }
+  }
+ },
+ {
+  "set": "year-back",
+  "ticker": "VZ",
+  "cik": "0000732712",
+  "vantage": "2025-07-25",
+  "assessmentDate": "2025-07-25",
+  "source": "verdict-s4/out/partd4-D3.json",
+  "x": {
+   "ticker": "VZ",
+   "sic": 4813,
+   "revYoY": [
+    5.207952189291377,
+    1.528152572693369
+   ],
+   "marginChangePts0": -0.1,
+   "rdYoY": [
+    null,
+    null
+   ],
+   "rdStatus": "not filed",
+   "rdTag": null,
+   "rdQuarters": 0,
+   "ocfTTM": [
+    37100000000,
+    36024000000
+   ],
+   "fcfTTM": [
+    null,
+    null
+   ],
+   "capexTTM": [
+    null,
+    null
+   ],
+   "revTTM0": 137000000000,
+   "currentRatio0": 0.6373211707573172,
+   "netDebt": [
+    142561000000,
+    146845000000
+   ],
+   "runwayQuarters": null,
+   "runwayCase": "none",
+   "critical": [],
+   "missedFiling": false,
+   "missedFilingWhy": "10-Q for 2025-09-30 due 2025-11-09, not yet due",
+   "restructuring205": [],
+   "stale": false,
+   "financeArm": true,
+   "financeArmSeparable": false,
+   "restrictedNotSeparated": false
+  },
+  "expected": {
+   "state": "Resilient",
+   "deciding": "no flags",
+   "fired": [],
+   "unmeasurable": [],
+   "flags": {
+    "SEVERE BURN": false,
+    "CAUTION BURN": false,
+    "PERSISTENT BURN, RUNWAY UNKNOWN": false,
+    "INVESTMENT CASH PRESSURE": false,
+    "WEAK LIQUIDITY": false,
+    "OPERATING DETERIORATION": false,
+    "LEVERAGE": false,
+    "FUNDING SUBSTITUTION": false,
+    "LOW-CASH DEBT": false,
+    "MISSED FILING": false
+   },
+   "ct": {
+    "direction": "UNKNOWN (R&D not filed)",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Limited"
+   },
+   "nc": {
+    "direction": "UNKNOWN",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Limited"
+   }
+  }
+ },
+ {
+  "set": "year-back",
+  "ticker": "T",
+  "cik": "0000732717",
+  "vantage": "2025-10-31",
+  "assessmentDate": "2025-10-31",
+  "source": "verdict-s4/out/partd4-D3.json",
+  "x": {
+   "ticker": "T",
+   "sic": 4813,
+   "revYoY": [
+    1.6416774236255915,
+    3.523844682350572
+   ],
+   "marginChangePts0": 12.9,
+   "rdYoY": [
+    null,
+    null
+   ],
+   "rdStatus": "not filed",
+   "rdTag": null,
+   "rdQuarters": 0,
+   "ocfTTM": [
+    40860000000,
+    38253000000
+   ],
+   "fcfTTM": [
+    19956000000,
+    20232000000
+   ],
+   "capexTTM": [
+    20904000000,
+    18021000000
+   ],
+   "revTTM0": 124480000000,
+   "currentRatio0": 1.0130484816987155,
+   "netDebt": [
+    119196000000,
+    126426000000
+   ],
+   "runwayQuarters": null,
+   "runwayCase": "none",
+   "critical": [],
+   "missedFiling": false,
+   "missedFilingWhy": "10-K for 2025-12-31 due 2026-03-01, not yet due",
+   "restructuring205": [],
+   "stale": false,
+   "financeArm": false,
+   "financeArmSeparable": false,
+   "restrictedNotSeparated": false
+  },
+  "expected": {
+   "state": "Resilient",
+   "deciding": "no flags",
+   "fired": [],
+   "unmeasurable": [],
+   "flags": {
+    "SEVERE BURN": false,
+    "CAUTION BURN": false,
+    "PERSISTENT BURN, RUNWAY UNKNOWN": false,
+    "INVESTMENT CASH PRESSURE": false,
+    "WEAK LIQUIDITY": false,
+    "OPERATING DETERIORATION": false,
+    "LEVERAGE": false,
+    "FUNDING SUBSTITUTION": false,
+    "LOW-CASH DEBT": false,
+    "MISSED FILING": false
+   },
+   "ct": {
+    "direction": "UNKNOWN (R&D not filed)",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Limited"
+   },
+   "nc": {
+    "direction": "UNKNOWN",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Adequate"
+   }
+  }
+ },
+ {
+  "set": "year-back",
+  "ticker": "KO",
+  "cik": "0000021344",
+  "vantage": "2025-05-01",
+  "assessmentDate": "2025-05-01",
+  "source": "verdict-s4/out/partd4-D3.json",
+  "x": {
+   "ticker": "KO",
+   "sic": 2080,
+   "revYoY": [
+    -1.513274336283186,
+    6.406120379758503
+   ],
+   "marginChangePts0": 14,
+   "rdYoY": [
+    null,
+    null
+   ],
+   "rdStatus": "not filed",
+   "rdTag": null,
+   "rdQuarters": 0,
+   "ocfTTM": [
+    1075000000,
+    11967000000
+   ],
+   "fcfTTM": [
+    -928000000,
+    10021000000
+   ],
+   "capexTTM": [
+    2003000000,
+    1946000000
+   ],
+   "revTTM0": 46890000000,
+   "currentRatio0": 1.099546370967742,
+   "netDebt": [
+    36742000000,
+    27015000000
+   ],
+   "runwayQuarters": 2,
+   "runwayCase": "burn",
+   "critical": [],
+   "missedFiling": false,
+   "missedFilingWhy": "10-Q for 2025-06-28 due 2025-08-07, not yet due",
+   "restructuring205": [],
+   "stale": false,
+   "financeArm": false,
+   "financeArmSeparable": false,
+   "restrictedNotSeparated": false
+  },
+  "expected": {
+   "state": "Watch",
+   "deciding": "BORROWING: LEVERAGE + FUNDING SUBSTITUTION",
+   "fired": [
+    "LEVERAGE",
+    "FUNDING SUBSTITUTION"
+   ],
+   "unmeasurable": [],
+   "flags": {
+    "SEVERE BURN": false,
+    "CAUTION BURN": false,
+    "PERSISTENT BURN, RUNWAY UNKNOWN": false,
+    "INVESTMENT CASH PRESSURE": false,
+    "WEAK LIQUIDITY": false,
+    "OPERATING DETERIORATION": false,
+    "LEVERAGE": true,
+    "FUNDING SUBSTITUTION": true,
+    "LOW-CASH DEBT": false,
+    "MISSED FILING": false
+   },
+   "ct": {
+    "direction": "UNKNOWN (R&D not filed)",
+    "caution": false,
+    "verdict": "Pursue with guardrails",
+    "conf": "Limited"
+   },
+   "nc": {
+    "direction": "UNKNOWN",
+    "caution": false,
+    "verdict": "Pursue with guardrails",
+    "conf": "Adequate"
+   }
+  }
+ },
+ {
+  "set": "year-back",
+  "ticker": "IBM",
+  "cik": "0000051143",
+  "vantage": "2025-10-23",
+  "assessmentDate": "2025-10-23",
+  "source": "verdict-s4/out/partd4-D3.json",
+  "x": {
+   "ticker": "IBM",
+   "sic": 3570,
+   "revYoY": [
+    9.10609299839658,
+    7.653772986683577
+   ],
+   "marginChangePts0": null,
+   "rdYoY": [
+    10.980810234541579,
+    13.967391304347826
+   ],
+   "rdStatus": "quarterly",
+   "rdTag": "ResearchAndDevelopmentExpense",
+   "rdQuarters": 12,
+   "ocfTTM": [
+    13483000000,
+    13578000000
+   ],
+   "fcfTTM": [
+    12471000000,
+    12533000000
+   ],
+   "capexTTM": [
+    1012000000,
+    1045000000
+   ],
+   "revTTM0": 65402000000,
+   "currentRatio0": 0.9316487394001479,
+   "netDebt": [
+    59488000000,
+    46972000000
+   ],
+   "runwayQuarters": null,
+   "runwayCase": "none",
+   "critical": [],
+   "missedFiling": false,
+   "missedFilingWhy": "10-K for 2025-12-31 due 2026-03-01, not yet due",
+   "restructuring205": [],
+   "stale": false,
+   "financeArm": true,
+   "financeArmSeparable": false,
+   "restrictedNotSeparated": false
+  },
+  "expected": {
+   "state": "Watch",
+   "deciding": "BORROWING: LEVERAGE + FUNDING SUBSTITUTION",
+   "fired": [
+    "LEVERAGE",
+    "FUNDING SUBSTITUTION"
+   ],
+   "unmeasurable": [],
+   "flags": {
+    "SEVERE BURN": false,
+    "CAUTION BURN": false,
+    "PERSISTENT BURN, RUNWAY UNKNOWN": false,
+    "INVESTMENT CASH PRESSURE": false,
+    "WEAK LIQUIDITY": false,
+    "OPERATING DETERIORATION": false,
+    "LEVERAGE": true,
+    "FUNDING SUBSTITUTION": true,
+    "LOW-CASH DEBT": false,
+    "MISSED FILING": false
+   },
+   "ct": {
+    "direction": "EXPANDING",
+    "caution": false,
+    "verdict": "Pursue with guardrails",
+    "conf": "Limited"
+   },
+   "nc": {
+    "direction": "UNKNOWN",
+    "caution": false,
+    "verdict": "Pursue with guardrails",
+    "conf": "Limited"
+   }
+  }
+ },
+ {
+  "set": "year-back",
+  "ticker": "CSCO",
+  "cik": "0000858877",
+  "vantage": "2025-09-03",
+  "assessmentDate": "2025-09-03",
+  "source": "verdict-s4/out/partd4-D3.json",
+  "x": {
+   "ticker": "CSCO",
+   "sic": 3576,
+   "revYoY": [
+    7.557542882275327,
+    11.39190678633286
+   ],
+   "marginChangePts0": 1.8,
+   "rdYoY": [
+    9.224414869206058,
+    19.866529774127308
+   ],
+   "rdStatus": "quarterly",
+   "rdTag": "ResearchAndDevelopmentExpense",
+   "rdQuarters": 12,
+   "ocfTTM": [
+    14193000000,
+    10880000000
+   ],
+   "fcfTTM": [
+    13288000000,
+    10210000000
+   ],
+   "capexTTM": [
+    905000000,
+    670000000
+   ],
+   "revTTM0": 56654000000,
+   "currentRatio0": 0.9977754962354551,
+   "netDebt": [
+    11983000000,
+    13108000000
+   ],
+   "runwayQuarters": null,
+   "runwayCase": "none",
+   "critical": [],
+   "missedFiling": false,
+   "missedFilingWhy": "10-Q for 2025-10-25 due 2025-12-04, not yet due",
+   "restructuring205": [],
+   "stale": false,
+   "financeArm": true,
+   "financeArmSeparable": false,
+   "restrictedNotSeparated": false
+  },
+  "expected": {
+   "state": "Resilient",
+   "deciding": "no flags",
+   "fired": [],
+   "unmeasurable": [],
+   "flags": {
+    "SEVERE BURN": false,
+    "CAUTION BURN": false,
+    "PERSISTENT BURN, RUNWAY UNKNOWN": false,
+    "INVESTMENT CASH PRESSURE": false,
+    "WEAK LIQUIDITY": false,
+    "OPERATING DETERIORATION": false,
+    "LEVERAGE": false,
+    "FUNDING SUBSTITUTION": false,
+    "LOW-CASH DEBT": false,
+    "MISSED FILING": false
+   },
+   "ct": {
+    "direction": "EXPANDING",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Limited"
+   },
+   "nc": {
+    "direction": "UNKNOWN",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Limited"
+   }
+  }
+ },
+ {
+  "set": "year-back",
+  "ticker": "ORCL",
+  "cik": "0001341439",
+  "vantage": "2025-09-10",
+  "assessmentDate": "2025-09-10",
+  "source": "verdict-s4/out/partd4-D3.json",
+  "x": {
+   "ticker": "ORCL",
+   "sic": 7372,
+   "revYoY": [
+    12.166528894566769,
+    11.310982011618954
+   ],
+   "marginChangePts0": -1.3,
+   "rdYoY": [
+    8.022549869904596,
+    19.280898876404496
+   ],
+   "rdStatus": "quarterly",
+   "rdTag": "ResearchAndDevelopmentExpense",
+   "rdQuarters": 12,
+   "ocfTTM": [
+    21534000000,
+    19126000000
+   ],
+   "fcfTTM": [
+    -5880000000,
+    11271000000
+   ],
+   "capexTTM": [
+    27414000000,
+    7855000000
+   ],
+   "revTTM0": 59018000000,
+   "currentRatio0": 0.6177960575813813,
+   "netDebt": [
+    -1926000000,
+    -1710000000
+   ],
+   "runwayQuarters": null,
+   "runwayCase": "heavy-investment",
+   "critical": [],
+   "missedFiling": false,
+   "missedFilingWhy": "10-Q for 2025-11-30 due 2026-01-09, not yet due",
+   "restructuring205": [],
+   "stale": false,
+   "financeArm": false,
+   "financeArmSeparable": false,
+   "restrictedNotSeparated": false
+  },
+  "expected": {
+   "state": "Resilient",
+   "deciding": "no flags",
+   "fired": [],
+   "unmeasurable": [],
+   "flags": {
+    "SEVERE BURN": false,
+    "CAUTION BURN": false,
+    "PERSISTENT BURN, RUNWAY UNKNOWN": false,
+    "INVESTMENT CASH PRESSURE": false,
+    "WEAK LIQUIDITY": false,
+    "OPERATING DETERIORATION": false,
+    "LEVERAGE": false,
+    "FUNDING SUBSTITUTION": false,
+    "LOW-CASH DEBT": false,
+    "MISSED FILING": false
+   },
+   "ct": {
+    "direction": "EXPANDING",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Adequate"
+   },
+   "nc": {
+    "direction": "UNKNOWN",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Adequate"
+   }
+  }
+ },
+ {
+  "set": "year-back",
+  "ticker": "CRM",
+  "cik": "0001108524",
+  "vantage": "2025-09-04",
+  "assessmentDate": "2025-09-04",
+  "source": "verdict-s4/out/partd4-D3.json",
+  "x": {
+   "ticker": "CRM",
+   "sic": 7372,
+   "revYoY": [
+    9.769436997319035,
+    7.620716084528632
+   ],
+   "marginChangePts0": 3.7,
+   "rdYoY": [
+    9.785025945144552,
+    6.725146198830409
+   ],
+   "rdStatus": "quarterly",
+   "rdTag": "ResearchAndDevelopmentExpense",
+   "rdQuarters": 12,
+   "ocfTTM": [
+    13169000000,
+    12074000000
+   ],
+   "fcfTTM": [
+    12497000000,
+    11461000000
+   ],
+   "capexTTM": [
+    672000000,
+    613000000
+   ],
+   "revTTM0": 39502000000,
+   "currentRatio0": 1.1242233268240724,
+   "netDebt": [
+    -6936000000,
+    -4206000000
+   ],
+   "runwayQuarters": null,
+   "runwayCase": "none",
+   "critical": [],
+   "missedFiling": false,
+   "missedFilingWhy": "10-Q for 2025-10-31 due 2025-12-10, not yet due",
+   "restructuring205": [],
+   "stale": false,
+   "financeArm": false,
+   "financeArmSeparable": false,
+   "restrictedNotSeparated": false
+  },
+  "expected": {
+   "state": "Resilient",
+   "deciding": "no flags",
+   "fired": [],
+   "unmeasurable": [],
+   "flags": {
+    "SEVERE BURN": false,
+    "CAUTION BURN": false,
+    "PERSISTENT BURN, RUNWAY UNKNOWN": false,
+    "INVESTMENT CASH PRESSURE": false,
+    "WEAK LIQUIDITY": false,
+    "OPERATING DETERIORATION": false,
+    "LEVERAGE": false,
+    "FUNDING SUBSTITUTION": false,
+    "LOW-CASH DEBT": false,
+    "MISSED FILING": false
+   },
+   "ct": {
+    "direction": "EXPANDING",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Adequate"
+   },
+   "nc": {
+    "direction": "UNKNOWN",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Adequate"
+   }
+  }
+ },
+ {
+  "set": "year-back",
+  "ticker": "ADBE",
+  "cik": "0000796343",
+  "vantage": "2025-09-24",
+  "assessmentDate": "2025-09-24",
+  "source": "verdict-s4/out/partd4-D3.json",
+  "x": {
+   "ticker": "ADBE",
+   "sic": 7372,
+   "revYoY": [
+    10.724852071005918,
+    10.623469579958561
+   ],
+   "marginChangePts0": -0.5,
+   "rdYoY": [
+    6.457925636007827,
+    9.959349593495935
+   ],
+   "rdStatus": "quarterly",
+   "rdTag": "ResearchAndDevelopmentExpenseSoftwareExcludingAcquiredInProcessCost",
+   "rdQuarters": 12,
+   "ocfTTM": [
+    9792000000,
+    6732000000
+   ],
+   "fcfTTM": [
+    9599000000,
+    6550000000
+   ],
+   "capexTTM": [
+    193000000,
+    182000000
+   ],
+   "revTTM0": 23181000000,
+   "currentRatio0": 1.018724970234874,
+   "netDebt": [
+    260000000,
+    -1888000000
+   ],
+   "runwayQuarters": null,
+   "runwayCase": "none",
+   "critical": [],
+   "missedFiling": false,
+   "missedFilingWhy": "10-K for 2025-11-28 due 2026-01-27, not yet due",
+   "restructuring205": [],
+   "stale": false,
+   "financeArm": false,
+   "financeArmSeparable": false,
+   "restrictedNotSeparated": false
+  },
+  "expected": {
+   "state": "Resilient",
+   "deciding": "no flags",
+   "fired": [],
+   "unmeasurable": [],
+   "flags": {
+    "SEVERE BURN": false,
+    "CAUTION BURN": false,
+    "PERSISTENT BURN, RUNWAY UNKNOWN": false,
+    "INVESTMENT CASH PRESSURE": false,
+    "WEAK LIQUIDITY": false,
+    "OPERATING DETERIORATION": false,
+    "LEVERAGE": false,
+    "FUNDING SUBSTITUTION": false,
+    "LOW-CASH DEBT": false,
+    "MISSED FILING": false
+   },
+   "ct": {
+    "direction": "EXPANDING",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Adequate"
+   },
+   "nc": {
+    "direction": "UNKNOWN",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Adequate"
+   }
+  }
+ },
+ {
+  "set": "year-back",
+  "ticker": "NKE",
+  "cik": "0000320187",
+  "vantage": "2025-10-01",
+  "assessmentDate": "2025-10-01",
+  "source": "verdict-s4/out/partd4-D3.json",
+  "x": {
+   "ticker": "NKE",
+   "sic": 3021,
+   "revYoY": [
+    1.1303822590387436,
+    -11.970490242741553
+   ],
+   "marginChangePts0": null,
+   "rdYoY": [
+    null,
+    null
+   ],
+   "rdStatus": "not filed",
+   "rdTag": null,
+   "rdQuarters": 0,
+   "ocfTTM": [
+    3526000000,
+    7889000000
+   ],
+   "fcfTTM": [
+    3009000000,
+    7210000000
+   ],
+   "capexTTM": [
+    517000000,
+    679000000
+   ],
+   "revTTM0": 46440000000,
+   "currentRatio0": 2.190266703326918,
+   "netDebt": [
+    976000000,
+    525000000
+   ],
+   "runwayQuarters": null,
+   "runwayCase": "none",
+   "critical": [],
+   "missedFiling": false,
+   "missedFilingWhy": "10-Q for 2025-11-30 due 2026-01-09, not yet due",
+   "restructuring205": [],
+   "stale": false,
+   "financeArm": false,
+   "financeArmSeparable": false,
+   "restrictedNotSeparated": false
+  },
+  "expected": {
+   "state": "Resilient",
+   "deciding": "no flags",
+   "fired": [],
+   "unmeasurable": [],
+   "flags": {
+    "SEVERE BURN": false,
+    "CAUTION BURN": false,
+    "PERSISTENT BURN, RUNWAY UNKNOWN": false,
+    "INVESTMENT CASH PRESSURE": false,
+    "WEAK LIQUIDITY": false,
+    "OPERATING DETERIORATION": false,
+    "LEVERAGE": false,
+    "FUNDING SUBSTITUTION": false,
+    "LOW-CASH DEBT": false,
+    "MISSED FILING": false
+   },
+   "ct": {
+    "direction": "UNKNOWN (R&D not filed)",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Limited"
+   },
+   "nc": {
+    "direction": "UNKNOWN",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Adequate"
+   }
+  }
+ },
+ {
+  "set": "year-back",
+  "ticker": "BA",
+  "cik": "0000012927",
+  "vantage": "2025-07-29",
+  "assessmentDate": "2025-07-29",
+  "source": "verdict-s4/out/partd4-D3.json",
+  "x": {
+   "ticker": "BA",
+   "sic": 3721,
+   "revYoY": [
+    34.88082532906439,
+    17.665519946888768
+   ],
+   "marginChangePts0": 5.7,
+   "rdYoY": [
+    -4.612159329140461,
+    -2.7649769585253456
+   ],
+   "rdStatus": "quarterly",
+   "rdTag": "ResearchAndDevelopmentExpense",
+   "rdQuarters": 12,
+   "ocfTTM": [
+    -6184000000,
+    -3882000000
+   ],
+   "fcfTTM": [
+    -8544000000,
+    -5616000000
+   ],
+   "capexTTM": [
+    2360000000,
+    1734000000
+   ],
+   "revTTM0": 75327000000,
+   "currentRatio0": 1.2314366971057111,
+   "netDebt": [
+    30356000000,
+    45306000000
+   ],
+   "runwayQuarters": null,
+   "runwayCase": "heavy-investment",
+   "critical": [],
+   "missedFiling": false,
+   "missedFilingWhy": "10-Q for 2025-09-30 due 2025-11-09, not yet due",
+   "restructuring205": [],
+   "stale": false,
+   "financeArm": true,
+   "financeArmSeparable": false,
+   "restrictedNotSeparated": false
+  },
+  "expected": {
+   "state": "Fragile",
+   "deciding": "2 areas: PERSISTENT BURN, RUNWAY UNKNOWN + INVESTMENT CASH PRESSURE + LOW-CASH DEBT",
+   "fired": [
+    "PERSISTENT BURN, RUNWAY UNKNOWN",
+    "INVESTMENT CASH PRESSURE",
+    "LOW-CASH DEBT"
+   ],
+   "unmeasurable": [
+    "SEVERE BURN",
+    "CAUTION BURN"
+   ],
+   "flags": {
+    "SEVERE BURN": null,
+    "CAUTION BURN": null,
+    "PERSISTENT BURN, RUNWAY UNKNOWN": true,
+    "INVESTMENT CASH PRESSURE": true,
+    "WEAK LIQUIDITY": false,
+    "OPERATING DETERIORATION": false,
+    "LEVERAGE": false,
+    "FUNDING SUBSTITUTION": false,
+    "LOW-CASH DEBT": true,
+    "MISSED FILING": false
+   },
+   "ct": {
+    "direction": "FLAT",
+    "caution": false,
+    "verdict": "Limit exposure",
+    "conf": "Limited"
+   },
+   "nc": {
+    "direction": "UNKNOWN",
+    "caution": false,
+    "verdict": "Monitor",
+    "conf": "Limited"
+   }
+  }
+ },
+ {
+  "set": "year-back",
+  "ticker": "F",
+  "cik": "0000037996",
+  "vantage": "2025-05-06",
+  "assessmentDate": "2025-05-06",
+  "source": "verdict-s4/out/partd4-D3.json",
+  "x": {
+   "ticker": "F",
+   "sic": 3711,
+   "revYoY": [
+    -4.9512588540570865,
+    4.893172620860711
+   ],
+   "marginChangePts0": -2.1,
+   "rdYoY": [
+    null,
+    null
+   ],
+   "rdStatus": "annual only",
+   "rdTag": null,
+   "rdQuarters": 0,
+   "ocfTTM": [
+    17717000000,
+    13503000000
+   ],
+   "fcfTTM": [
+    9309000000,
+    4953000000
+   ],
+   "capexTTM": [
+    8408000000,
+    8550000000
+   ],
+   "revTTM0": 182874000000,
+   "currentRatio0": 1.131718353382629,
+   "netDebt": [
+    -14296000000,
+    -14306000000
+   ],
+   "runwayQuarters": null,
+   "runwayCase": "none",
+   "critical": [],
+   "missedFiling": false,
+   "missedFilingWhy": "10-Q for 2025-06-30 due 2025-08-09, not yet due",
+   "restructuring205": [],
+   "stale": false,
+   "financeArm": true,
+   "financeArmSeparable": true,
+   "restrictedNotSeparated": false
+  },
+  "expected": {
+   "state": "Resilient",
+   "deciding": "no flags",
+   "fired": [],
+   "unmeasurable": [],
+   "flags": {
+    "SEVERE BURN": false,
+    "CAUTION BURN": false,
+    "PERSISTENT BURN, RUNWAY UNKNOWN": false,
+    "INVESTMENT CASH PRESSURE": false,
+    "WEAK LIQUIDITY": false,
+    "OPERATING DETERIORATION": false,
+    "LEVERAGE": false,
+    "FUNDING SUBSTITUTION": false,
+    "LOW-CASH DEBT": false,
+    "MISSED FILING": false
+   },
+   "ct": {
+    "direction": "UNKNOWN (R&D annual only)",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Limited"
+   },
+   "nc": {
+    "direction": "UNKNOWN",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Adequate"
+   }
+  }
+ },
+ {
+  "set": "year-back",
+  "ticker": "GM",
+  "cik": "0001467858",
+  "vantage": "2025-10-21",
+  "assessmentDate": "2025-10-21",
+  "source": "verdict-s4/out/partd4-D3.json",
+  "x": {
+   "ticker": "GM",
+   "sic": 3711,
+   "revYoY": [
+    -0.3404639333839244,
+    -1.7657236965540244
+   ],
+   "marginChangePts0": -5.3,
+   "rdYoY": [
+    null,
+    null
+   ],
+   "rdStatus": "not filed in the window",
+   "rdTag": null,
+   "rdQuarters": 0,
+   "ocfTTM": [
+    24212000000,
+    19646000000
+   ],
+   "fcfTTM": [
+    14896000000,
+    8343000000
+   ],
+   "capexTTM": [
+    9316000000,
+    11303000000
+   ],
+   "revTTM0": 187435000000,
+   "currentRatio0": 1.2287475213033925,
+   "netDebt": [
+    -13588000000,
+    -15737000000
+   ],
+   "runwayQuarters": null,
+   "runwayCase": "none",
+   "critical": [],
+   "missedFiling": false,
+   "missedFilingWhy": "10-K for 2025-12-31 due 2026-03-01, not yet due",
+   "restructuring205": [],
+   "stale": false,
+   "financeArm": true,
+   "financeArmSeparable": true,
+   "restrictedNotSeparated": false
+  },
+  "expected": {
+   "state": "Resilient",
+   "deciding": "no flags",
+   "fired": [],
+   "unmeasurable": [],
+   "flags": {
+    "SEVERE BURN": false,
+    "CAUTION BURN": false,
+    "PERSISTENT BURN, RUNWAY UNKNOWN": false,
+    "INVESTMENT CASH PRESSURE": false,
+    "WEAK LIQUIDITY": false,
+    "OPERATING DETERIORATION": false,
+    "LEVERAGE": false,
+    "FUNDING SUBSTITUTION": false,
+    "LOW-CASH DEBT": false,
+    "MISSED FILING": false
+   },
+   "ct": {
+    "direction": "UNKNOWN (R&D not filed in the window)",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Limited"
+   },
+   "nc": {
+    "direction": "UNKNOWN",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Adequate"
+   }
+  }
+ },
+ {
+  "set": "year-back",
+  "ticker": "HPQ",
+  "cik": "0000047217",
+  "vantage": "2025-08-28",
+  "assessmentDate": "2025-08-28",
+  "source": "verdict-s4/out/partd4-D3.json",
+  "x": {
+   "ticker": "HPQ",
+   "sic": 3570,
+   "revYoY": [
+    3.054959686367335,
+    3.28125
+   ],
+   "marginChangePts0": -1.9,
+   "rdYoY": [
+    -1.694915254237288,
+    -8.027522935779817
+   ],
+   "rdStatus": "quarterly",
+   "rdTag": "ResearchAndDevelopmentExpense",
+   "rdQuarters": 12,
+   "ocfTTM": [
+    3696000000,
+    4101000000
+   ],
+   "fcfTTM": [
+    2843000000,
+    3512000000
+   ],
+   "capexTTM": [
+    853000000,
+    589000000
+   ],
+   "revTTM0": 54711000000,
+   "currentRatio0": 0.7383720930232558,
+   "netDebt": [
+    6731000000,
+    6840000000
+   ],
+   "runwayQuarters": null,
+   "runwayCase": "none",
+   "critical": [],
+   "missedFiling": false,
+   "missedFilingWhy": "10-K for 2025-10-31 due 2025-12-30, not yet due",
+   "restructuring205": [
+    "2025-02-27"
+   ],
+   "stale": false,
+   "financeArm": false,
+   "financeArmSeparable": false,
+   "restrictedNotSeparated": false
+  },
+  "expected": {
+   "state": "Resilient",
+   "deciding": "no flags",
+   "fired": [],
+   "unmeasurable": [],
+   "flags": {
+    "SEVERE BURN": false,
+    "CAUTION BURN": false,
+    "PERSISTENT BURN, RUNWAY UNKNOWN": false,
+    "INVESTMENT CASH PRESSURE": false,
+    "WEAK LIQUIDITY": false,
+    "OPERATING DETERIORATION": false,
+    "LEVERAGE": false,
+    "FUNDING SUBSTITUTION": false,
+    "LOW-CASH DEBT": false,
+    "MISSED FILING": false
+   },
+   "ct": {
+    "direction": "CAUTION (8-K 2.05 2025-02-27)",
+    "caution": true,
+    "verdict": "Pursue with guardrails",
+    "conf": "Adequate"
+   },
+   "nc": {
+    "direction": "UNKNOWN",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Adequate"
+   }
+  }
+ },
+ {
+  "set": "year-back",
+  "ticker": "DELL",
+  "cik": "0001571996",
+  "vantage": "2025-09-08",
+  "assessmentDate": "2025-09-08",
+  "source": "verdict-s4/out/partd4-D3.json",
+  "x": {
+   "ticker": "DELL",
+   "sic": 3571,
+   "revYoY": [
+    18.98026052904979,
+    5.098003956123
+   ],
+   "marginChangePts0": 0.6,
+   "rdYoY": [
+    0.641025641025641,
+    5.897771952817824
+   ],
+   "rdStatus": "quarterly",
+   "rdTag": "ResearchAndDevelopmentExpense",
+   "rdQuarters": 12,
+   "ocfTTM": [
+    7477000000,
+    6068000000
+   ],
+   "fcfTTM": [
+    4860000000,
+    3359000000
+   ],
+   "capexTTM": [
+    2617000000,
+    2709000000
+   ],
+   "revTTM0": 101451000000,
+   "currentRatio0": 0.8295723816120447,
+   "netDebt": [
+    20544000000,
+    19972000000
+   ],
+   "runwayQuarters": null,
+   "runwayCase": "none",
+   "critical": [],
+   "missedFiling": false,
+   "missedFilingWhy": "10-Q for 2025-10-31 due 2025-12-10, not yet due",
+   "restructuring205": [],
+   "stale": false,
+   "financeArm": true,
+   "financeArmSeparable": false,
+   "restrictedNotSeparated": false
+  },
+  "expected": {
+   "state": "Resilient",
+   "deciding": "no flags",
+   "fired": [],
+   "unmeasurable": [],
+   "flags": {
+    "SEVERE BURN": false,
+    "CAUTION BURN": false,
+    "PERSISTENT BURN, RUNWAY UNKNOWN": false,
+    "INVESTMENT CASH PRESSURE": false,
+    "WEAK LIQUIDITY": false,
+    "OPERATING DETERIORATION": false,
+    "LEVERAGE": false,
+    "FUNDING SUBSTITUTION": false,
+    "LOW-CASH DEBT": false,
+    "MISSED FILING": false
+   },
+   "ct": {
+    "direction": "FLAT",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Limited"
+   },
+   "nc": {
+    "direction": "UNKNOWN",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Limited"
+   }
+  }
+ },
+ {
+  "set": "year-back",
+  "ticker": "PYPL",
+  "cik": "0001633917",
+  "vantage": "2025-04-29",
+  "assessmentDate": "2025-04-29",
+  "source": "verdict-s4/out/partd4-D3.json",
+  "x": {
+   "ticker": "PYPL",
+   "sic": 7389,
+   "revYoY": [
+    1.194960384465515,
+    4.23623224520309
+   ],
+   "marginChangePts0": 4.4,
+   "rdYoY": [
+    null,
+    null
+   ],
+   "rdStatus": "not filed in the window",
+   "rdTag": null,
+   "rdQuarters": 0,
+   "ocfTTM": [
+    6693000000,
+    5590000000
+   ],
+   "fcfTTM": [
+    5968000000,
+    4983000000
+   ],
+   "capexTTM": [
+    725000000,
+    607000000
+   ],
+   "revTTM0": 31889000000,
+   "currentRatio0": 1.3000514778430783,
+   "netDebt": [
+    206000000,
+    -4635000000
+   ],
+   "runwayQuarters": null,
+   "runwayCase": "none",
+   "critical": [],
+   "missedFiling": false,
+   "missedFilingWhy": "10-Q for 2025-06-30 due 2025-08-09, not yet due",
+   "restructuring205": [],
+   "stale": false,
+   "financeArm": true,
+   "financeArmSeparable": false,
+   "restrictedNotSeparated": false
+  },
+  "expected": {
+   "state": "Resilient",
+   "deciding": "no flags",
+   "fired": [],
+   "unmeasurable": [],
+   "flags": {
+    "SEVERE BURN": false,
+    "CAUTION BURN": false,
+    "PERSISTENT BURN, RUNWAY UNKNOWN": false,
+    "INVESTMENT CASH PRESSURE": false,
+    "WEAK LIQUIDITY": false,
+    "OPERATING DETERIORATION": false,
+    "LEVERAGE": false,
+    "FUNDING SUBSTITUTION": false,
+    "LOW-CASH DEBT": false,
+    "MISSED FILING": false
+   },
+   "ct": {
+    "direction": "UNKNOWN (R&D not filed in the window)",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Limited"
+   },
+   "nc": {
+    "direction": "UNKNOWN",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Limited"
+   }
+  }
+ },
+ {
+  "set": "year-back",
+  "ticker": "SBUX",
+  "cik": "0000829224",
+  "vantage": "2025-07-29",
+  "assessmentDate": "2025-07-29",
+  "source": "verdict-s4/out/partd4-D3.json",
+  "x": {
+   "ticker": "SBUX",
+   "sic": 5810,
+   "revYoY": [
+    3.7536071275743645,
+    2.3192806259488497
+   ],
+   "marginChangePts0": -6.8,
+   "rdYoY": [
+    null,
+    null
+   ],
+   "rdStatus": "not filed",
+   "rdTag": null,
+   "rdQuarters": 0,
+   "ocfTTM": [
+    4901300000,
+    6505000000
+   ],
+   "fcfTTM": [
+    2253600000,
+    3826200000
+   ],
+   "capexTTM": [
+    2647700000,
+    2678800000
+   ],
+   "revTTM0": 36689400000,
+   "currentRatio0": 0.7558134316972259,
+   "netDebt": [
+    12813200000,
+    12183100000
+   ],
+   "runwayQuarters": null,
+   "runwayCase": "none",
+   "critical": [],
+   "missedFiling": false,
+   "missedFilingWhy": "10-K for 2025-09-28 due 2025-11-27, not yet due",
+   "restructuring205": [],
+   "stale": false,
+   "financeArm": false,
+   "financeArmSeparable": false,
+   "restrictedNotSeparated": true
+  },
+  "expected": {
+   "state": "Watch",
+   "deciding": "BORROWING: FUNDING SUBSTITUTION",
+   "fired": [
+    "FUNDING SUBSTITUTION"
+   ],
+   "unmeasurable": [],
+   "flags": {
+    "SEVERE BURN": false,
+    "CAUTION BURN": false,
+    "PERSISTENT BURN, RUNWAY UNKNOWN": false,
+    "INVESTMENT CASH PRESSURE": false,
+    "WEAK LIQUIDITY": false,
+    "OPERATING DETERIORATION": false,
+    "LEVERAGE": false,
+    "FUNDING SUBSTITUTION": true,
+    "LOW-CASH DEBT": false,
+    "MISSED FILING": false
+   },
+   "ct": {
+    "direction": "UNKNOWN (R&D not filed)",
+    "caution": false,
+    "verdict": "Pursue with guardrails",
+    "conf": "Limited"
+   },
+   "nc": {
+    "direction": "UNKNOWN",
+    "caution": false,
+    "verdict": "Pursue with guardrails",
+    "conf": "Limited"
+   }
+  }
+ },
+ {
+  "set": "year-back",
+  "ticker": "DIS",
+  "cik": "0001744489",
+  "vantage": "2025-08-06",
+  "assessmentDate": "2025-08-06",
+  "source": "verdict-s4/out/partd4-D3.json",
+  "x": {
+   "ticker": "DIS",
+   "sic": 7990,
+   "revYoY": [
+    2.137767220902613,
+    6.964633428429108
+   ],
+   "marginChangePts0": 1.1,
+   "rdYoY": [
+    null,
+    null
+   ],
+   "rdStatus": "not filed",
+   "rdTag": null,
+   "rdQuarters": 0,
+   "ocfTTM": [
+    19145000000,
+    13255000000
+   ],
+   "fcfTTM": [
+    11548000000,
+    7958000000
+   ],
+   "capexTTM": [
+    7597000000,
+    5297000000
+   ],
+   "revTTM0": 94535000000,
+   "currentRatio0": 0.7224311537061749,
+   "netDebt": [
+    36896000000,
+    41630000000
+   ],
+   "runwayQuarters": null,
+   "runwayCase": "none",
+   "critical": [],
+   "missedFiling": false,
+   "missedFilingWhy": "10-K for 2025-09-27 due 2025-11-26, not yet due",
+   "restructuring205": [],
+   "stale": false,
+   "financeArm": false,
+   "financeArmSeparable": false,
+   "restrictedNotSeparated": false
+  },
+  "expected": {
+   "state": "Resilient",
+   "deciding": "no flags",
+   "fired": [],
+   "unmeasurable": [],
+   "flags": {
+    "SEVERE BURN": false,
+    "CAUTION BURN": false,
+    "PERSISTENT BURN, RUNWAY UNKNOWN": false,
+    "INVESTMENT CASH PRESSURE": false,
+    "WEAK LIQUIDITY": false,
+    "OPERATING DETERIORATION": false,
+    "LEVERAGE": false,
+    "FUNDING SUBSTITUTION": false,
+    "LOW-CASH DEBT": false,
+    "MISSED FILING": false
+   },
+   "ct": {
+    "direction": "UNKNOWN (R&D not filed)",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Limited"
+   },
+   "nc": {
+    "direction": "UNKNOWN",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Adequate"
+   }
+  }
+ },
+ {
+  "set": "year-back",
+  "ticker": "LULU",
+  "cik": "0001397187",
+  "vantage": "2025-09-04",
+  "assessmentDate": "2025-09-04",
+  "source": "verdict-s4/out/partd4-D3.json",
+  "x": {
+   "ticker": "LULU",
+   "sic": 2300,
+   "revYoY": [
+    6.50088272085524,
+    7.323539278307531
+   ],
+   "marginChangePts0": -2.1,
+   "rdYoY": [
+    null,
+    null
+   ],
+   "rdStatus": "not filed",
+   "rdTag": null,
+   "rdQuarters": 0,
+   "ocfTTM": [
+    1911771000,
+    2344615000
+   ],
+   "fcfTTM": [
+    1168145000,
+    1699436000
+   ],
+   "capexTTM": [
+    743626000,
+    645179000
+   ],
+   "revTTM0": 10904036000,
+   "currentRatio0": 2.2658599951455876,
+   "netDebt": [
+    -1155794000,
+    -1610112000
+   ],
+   "runwayQuarters": null,
+   "runwayCase": "none",
+   "critical": [],
+   "missedFiling": false,
+   "missedFilingWhy": "10-Q for 2025-11-02 due 2025-12-12, not yet due",
+   "restructuring205": [],
+   "stale": false,
+   "financeArm": false,
+   "financeArmSeparable": false,
+   "restrictedNotSeparated": true
+  },
+  "expected": {
+   "state": "Resilient",
+   "deciding": "no flags",
+   "fired": [],
+   "unmeasurable": [],
+   "flags": {
+    "SEVERE BURN": false,
+    "CAUTION BURN": false,
+    "PERSISTENT BURN, RUNWAY UNKNOWN": false,
+    "INVESTMENT CASH PRESSURE": false,
+    "WEAK LIQUIDITY": false,
+    "OPERATING DETERIORATION": false,
+    "LEVERAGE": false,
+    "FUNDING SUBSTITUTION": false,
+    "LOW-CASH DEBT": false,
+    "MISSED FILING": false
+   },
+   "ct": {
+    "direction": "UNKNOWN (R&D not filed)",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Limited"
+   },
+   "nc": {
+    "direction": "UNKNOWN",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Limited"
+   }
+  }
+ },
+ {
+  "set": "year-back",
+  "ticker": "PTON",
+  "cik": "0001639825",
+  "vantage": "2025-08-07",
+  "assessmentDate": "2025-08-07",
+  "source": "verdict-s4/out/partd4-D3.json",
+  "x": {
+   "ticker": "PTON",
+   "sic": 3949,
+   "revYoY": [
+    -5.716948889234115,
+    -13.055594259439877
+   ],
+   "marginChangePts0": 14.7,
+   "rdYoY": [
+    -19.596541786743515,
+    -22.395833333333336
+   ],
+   "rdStatus": "quarterly",
+   "rdTag": "ResearchAndDevelopmentExpense",
+   "rdQuarters": 12,
+   "ocfTTM": [
+    333000000,
+    -66100000
+   ],
+   "fcfTTM": [
+    323700000,
+    -85800000
+   ],
+   "capexTTM": [
+    9300000,
+    19700000
+   ],
+   "revTTM0": 2490800000,
+   "currentRatio0": 1.7882821246423684,
+   "netDebt": [
+    459500000,
+    802500000
+   ],
+   "runwayQuarters": null,
+   "runwayCase": "none",
+   "critical": [],
+   "missedFiling": false,
+   "missedFilingWhy": "10-Q for 2025-09-30 due 2025-11-09, not yet due",
+   "restructuring205": [],
+   "stale": false,
+   "financeArm": false,
+   "financeArmSeparable": false,
+   "restrictedNotSeparated": false
+  },
+  "expected": {
+   "state": "Resilient",
+   "deciding": "no flags",
+   "fired": [],
+   "unmeasurable": [],
+   "flags": {
+    "SEVERE BURN": false,
+    "CAUTION BURN": false,
+    "PERSISTENT BURN, RUNWAY UNKNOWN": false,
+    "INVESTMENT CASH PRESSURE": false,
+    "WEAK LIQUIDITY": false,
+    "OPERATING DETERIORATION": false,
+    "LEVERAGE": false,
+    "FUNDING SUBSTITUTION": false,
+    "LOW-CASH DEBT": false,
+    "MISSED FILING": false
+   },
+   "ct": {
+    "direction": "CAUTION (R&D -19.6%/-22.4%)",
+    "caution": true,
+    "verdict": "Pursue with guardrails",
+    "conf": "Adequate"
+   },
+   "nc": {
+    "direction": "UNKNOWN",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Adequate"
+   }
+  }
+ },
+ {
+  "set": "year-back",
+  "ticker": "CVNA",
+  "cik": "0001690820",
+  "vantage": "2025-07-30",
+  "assessmentDate": "2025-07-30",
+  "source": "verdict-s4/out/partd4-D3.json",
+  "x": {
+   "ticker": "CVNA",
+   "sic": 5500,
+   "revYoY": [
+    41.935483870967744,
+    38.25547206795165
+   ],
+   "marginChangePts0": 3,
+   "rdYoY": [
+    null,
+    null
+   ],
+   "rdStatus": "not filed",
+   "rdTag": null,
+   "rdQuarters": 0,
+   "ocfTTM": [
+    724000000,
+    815000000
+   ],
+   "fcfTTM": [
+    615000000,
+    738000000
+   ],
+   "capexTTM": [
+    109000000,
+    77000000
+   ],
+   "revTTM0": 16274000000,
+   "currentRatio0": 4.003528581510233,
+   "netDebt": [
+    3850000000,
+    5161000000
+   ],
+   "runwayQuarters": null,
+   "runwayCase": "heavy-investment",
+   "critical": [],
+   "missedFiling": false,
+   "missedFilingWhy": "10-Q for 2025-09-30 due 2025-11-09, not yet due",
+   "restructuring205": [],
+   "stale": false,
+   "financeArm": false,
+   "financeArmSeparable": false,
+   "restrictedNotSeparated": false
+  },
+  "expected": {
+   "state": "Watch",
+   "deciding": "BORROWING: LEVERAGE",
+   "fired": [
+    "LEVERAGE"
+   ],
+   "unmeasurable": [],
+   "flags": {
+    "SEVERE BURN": false,
+    "CAUTION BURN": false,
+    "PERSISTENT BURN, RUNWAY UNKNOWN": false,
+    "INVESTMENT CASH PRESSURE": false,
+    "WEAK LIQUIDITY": false,
+    "OPERATING DETERIORATION": false,
+    "LEVERAGE": true,
+    "FUNDING SUBSTITUTION": false,
+    "LOW-CASH DEBT": false,
+    "MISSED FILING": false
+   },
+   "ct": {
+    "direction": "UNKNOWN (R&D not filed)",
+    "caution": false,
+    "verdict": "Pursue with guardrails",
+    "conf": "Limited"
+   },
+   "nc": {
+    "direction": "UNKNOWN",
+    "caution": false,
+    "verdict": "Pursue with guardrails",
+    "conf": "Adequate"
+   }
+  }
+ },
+ {
+  "set": "year-back",
+  "ticker": "AAL",
+  "cik": "0000006201",
+  "vantage": "2025-07-24",
+  "assessmentDate": "2025-07-24",
+  "source": "verdict-s4/out/partd4-D3.json",
+  "x": {
+   "ticker": "AAL",
+   "sic": 4512,
+   "revYoY": [
+    0.40463234268173576,
+    -0.1511535401750199
+   ],
+   "marginChangePts0": -1.8,
+   "rdYoY": [
+    null,
+    null
+   ],
+   "rdStatus": "not filed",
+   "rdTag": null,
+   "rdQuarters": 0,
+   "ocfTTM": [
+    4094000000,
+    2015000000
+   ],
+   "fcfTTM": [
+    1563000000,
+    -812000000
+   ],
+   "capexTTM": [
+    2531000000,
+    2827000000
+   ],
+   "revTTM0": 54250000000,
+   "currentRatio0": 0.5846882154359552,
+   "netDebt": [
+    16132000000,
+    18763000000
+   ],
+   "runwayQuarters": null,
+   "runwayCase": "none",
+   "critical": [],
+   "missedFiling": false,
+   "missedFilingWhy": "10-Q for 2025-09-30 due 2025-11-09, not yet due",
+   "restructuring205": [],
+   "stale": false,
+   "financeArm": false,
+   "financeArmSeparable": false,
+   "restrictedNotSeparated": false
+  },
+  "expected": {
+   "state": "Resilient",
+   "deciding": "no flags",
+   "fired": [],
+   "unmeasurable": [],
+   "flags": {
+    "SEVERE BURN": false,
+    "CAUTION BURN": false,
+    "PERSISTENT BURN, RUNWAY UNKNOWN": false,
+    "INVESTMENT CASH PRESSURE": false,
+    "WEAK LIQUIDITY": false,
+    "OPERATING DETERIORATION": false,
+    "LEVERAGE": false,
+    "FUNDING SUBSTITUTION": false,
+    "LOW-CASH DEBT": false,
+    "MISSED FILING": false
+   },
+   "ct": {
+    "direction": "UNKNOWN (R&D not filed)",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Limited"
+   },
+   "nc": {
+    "direction": "UNKNOWN",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Adequate"
+   }
+  }
+ },
+ {
+  "set": "year-back",
+  "ticker": "CCL",
+  "cik": "0000815097",
+  "vantage": "2025-09-29",
+  "assessmentDate": "2025-09-29",
+  "source": "verdict-s4/out/partd4-D3.json",
+  "x": {
+   "ticker": "CCL",
+   "sic": 4400,
+   "revYoY": [
+    3.254812563323202,
+    9.462030790520672
+   ],
+   "marginChangePts0": 0.3,
+   "rdYoY": [
+    null,
+    null
+   ],
+   "rdStatus": "not filed",
+   "rdTag": null,
+   "rdQuarters": 0,
+   "ocfTTM": [
+    5611000000,
+    5934000000
+   ],
+   "fcfTTM": [
+    2914000000,
+    1225000000
+   ],
+   "capexTTM": [
+    2697000000,
+    4709000000
+   ],
+   "revTTM0": 26229000000,
+   "currentRatio0": 0.3382301504022385,
+   "netDebt": [
+    24718000000,
+    27334000000
+   ],
+   "runwayQuarters": null,
+   "runwayCase": "none",
+   "critical": [],
+   "missedFiling": false,
+   "missedFilingWhy": "10-K for 2025-11-30 due 2026-01-29, not yet due",
+   "restructuring205": [],
+   "stale": false,
+   "financeArm": false,
+   "financeArmSeparable": false,
+   "restrictedNotSeparated": false
+  },
+  "expected": {
+   "state": "Watch",
+   "deciding": "BORROWING: LEVERAGE",
+   "fired": [
+    "LEVERAGE"
+   ],
+   "unmeasurable": [],
+   "flags": {
+    "SEVERE BURN": false,
+    "CAUTION BURN": false,
+    "PERSISTENT BURN, RUNWAY UNKNOWN": false,
+    "INVESTMENT CASH PRESSURE": false,
+    "WEAK LIQUIDITY": false,
+    "OPERATING DETERIORATION": false,
+    "LEVERAGE": true,
+    "FUNDING SUBSTITUTION": false,
+    "LOW-CASH DEBT": false,
+    "MISSED FILING": false
+   },
+   "ct": {
+    "direction": "UNKNOWN (R&D not filed)",
+    "caution": false,
+    "verdict": "Pursue with guardrails",
+    "conf": "Limited"
+   },
+   "nc": {
+    "direction": "UNKNOWN",
+    "caution": false,
+    "verdict": "Pursue with guardrails",
+    "conf": "Adequate"
+   }
+  }
+ },
+ {
+  "set": "year-back",
+  "ticker": "MMM",
+  "cik": "0000066740",
+  "vantage": "2025-10-21",
+  "assessmentDate": "2025-10-21",
+  "source": "verdict-s4/out/partd4-D3.json",
+  "x": {
+   "ticker": "MMM",
+   "sic": 3841,
+   "revYoY": [
+    3.543056879567842,
+    1.422861710631495
+   ],
+   "marginChangePts0": 1.3,
+   "rdYoY": [
+    null,
+    null
+   ],
+   "rdStatus": "annual only",
+   "rdTag": null,
+   "rdQuarters": 0,
+   "ocfTTM": [
+    2541000000,
+    1987000000
+   ],
+   "fcfTTM": [
+    1588000000,
+    739000000
+   ],
+   "capexTTM": [
+    953000000,
+    1248000000
+   ],
+   "revTTM0": 22838000000,
+   "currentRatio0": 1.8423222260391618,
+   "netDebt": [
+    7932000000,
+    7139000000
+   ],
+   "runwayQuarters": null,
+   "runwayCase": "none",
+   "critical": [],
+   "missedFiling": false,
+   "missedFilingWhy": "10-K for 2025-12-31 due 2026-03-01, not yet due",
+   "restructuring205": [],
+   "stale": false,
+   "financeArm": false,
+   "financeArmSeparable": false,
+   "restrictedNotSeparated": true
+  },
+  "expected": {
+   "state": "Resilient",
+   "deciding": "no flags",
+   "fired": [],
+   "unmeasurable": [],
+   "flags": {
+    "SEVERE BURN": false,
+    "CAUTION BURN": false,
+    "PERSISTENT BURN, RUNWAY UNKNOWN": false,
+    "INVESTMENT CASH PRESSURE": false,
+    "WEAK LIQUIDITY": false,
+    "OPERATING DETERIORATION": false,
+    "LEVERAGE": false,
+    "FUNDING SUBSTITUTION": false,
+    "LOW-CASH DEBT": false,
+    "MISSED FILING": false
+   },
+   "ct": {
+    "direction": "UNKNOWN (R&D annual only)",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Limited"
+   },
+   "nc": {
+    "direction": "UNKNOWN",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Limited"
+   }
+  }
+ },
+ {
+  "set": "year-back",
+  "ticker": "M",
+  "cik": "0000794367",
+  "vantage": "2025-09-10",
+  "assessmentDate": "2025-09-10",
+  "source": "verdict-s4/out/partd4-D3.json",
+  "x": {
+   "ticker": "M",
+   "sic": 5311,
+   "revYoY": [
+    -1.903453689167975,
+    -4.14
+   ],
+   "marginChangePts0": -1.4,
+   "rdYoY": [
+    null,
+    null
+   ],
+   "rdStatus": "not filed",
+   "rdTag": null,
+   "rdQuarters": 0,
+   "ocfTTM": [
+    1396000000,
+    1171000000
+   ],
+   "fcfTTM": [
+    970000000,
+    659000000
+   ],
+   "capexTTM": [
+    426000000,
+    512000000
+   ],
+   "revTTM0": 22702000000,
+   "currentRatio0": 1.3806589239156197,
+   "netDebt": [
+    1797000000,
+    2353000000
+   ],
+   "runwayQuarters": null,
+   "runwayCase": "none",
+   "critical": [],
+   "missedFiling": false,
+   "missedFilingWhy": "10-Q for 2025-11-01 due 2025-12-11, not yet due",
+   "restructuring205": [],
+   "stale": false,
+   "financeArm": false,
+   "financeArmSeparable": false,
+   "restrictedNotSeparated": false
+  },
+  "expected": {
+   "state": "Resilient",
+   "deciding": "no flags",
+   "fired": [],
+   "unmeasurable": [],
+   "flags": {
+    "SEVERE BURN": false,
+    "CAUTION BURN": false,
+    "PERSISTENT BURN, RUNWAY UNKNOWN": false,
+    "INVESTMENT CASH PRESSURE": false,
+    "WEAK LIQUIDITY": false,
+    "OPERATING DETERIORATION": false,
+    "LEVERAGE": false,
+    "FUNDING SUBSTITUTION": false,
+    "LOW-CASH DEBT": false,
+    "MISSED FILING": false
+   },
+   "ct": {
+    "direction": "UNKNOWN (R&D not filed)",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Limited"
+   },
+   "nc": {
+    "direction": "UNKNOWN",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Adequate"
+   }
+  }
+ },
+ {
+  "set": "year-back",
+  "ticker": "KSS",
+  "cik": "0000885639",
+  "vantage": "2025-09-04",
+  "assessmentDate": "2025-09-04",
+  "source": "verdict-s4/out/partd4-D3.json",
+  "x": {
+   "ticker": "KSS",
+   "sic": 5311,
+   "revYoY": [
+    -4.983922829581994,
+    -4.405677114133648
+   ],
+   "marginChangePts0": 3.5,
+   "rdYoY": [
+    null,
+    null
+   ],
+   "rdStatus": "not filed",
+   "rdTag": null,
+   "rdQuarters": 0,
+   "ocfTTM": [
+    907000000,
+    1187000000
+   ],
+   "fcfTTM": [
+    480000000,
+    709000000
+   ],
+   "capexTTM": [
+    427000000,
+    478000000
+   ],
+   "revTTM0": 15886000000,
+   "currentRatio0": 1.3634222919937207,
+   "netDebt": [
+    1421000000,
+    1705000000
+   ],
+   "runwayQuarters": null,
+   "runwayCase": "none",
+   "critical": [],
+   "missedFiling": false,
+   "missedFilingWhy": "10-Q for 2025-11-01 due 2025-12-11, not yet due",
+   "restructuring205": [
+    "2025-01-10"
+   ],
+   "stale": false,
+   "financeArm": false,
+   "financeArmSeparable": false,
+   "restrictedNotSeparated": false
+  },
+  "expected": {
+   "state": "Resilient",
+   "deciding": "no flags",
+   "fired": [],
+   "unmeasurable": [],
+   "flags": {
+    "SEVERE BURN": false,
+    "CAUTION BURN": false,
+    "PERSISTENT BURN, RUNWAY UNKNOWN": false,
+    "INVESTMENT CASH PRESSURE": false,
+    "WEAK LIQUIDITY": false,
+    "OPERATING DETERIORATION": false,
+    "LEVERAGE": false,
+    "FUNDING SUBSTITUTION": false,
+    "LOW-CASH DEBT": false,
+    "MISSED FILING": false
+   },
+   "ct": {
+    "direction": "CAUTION (8-K 2.05 2025-01-10)",
+    "caution": true,
+    "verdict": "Pursue with guardrails",
+    "conf": "Limited"
+   },
+   "nc": {
+    "direction": "UNKNOWN",
+    "caution": false,
+    "verdict": "Pursue",
+    "conf": "Adequate"
+   }
+  }
+ },
+ {
+  "set": "year-back",
+  "ticker": "XRX",
+  "cik": "0001770450",
+  "vantage": "2025-08-07",
+  "assessmentDate": "2025-08-07",
+  "source": "verdict-s4/out/partd4-D3.json",
+  "x": {
+   "ticker": "XRX",
+   "sic": 3577,
+   "revYoY": [
+    -0.12674271229404308,
+    -2.9960053262316912
+   ],
+   "marginChangePts0": null,
+   "rdYoY": [
+    null,
+    null
+   ],
+   "rdStatus": "not filed",
+   "rdTag": null,
+   "rdQuarters": 0,
+   "ocfTTM": [
+    367000000,
+    557000000
+   ],
+   "fcfTTM": [
+    345000000,
+    525000000
+   ],
+   "capexTTM": [
+    22000000,
+    32000000
+   ],
+   "revTTM0": 6174000000,
+   "currentRatio0": 1.4604286892003298,
+   "netDebt": [
+    3493000000,
+    2818000000
+   ],
+   "runwayQuarters": 29,
+   "runwayCase": "burn",
+   "critical": [],
+   "missedFiling": false,
+   "missedFilingWhy": "10-Q for 2025-09-30 due 2025-11-09, not yet due",
+   "restructuring205": [],
+   "stale": false,
+   "financeArm": true,
+   "financeArmSeparable": false,
+   "restrictedNotSeparated": false
+  },
+  "expected": {
+   "state": "Watch",
+   "deciding": "BORROWING: LEVERAGE + FUNDING SUBSTITUTION",
+   "fired": [
+    "LEVERAGE",
+    "FUNDING SUBSTITUTION"
+   ],
+   "unmeasurable": [],
+   "flags": {
+    "SEVERE BURN": false,
+    "CAUTION BURN": false,
+    "PERSISTENT BURN, RUNWAY UNKNOWN": false,
+    "INVESTMENT CASH PRESSURE": false,
+    "WEAK LIQUIDITY": false,
+    "OPERATING DETERIORATION": false,
+    "LEVERAGE": true,
+    "FUNDING SUBSTITUTION": true,
+    "LOW-CASH DEBT": false,
+    "MISSED FILING": false
+   },
+   "ct": {
+    "direction": "UNKNOWN (R&D not filed)",
+    "caution": false,
+    "verdict": "Pursue with guardrails",
+    "conf": "Limited"
+   },
+   "nc": {
+    "direction": "UNKNOWN",
+    "caution": false,
+    "verdict": "Pursue with guardrails",
+    "conf": "Limited"
+   }
+  }
+ }
+]

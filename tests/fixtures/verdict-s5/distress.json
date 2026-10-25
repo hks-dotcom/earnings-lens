@@ -1,0 +1,703 @@
+[
+ {
+  "set": "distress",
+  "ticker": "GETYQ",
+  "cik": "0001898496",
+  "vantage": "2026-08-10",
+  "assessmentDate": "2026-08-10",
+  "source": "verdict-s4/out/partd4-D1.json",
+  "x": {
+   "ticker": "GETYQ",
+   "sic": 7389,
+   "revYoY": [
+    -2.4625130916800777,
+    1.1143490853590505
+   ],
+   "marginChangePts0": -1,
+   "rdYoY": [
+    null,
+    null
+   ],
+   "rdStatus": "not filed",
+   "rdTag": null,
+   "rdQuarters": 0,
+   "ocfTTM": [
+    -25434000,
+    72279000
+   ],
+   "fcfTTM": [
+    -83034000,
+    12845000
+   ],
+   "capexTTM": [
+    57600000,
+    59434000
+   ],
+   "revTTM0": 978003000,
+   "currentRatio0": 0.7819192080967561,
+   "netDebt": [
+    1983282000,
+    1252131000
+   ],
+   "runwayQuarters": 0,
+   "runwayCase": "burn",
+   "critical": [],
+   "missedFiling": false,
+   "missedFilingWhy": "10-Q for 2026-09-30 due 2026-11-14, not yet due",
+   "restructuring205": [],
+   "stale": false,
+   "financeArm": false,
+   "financeArmSeparable": false,
+   "restrictedNotSeparated": false
+  },
+  "expected": {
+   "state": "Fragile",
+   "deciding": "2 areas: WEAK LIQUIDITY + FUNDING SUBSTITUTION + LOW-CASH DEBT",
+   "fired": [
+    "WEAK LIQUIDITY",
+    "FUNDING SUBSTITUTION",
+    "LOW-CASH DEBT"
+   ],
+   "unmeasurable": [],
+   "flags": {
+    "SEVERE BURN": false,
+    "CAUTION BURN": false,
+    "PERSISTENT BURN, RUNWAY UNKNOWN": false,
+    "INVESTMENT CASH PRESSURE": false,
+    "WEAK LIQUIDITY": true,
+    "OPERATING DETERIORATION": false,
+    "LEVERAGE": false,
+    "FUNDING SUBSTITUTION": true,
+    "LOW-CASH DEBT": true,
+    "MISSED FILING": false
+   },
+   "ct": {
+    "direction": "UNKNOWN (R&D not filed)",
+    "caution": false,
+    "verdict": "Limit exposure",
+    "conf": "Limited"
+   },
+   "nc": {
+    "direction": "UNKNOWN",
+    "caution": false,
+    "verdict": "Monitor",
+    "conf": "Adequate"
+   }
+  }
+ },
+ {
+  "set": "distress",
+  "ticker": "GNLN",
+  "cik": "0001743745",
+  "vantage": "2026-08-14",
+  "assessmentDate": "2026-08-14",
+  "source": "verdict-s4/out/partd4-D1.json",
+  "x": {
+   "ticker": "GNLN",
+   "sic": 5099,
+   "revYoY": [
+    -89.59390862944161,
+    -69.50306330837304
+   ],
+   "marginChangePts0": -3591.7,
+   "rdYoY": [
+    null,
+    null
+   ],
+   "rdStatus": "not filed",
+   "rdTag": null,
+   "rdQuarters": 0,
+   "ocfTTM": [
+    -19513000,
+    -10216000
+   ],
+   "fcfTTM": [
+    null,
+    -10377000
+   ],
+   "capexTTM": [
+    null,
+    161000
+   ],
+   "revTTM0": 2628000,
+   "currentRatio0": 2.360385144429161,
+   "netDebt": [
+    -6065000,
+    -5724000
+   ],
+   "runwayQuarters": null,
+   "runwayCase": "burn",
+   "critical": [],
+   "missedFiling": false,
+   "missedFilingWhy": "10-Q for 2026-09-30 due 2026-11-14, not yet due",
+   "restructuring205": [],
+   "stale": false,
+   "financeArm": false,
+   "financeArmSeparable": false,
+   "restrictedNotSeparated": false
+  },
+  "expected": {
+   "state": "Fragile",
+   "deciding": "2 areas: PERSISTENT BURN, RUNWAY UNKNOWN + OPERATING DETERIORATION",
+   "fired": [
+    "PERSISTENT BURN, RUNWAY UNKNOWN",
+    "OPERATING DETERIORATION"
+   ],
+   "unmeasurable": [
+    "SEVERE BURN",
+    "CAUTION BURN",
+    "INVESTMENT CASH PRESSURE"
+   ],
+   "flags": {
+    "SEVERE BURN": null,
+    "CAUTION BURN": null,
+    "PERSISTENT BURN, RUNWAY UNKNOWN": true,
+    "INVESTMENT CASH PRESSURE": null,
+    "WEAK LIQUIDITY": false,
+    "OPERATING DETERIORATION": true,
+    "LEVERAGE": false,
+    "FUNDING SUBSTITUTION": false,
+    "LOW-CASH DEBT": false,
+    "MISSED FILING": false
+   },
+   "ct": {
+    "direction": "CAUTION (OPERATING DETERIORATION)",
+    "caution": true,
+    "verdict": "Limit exposure",
+    "conf": "Limited"
+   },
+   "nc": {
+    "direction": "CAUTION",
+    "caution": true,
+    "verdict": "Monitor",
+    "conf": "Limited"
+   }
+  }
+ },
+ {
+  "set": "distress",
+  "ticker": "LESLQ",
+  "cik": "0001821806",
+  "vantage": "2026-08-12",
+  "assessmentDate": "2026-08-12",
+  "source": "verdict-s4/out/partd4-D1.json",
+  "x": {
+   "ticker": "LESLQ",
+   "sic": 5990,
+   "revYoY": [
+    -8.364994693682585,
+    4.296182551063037
+   ],
+   "marginChangePts0": -0.3,
+   "rdYoY": [
+    null,
+    null
+   ],
+   "rdStatus": "not filed",
+   "rdTag": null,
+   "rdQuarters": 0,
+   "ocfTTM": [
+    10622000,
+    7658000
+   ],
+   "fcfTTM": [
+    -6345000,
+    -24326000
+   ],
+   "capexTTM": [
+    16967000,
+    31984000
+   ],
+   "revTTM0": 1179571000,
+   "currentRatio0": 1.3498067005357046,
+   "netDebt": [
+    737453000,
+    728863000
+   ],
+   "runwayQuarters": null,
+   "runwayCase": "none",
+   "critical": [],
+   "missedFiling": false,
+   "missedFilingWhy": "10-K for 2026-10-03 due 2026-12-17, not yet due",
+   "restructuring205": [
+    "2025-12-02"
+   ],
+   "stale": false,
+   "financeArm": false,
+   "financeArmSeparable": false,
+   "restrictedNotSeparated": false
+  },
+  "expected": {
+   "state": "Fragile",
+   "deciding": "2 areas: INVESTMENT CASH PRESSURE + LOW-CASH DEBT",
+   "fired": [
+    "INVESTMENT CASH PRESSURE",
+    "LOW-CASH DEBT"
+   ],
+   "unmeasurable": [],
+   "flags": {
+    "SEVERE BURN": false,
+    "CAUTION BURN": false,
+    "PERSISTENT BURN, RUNWAY UNKNOWN": false,
+    "INVESTMENT CASH PRESSURE": true,
+    "WEAK LIQUIDITY": false,
+    "OPERATING DETERIORATION": false,
+    "LEVERAGE": false,
+    "FUNDING SUBSTITUTION": false,
+    "LOW-CASH DEBT": true,
+    "MISSED FILING": false
+   },
+   "ct": {
+    "direction": "CAUTION (8-K 2.05 2025-12-02)",
+    "caution": true,
+    "verdict": "Limit exposure",
+    "conf": "Limited"
+   },
+   "nc": {
+    "direction": "UNKNOWN",
+    "caution": false,
+    "verdict": "Monitor",
+    "conf": "Adequate"
+   }
+  }
+ },
+ {
+  "set": "distress",
+  "ticker": "TWINLAB CONSOLIDATED HOLDINGS, INC.",
+  "cik": "0001590695",
+  "vantage": "2025-10-16",
+  "assessmentDate": "2025-10-16",
+  "source": "verdict-s4/out/partd4-D1.json",
+  "x": {
+   "ticker": "TWINLAB CONSOLIDATED HOLDINGS, INC.",
+   "sic": 2833,
+   "revYoY": [
+    -36.8335146898803,
+    -36.09346177495388
+   ],
+   "marginChangePts0": -26.6,
+   "rdYoY": [
+    null,
+    null
+   ],
+   "rdStatus": "not filed in the window",
+   "rdTag": null,
+   "rdQuarters": 0,
+   "ocfTTM": [
+    2314000,
+    4455000
+   ],
+   "fcfTTM": [
+    null,
+    4455000
+   ],
+   "capexTTM": [
+    null,
+    0
+   ],
+   "revTTM0": 4248000,
+   "currentRatio0": 0.03295173369403847,
+   "netDebt": [
+    92984000,
+    95299000
+   ],
+   "runwayQuarters": null,
+   "runwayCase": "burn",
+   "critical": [],
+   "missedFiling": true,
+   "missedFilingWhy": "10-K for 2024-12-31 due 2025-03-31, not filed, no 12b-25",
+   "restructuring205": [],
+   "stale": false,
+   "financeArm": false,
+   "financeArmSeparable": false,
+   "restrictedNotSeparated": false
+  },
+  "expected": {
+   "state": "Fragile",
+   "deciding": "3 areas: OPERATING DETERIORATION + LEVERAGE + MISSED FILING",
+   "fired": [
+    "OPERATING DETERIORATION",
+    "LEVERAGE",
+    "MISSED FILING"
+   ],
+   "unmeasurable": [],
+   "flags": {
+    "SEVERE BURN": false,
+    "CAUTION BURN": false,
+    "PERSISTENT BURN, RUNWAY UNKNOWN": false,
+    "INVESTMENT CASH PRESSURE": false,
+    "WEAK LIQUIDITY": false,
+    "OPERATING DETERIORATION": true,
+    "LEVERAGE": true,
+    "FUNDING SUBSTITUTION": false,
+    "LOW-CASH DEBT": false,
+    "MISSED FILING": true
+   },
+   "ct": {
+    "direction": "CAUTION (OPERATING DETERIORATION)",
+    "caution": true,
+    "verdict": "Limit exposure",
+    "conf": "Exception"
+   },
+   "nc": {
+    "direction": "UNKNOWN",
+    "caution": false,
+    "verdict": "Monitor",
+    "conf": "Exception"
+   }
+  }
+ },
+ {
+  "set": "distress",
+  "ticker": "BTAIQ",
+  "cik": "0001720893",
+  "vantage": "2026-08-13",
+  "assessmentDate": "2026-08-13",
+  "source": "verdict-s4/out/partd4-D1.json",
+  "x": {
+   "ticker": "BTAIQ",
+   "sic": 2834,
+   "revYoY": [
+    51.66666666666667,
+    22.61904761904762
+   ],
+   "marginChangePts0": 7609.5,
+   "rdYoY": [
+    -69.14976599063962,
+    -35.11198945981555
+   ],
+   "rdStatus": "quarterly",
+   "rdTag": "ResearchAndDevelopmentExpense",
+   "rdQuarters": 12,
+   "ocfTTM": [
+    -50904000,
+    -55765000
+   ],
+   "fcfTTM": [
+    -50904000,
+    -55765000
+   ],
+   "capexTTM": [
+    0,
+    0
+   ],
+   "revTTM0": 742000,
+   "currentRatio0": 0.20926146016376349,
+   "netDebt": [
+    91610000,
+    91250000
+   ],
+   "runwayQuarters": 1,
+   "runwayCase": "burn",
+   "critical": [],
+   "missedFiling": false,
+   "missedFilingWhy": "10-Q for 2026-09-30 due 2026-11-14, not yet due",
+   "restructuring205": [],
+   "stale": false,
+   "financeArm": false,
+   "financeArmSeparable": false,
+   "restrictedNotSeparated": false
+  },
+  "expected": {
+   "state": "Fragile",
+   "deciding": "SEVERE BURN (+ INVESTMENT CASH PRESSURE, WEAK LIQUIDITY, LOW-CASH DEBT)",
+   "fired": [
+    "SEVERE BURN",
+    "INVESTMENT CASH PRESSURE",
+    "WEAK LIQUIDITY",
+    "LOW-CASH DEBT"
+   ],
+   "unmeasurable": [],
+   "flags": {
+    "SEVERE BURN": true,
+    "CAUTION BURN": false,
+    "PERSISTENT BURN, RUNWAY UNKNOWN": false,
+    "INVESTMENT CASH PRESSURE": true,
+    "WEAK LIQUIDITY": true,
+    "OPERATING DETERIORATION": false,
+    "LEVERAGE": false,
+    "FUNDING SUBSTITUTION": false,
+    "LOW-CASH DEBT": true,
+    "MISSED FILING": false
+   },
+   "ct": {
+    "direction": "CAUTION (R&D -69.1%/-35.1%)",
+    "caution": true,
+    "verdict": "Limit exposure",
+    "conf": "Adequate"
+   },
+   "nc": {
+    "direction": "UNKNOWN",
+    "caution": false,
+    "verdict": "Monitor",
+    "conf": "Adequate"
+   }
+  }
+ },
+ {
+  "set": "distress",
+  "ticker": "ECHO",
+  "cik": "0001415404",
+  "vantage": "2026-05-11",
+  "assessmentDate": "2026-05-11",
+  "source": "verdict-s4/out/partd4-D1.json",
+  "x": {
+   "ticker": "ECHO",
+   "sic": 4899,
+   "revYoY": [
+    -5.226915998364755,
+    -4.30871367286305
+   ],
+   "marginChangePts0": 13,
+   "rdYoY": [
+    -11.11111111111111,
+    -11.76470588235294
+   ],
+   "rdStatus": "quarterly",
+   "rdTag": "ResearchAndDevelopmentExpense",
+   "rdQuarters": 12,
+   "ocfTTM": [
+    -67845000,
+    1008193000
+   ],
+   "fcfTTM": [
+    -908583000,
+    -275499000
+   ],
+   "capexTTM": [
+    840738000,
+    1283692000
+   ],
+   "revTTM0": 14802720000,
+   "currentRatio0": 0.3016755237275911,
+   "netDebt": [
+    22736477000,
+    21273663000
+   ],
+   "runwayQuarters": null,
+   "runwayCase": "none",
+   "critical": [
+    "Critical: obligation trigger, review the event (8-K 2.04 2025-06-27)",
+    "Critical: obligation trigger, review the event (8-K 2.04 2025-06-02)",
+    "Critical: obligation trigger, review the event (8-K 2.04 2025-05-30)"
+   ],
+   "missedFiling": false,
+   "missedFilingWhy": "10-Q for 2026-06-30 due 2026-08-09, not yet due",
+   "restructuring205": [],
+   "stale": false,
+   "financeArm": true,
+   "financeArmSeparable": false,
+   "restrictedNotSeparated": false
+  },
+  "expected": {
+   "state": "Critical",
+   "deciding": "obligation trigger, review the event (8-K 2.04 2025-06-27); obligation trigger, review the event (8-K 2.04 2025-06-02); obligation trigger, review the event (8-K 2.04 2025-05-30)",
+   "fired": [
+    "INVESTMENT CASH PRESSURE",
+    "WEAK LIQUIDITY",
+    "FUNDING SUBSTITUTION",
+    "LOW-CASH DEBT"
+   ],
+   "unmeasurable": [],
+   "flags": {
+    "SEVERE BURN": false,
+    "CAUTION BURN": false,
+    "PERSISTENT BURN, RUNWAY UNKNOWN": false,
+    "INVESTMENT CASH PRESSURE": true,
+    "WEAK LIQUIDITY": true,
+    "OPERATING DETERIORATION": false,
+    "LEVERAGE": false,
+    "FUNDING SUBSTITUTION": true,
+    "LOW-CASH DEBT": true,
+    "MISSED FILING": false
+   },
+   "ct": {
+    "direction": "CAUTION (R&D -11.1%/-11.8%)",
+    "caution": true,
+    "verdict": "Limit exposure",
+    "conf": "Limited"
+   },
+   "nc": {
+    "direction": "UNKNOWN",
+    "caution": false,
+    "verdict": "Limit exposure",
+    "conf": "Limited"
+   }
+  }
+ },
+ {
+  "set": "distress",
+  "ticker": "SGMOQ",
+  "cik": "0001001233",
+  "vantage": "2026-05-14",
+  "assessmentDate": "2026-05-14",
+  "source": "verdict-s4/out/partd4-D1.json",
+  "x": {
+   "ticker": "SGMOQ",
+   "sic": 2836,
+   "revYoY": [
+    -77.5982600590337,
+    88.42537412263276
+   ],
+   "marginChangePts0": -1755.1,
+   "rdYoY": [
+    2.1687302930093058,
+    32.78986272439282
+   ],
+   "rdStatus": "quarterly",
+   "rdTag": "ResearchAndDevelopmentExpense",
+   "rdQuarters": 12,
+   "ocfTTM": [
+    -90341000,
+    -44625000
+   ],
+   "fcfTTM": [
+    -90456000,
+    -44892000
+   ],
+   "capexTTM": [
+    115000,
+    267000
+   ],
+   "revTTM0": 34557000,
+   "currentRatio0": 0.6984981367862386,
+   "netDebt": [
+    -27586000,
+    -25180000
+   ],
+   "runwayQuarters": 1,
+   "runwayCase": "burn",
+   "critical": [],
+   "missedFiling": false,
+   "missedFilingWhy": "10-Q for 2026-06-30 due 2026-08-14, not yet due",
+   "restructuring205": [],
+   "stale": false,
+   "financeArm": false,
+   "financeArmSeparable": false,
+   "restrictedNotSeparated": false
+  },
+  "expected": {
+   "state": "Fragile",
+   "deciding": "SEVERE BURN (+ INVESTMENT CASH PRESSURE, WEAK LIQUIDITY, OPERATING DETERIORATION)",
+   "fired": [
+    "SEVERE BURN",
+    "INVESTMENT CASH PRESSURE",
+    "WEAK LIQUIDITY",
+    "OPERATING DETERIORATION"
+   ],
+   "unmeasurable": [],
+   "flags": {
+    "SEVERE BURN": true,
+    "CAUTION BURN": false,
+    "PERSISTENT BURN, RUNWAY UNKNOWN": false,
+    "INVESTMENT CASH PRESSURE": true,
+    "WEAK LIQUIDITY": true,
+    "OPERATING DETERIORATION": true,
+    "LEVERAGE": false,
+    "FUNDING SUBSTITUTION": false,
+    "LOW-CASH DEBT": false,
+    "MISSED FILING": false
+   },
+   "ct": {
+    "direction": "CAUTION (OPERATING DETERIORATION)",
+    "caution": true,
+    "verdict": "Limit exposure",
+    "conf": "Adequate"
+   },
+   "nc": {
+    "direction": "CAUTION",
+    "caution": true,
+    "verdict": "Monitor",
+    "conf": "Adequate"
+   }
+  }
+ },
+ {
+  "set": "distress",
+  "ticker": "SNBRQ",
+  "cik": "0000827187",
+  "vantage": "2026-05-12",
+  "assessmentDate": "2026-05-12",
+  "source": "verdict-s4/out/partd4-D1.json",
+  "x": {
+   "ticker": "SNBRQ",
+   "sic": 2510,
+   "revYoY": [
+    -18.886693569919213,
+    -7.8106879466690735
+   ],
+   "marginChangePts0": -12.1,
+   "rdYoY": [
+    -50.949280014674855,
+    -40.94621233455364
+   ],
+   "rdStatus": "quarterly",
+   "rdTag": "ResearchAndDevelopmentExpense",
+   "rdQuarters": 12,
+   "ocfTTM": [
+    -8408000,
+    -9228000
+   ],
+   "fcfTTM": [
+    -23657000,
+    -28024000
+   ],
+   "capexTTM": [
+    15249000,
+    18796000
+   ],
+   "revTTM0": 1337176000,
+   "currentRatio0": 0.1539912139949276,
+   "netDebt": [
+    604116000,
+    556009000
+   ],
+   "runwayQuarters": 0,
+   "runwayCase": "burn",
+   "critical": [],
+   "missedFiling": false,
+   "missedFilingWhy": "10-Q for 2026-07-04 due 2026-08-13, not yet due",
+   "restructuring205": [],
+   "stale": false,
+   "financeArm": false,
+   "financeArmSeparable": false,
+   "restrictedNotSeparated": false
+  },
+  "expected": {
+   "state": "Fragile",
+   "deciding": "SEVERE BURN (+ INVESTMENT CASH PRESSURE, WEAK LIQUIDITY, OPERATING DETERIORATION, LOW-CASH DEBT)",
+   "fired": [
+    "SEVERE BURN",
+    "INVESTMENT CASH PRESSURE",
+    "WEAK LIQUIDITY",
+    "OPERATING DETERIORATION",
+    "LOW-CASH DEBT"
+   ],
+   "unmeasurable": [],
+   "flags": {
+    "SEVERE BURN": true,
+    "CAUTION BURN": false,
+    "PERSISTENT BURN, RUNWAY UNKNOWN": false,
+    "INVESTMENT CASH PRESSURE": true,
+    "WEAK LIQUIDITY": true,
+    "OPERATING DETERIORATION": true,
+    "LEVERAGE": false,
+    "FUNDING SUBSTITUTION": false,
+    "LOW-CASH DEBT": true,
+    "MISSED FILING": false
+   },
+   "ct": {
+    "direction": "CAUTION (R&D -50.9%/-40.9%, OPERATING DETERIORATION)",
+    "caution": true,
+    "verdict": "Limit exposure",
+    "conf": "Adequate"
+   },
+   "nc": {
+    "direction": "CAUTION",
+    "caution": true,
+    "verdict": "Monitor",
+    "conf": "Adequate"
+   }
+  }
+ }
+]
