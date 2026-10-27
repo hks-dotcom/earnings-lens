@@ -8,8 +8,8 @@ import { Lens } from "@/lib/rules/dealStructure";
  * advance. They exist to show that the same counterparty produces a
  * different deal depending on who is selling and how they bill.
  *
- * These are labels only. Everything underneath -- the Lens type, rule
- * outputs, rules-snapshot keys and values -- keeps the neutral identifiers
+ * These are labels only. Everything underneath -- the Lens type and the
+ * rule outputs -- keeps the neutral identifiers
  * "Services" and "SaaS", so renaming a lens is a change to this file and
  * nothing else: no rule, figure or stored snapshot moves.
  */

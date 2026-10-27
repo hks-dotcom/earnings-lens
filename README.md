@@ -416,12 +416,10 @@ Other commands:
 | `npm run explain-report -- NVDA` | The whole Claude layer for a ticker: triggers, sources read, explanation, citation, verified passages, what was dropped, tokens spent. |
 | `npm run audit-explanations` | Re-fetches every cited filing and re-verifies every stored explanation from scratch. Makes no Claude call. |
 | `npm run snapshot` / `npm run statements-snapshot` | Regenerate the snapshot baselines (never without reviewing the diff). |
-| `npm run test:ladder` / `npm run test:rules-snapshot` | The retired S0 ladder and rules snapshot, kept runnable but out of `check`: the S5 engine replaced the verdict they test. |
 
 ---
 
 Built with [Claude Code](https://claude.com/claude-code) from my own written
 spec (`Earnings_Lens_Build_Spec.md`) and the locked verdict rules
 (`Earnings_Lens_Verdict_Rules_S5.md`). The visual target is
-`Earnings_Lens_Verdict_S5_Mock.html` (mock V24); `Earnings_Lens_Statements_Mock.html`
-still describes the statement tabs.
+`Earnings_Lens_Verdict_S5_Mock.html` (mock V24).
