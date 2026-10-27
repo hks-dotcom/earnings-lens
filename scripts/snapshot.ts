@@ -2,7 +2,8 @@
 // method, derived -- every cell, not just the number) to snapshots/. Run
 // scripts/diff-snapshot.ts afterward to catch any cell that changes on a
 // fresh pull, whether from a new filing, an EDGAR restatement, or a code
-// change to the resolution logic.
+// change to the resolution logic. Reads only filings on or before
+// SNAPSHOT_AS_OF (scripts/lib/snapshotAsOf.ts), as the diff does.
 //
 // Usage: npx tsx scripts/snapshot.ts NVDA MSFT WMT UFPT NAII AMZN GOOGL
 
@@ -13,7 +14,9 @@ import { getSubmissions, periodicFilings } from "@/lib/edgar/submissions";
 import { getCompanyFacts } from "@/lib/edgar/companyFacts";
 import { buildKeyFinancials } from "@/lib/xbrl/keyFinancials";
 import { buildAnnualFigures } from "@/lib/present/annualFigures";
+import { factsAsOf, submissionsAsOf } from "@/lib/verdict/repairs/asOf";
 import { buildSnapshot } from "@/scripts/lib/snapshotTypes";
+import { SNAPSHOT_AS_OF } from "@/scripts/lib/snapshotAsOf";
 
 const SNAPSHOT_DIR = join(process.cwd(), "snapshots");
 
@@ -23,8 +26,8 @@ async function snapshotOne(ticker: string) {
     console.error(`  ${ticker}: not found in SEC's ticker map, skipped`);
     return;
   }
-  const subs = await getSubmissions(record.cik);
-  const facts = await getCompanyFacts(record.cik);
+  const subs = submissionsAsOf(await getSubmissions(record.cik), SNAPSHOT_AS_OF);
+  const facts = factsAsOf(await getCompanyFacts(record.cik), SNAPSHOT_AS_OF);
   const periodic = periodicFilings(subs);
   const kf = buildKeyFinancials(facts, periodic, subs.fiscalYearEnd);
   const snapshot = buildSnapshot(

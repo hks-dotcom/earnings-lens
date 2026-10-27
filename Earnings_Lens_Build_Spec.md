@@ -255,6 +255,7 @@ Revenue is the denominator because it is always positive; operating income can b
 ## Done when
 
 1. NVDA reproduces the mock's figures from the Q2 FY27 10-Q, and the snapshot diff for every fixture reports no changed cells.
+   Both snapshot diffs are pinned to 2026-09-22 (`scripts/lib/snapshotAsOf.ts`), the date their baselines were written, because a filing that lands later would otherwise show up as a change; re-baselining means moving that date and rewriting both baselines together.
 2. A company with a 52/53-week fiscal year shows a "~" due-by date.
 3. A company that has just reported shows the "new results announced" line.
 4. A retailer's seasonal Q/Q dip in SG&A does not trigger the spending-cuts finding, because signals read Y/Y.

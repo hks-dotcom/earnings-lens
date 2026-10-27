@@ -5,6 +5,7 @@ import { buildKeyFinancials } from "@/lib/xbrl/keyFinancials";
 import { extractFilingStatement, FilingStatementExtract } from "@/lib/xbrl/statementExtract";
 import { buildStatements, statementFilings, Statements } from "@/lib/xbrl/statements";
 import { readFilingStatement, storeConfigured, writeFilingStatement } from "@/lib/db/store";
+import { factsAsOf, submissionsAsOf } from "@/lib/verdict/repairs/asOf";
 
 /**
  * Loads each filing's extracted statements: from the store when it has
@@ -133,12 +134,18 @@ export interface LoadedStatements {
   stats: ExtractStats[];
 }
 
-/** Everything for one ticker, in one call -- for scripts and tests. The page loads filings one per request instead. */
-export async function loadStatements(rawTicker: string): Promise<LoadedStatements> {
+/**
+ * Everything for one ticker, in one call -- for scripts and tests. The page loads filings one per request instead.
+ * With `asOf` (YYYY-MM-DD) only filings on or before that date are read, through the verdict's H as-of read;
+ * without it, everything filed to date.
+ */
+export async function loadStatements(rawTicker: string, asOf?: string): Promise<LoadedStatements> {
   const record = await resolveTicker(rawTicker);
   if (!record) throw new Error(`Ticker "${rawTicker}" not found`);
-  const subs = await getSubmissions(record.cik);
-  const facts = await getCompanyFacts(record.cik);
+  const liveSubs = await getSubmissions(record.cik);
+  const liveFacts = await getCompanyFacts(record.cik);
+  const subs = asOf ? submissionsAsOf(liveSubs, asOf) : liveSubs;
+  const facts = asOf ? factsAsOf(liveFacts, asOf) : liveFacts;
   const periodic = periodicFilings(subs);
   const kf = buildKeyFinancials(facts, periodic, subs.fiscalYearEnd);
 

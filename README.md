@@ -384,6 +384,10 @@ That runs the type check, the linter, and:
   verification tests including the altered-quote case, a footing test, a
   recast check, and two snapshot diffs over thirteen real companies -- every
   Key financials figure with its provenance, and every statement cell.
+  Both are pinned to 2026-09-22 (`scripts/lib/snapshotAsOf.ts`), the date
+  their baselines were written, so a filing that lands later does not show
+  up as a change; re-baselining means moving that date and rewriting both
+  baselines together.
 
 `scripts/verdict-page-live.ts` (report only, network, not in `check`) builds
 the page's verdict for today's 41 through the page's own path and compares it
@@ -415,7 +419,7 @@ Other commands:
 |---|---|
 | `npm run explain-report -- NVDA` | The whole Claude layer for a ticker: triggers, sources read, explanation, citation, verified passages, what was dropped, tokens spent. |
 | `npm run audit-explanations` | Re-fetches every cited filing and re-verifies every stored explanation from scratch. Makes no Claude call. |
-| `npm run snapshot` / `npm run statements-snapshot` | Regenerate the snapshot baselines (never without reviewing the diff). |
+| `npm run snapshot` / `npm run statements-snapshot` | Regenerate the snapshot baselines (never without reviewing the diff). Both read only filings up to the pinned date in `scripts/lib/snapshotAsOf.ts` (2026-09-22) so later filings do not show as changes; move that date and rewrite both baselines together. |
 
 ---
 

@@ -1,7 +1,8 @@
 // Re-builds each ticker's statements and diffs them against
 // statements-snapshots/<TICKER>.json cell by cell: value, method and
 // provenance, plus row order, labels and flags. Exits non-zero on any
-// change, like the other two snapshot diffs.
+// change, like the other two snapshot diffs. Reads only filings on or
+// before SNAPSHOT_AS_OF (scripts/lib/snapshotAsOf.ts), as the writer does.
 //
 // Usage: npx tsx scripts/diff-statements-snapshot.ts NVDA MSFT ...
 
@@ -9,6 +10,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { loadStatements } from "@/lib/xbrl/statementLoader";
 import { buildStatementsSnapshot, StatementsSnapshot } from "@/scripts/lib/statementsSnapshot";
+import { SNAPSHOT_AS_OF } from "@/scripts/lib/snapshotAsOf";
 
 const DIR = join(process.cwd(), "statements-snapshots");
 
@@ -19,7 +21,7 @@ async function diffOne(t: string): Promise<number> {
     return 1;
   }
   const old = JSON.parse(readFileSync(path, "utf8")) as StatementsSnapshot;
-  const { ticker, statements } = await loadStatements(t);
+  const { ticker, statements } = await loadStatements(t, SNAPSHOT_AS_OF);
   const fresh = JSON.parse(JSON.stringify(buildStatementsSnapshot(ticker, statements))) as StatementsSnapshot;
   console.log(`=== ${ticker} ===`);
   let changed = 0;

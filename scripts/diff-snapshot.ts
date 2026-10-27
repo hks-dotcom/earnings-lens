@@ -3,6 +3,8 @@
 // number (not array position), so a new filing shifting the 5-quarter
 // window doesn't produce spurious diffs for the quarters that still
 // overlap -- it's reported separately as "new quarter" / "dropped quarter".
+// Reads only filings on or before SNAPSHOT_AS_OF (scripts/lib/snapshotAsOf.ts),
+// the date the snapshots were written, so a later filing is not a change.
 //
 // Usage: npx tsx scripts/diff-snapshot.ts NVDA MSFT WMT UFPT NAII AMZN GOOGL
 
@@ -13,6 +15,7 @@ import { getSubmissions, periodicFilings } from "@/lib/edgar/submissions";
 import { getCompanyFacts } from "@/lib/edgar/companyFacts";
 import { buildKeyFinancials } from "@/lib/xbrl/keyFinancials";
 import { buildAnnualFigures } from "@/lib/present/annualFigures";
+import { factsAsOf, submissionsAsOf } from "@/lib/verdict/repairs/asOf";
 import {
   ANNUAL_ROW_NAMES,
   AnnualSnapshotCell,
@@ -21,6 +24,7 @@ import {
   Snapshot,
   SnapshotCell,
 } from "@/scripts/lib/snapshotTypes";
+import { SNAPSHOT_AS_OF } from "@/scripts/lib/snapshotAsOf";
 
 const SNAPSHOT_DIR = join(process.cwd(), "snapshots");
 
@@ -100,8 +104,8 @@ async function diffOne(ticker: string): Promise<{ changed: number; checked: numb
     console.log(`  ${ticker}: not found in SEC's ticker map`);
     return { changed: 0, checked: 0 };
   }
-  const subs = await getSubmissions(record.cik);
-  const facts = await getCompanyFacts(record.cik);
+  const subs = submissionsAsOf(await getSubmissions(record.cik), SNAPSHOT_AS_OF);
+  const facts = factsAsOf(await getCompanyFacts(record.cik), SNAPSHOT_AS_OF);
   const periodic = periodicFilings(subs);
   const kf = buildKeyFinancials(facts, periodic, subs.fiscalYearEnd);
   const fresh = buildSnapshot(
