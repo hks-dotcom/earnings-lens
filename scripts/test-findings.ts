@@ -7,6 +7,8 @@
 //   fires with its rule line.
 // - Spending cuts name every restructuring filing in the window, each with
 //   its own explanation key. No fixture has two, so they are built here.
+// - The spending-cuts headline says what fired, with no figure: an R&D or
+//   SG&A cut, both, a restructuring filing, or a filing and a cut.
 // - A zero comparison amount reads "none".
 // - Spending cuts raise a low risk reading to medium in the rules module.
 //   (The S5 verdict replaced the hero, Why box and Summary these once
@@ -213,6 +215,23 @@ check("spending cuts: a filing and an R&D cut", {
   more: [{ sentence: "R&D down 10.0% on last year.", explainKey: "retrenchment" }],
   figures: "8-K filed 29 Jan 2026, accession 0000000000-26-000100 · R&D $90M, from $100M in Q2 FY25",
 });
+
+// --- spending cuts: the headline says what fired, with no figure (rules 17.7) --
+const RND_CUT = "R&D down -10.0% Y/Y, beyond the 2% flat band";
+const SGA_CUT = "SG&A down -4.0% Y/Y, beyond the 2% flat band";
+const kfCuts = kfWith({ revenue: line(1_000, 900), researchAndDevelopment: line(90, 100), sga: line(96, 100) });
+check("spending cuts headline: R&D cut only", cutsItem(cutsLens([], [RND_CUT]), kfCuts)?.headline, "R&D down on last year.");
+check("spending cuts headline: SG&A cut only", cutsItem(cutsLens([], [SGA_CUT]), kfCuts)?.headline, "SG&A down on last year.");
+check("spending cuts headline: both cut", cutsItem(cutsLens([], [RND_CUT, SGA_CUT]), kfCuts)?.headline, "R&D and SG&A down on last year.");
+check("spending cuts headline: filings only", [cutsItem(cutsLens(TWO.slice(1)))?.headline, cutsItem(cutsLens(TWO))?.headline], [
+  "Restructuring filed.",
+  "Restructuring filed.",
+]);
+check(
+  "spending cuts headline: a filing and a cut",
+  [cutsItem(cutsLens(TWO.slice(1), [RND_CUT]), kfCuts)?.headline, cutsItem(cutsLens(TWO, [RND_CUT, SGA_CUT]), kfCuts)?.headline],
+  ["Restructuring filed; R&D down on last year.", "Restructuring filed; R&D and SG&A down on last year."]
+);
 
 // --- spending cuts raise a low risk reading to medium -------------------------
 const NO_CUTS: RetrenchmentSignal = { triggered: false, causes: [] };

@@ -34,7 +34,6 @@ import {
 import { formatDate } from "@/lib/rules/redFlags";
 import { restructuringFilingsOf, restructuringKey } from "@/lib/rules/explanationTriggers";
 import { riskWord } from "@/lib/present/riskWords";
-import { LENS_NAME } from "@/lib/present/lensNames";
 
 /**
  * "What stands out": short, rule-based observations about how the numbers
@@ -484,7 +483,9 @@ export function listInWords(parts: string[]): string {
  * Spending cuts. A restructuring filing is named with its date, every one
  * in the window, oldest first; each filing's explanation closes the
  * sentence as its own sentence with its own citation. An R&D or SG&A cut is
- * a sentence of its own, closed by the quarter's explanation.
+ * a sentence of its own, closed by the quarter's explanation. The headline
+ * says what fired, with no figure: "Restructuring filed; R&D down on last
+ * year." (rules 17.7).
  */
 function spendingCutsItem(lens: LensResult, kf: KeyFinancials, unit: Unit): StandOutItem | undefined {
   if (!lens.retrenchment.triggered) return undefined;
@@ -517,6 +518,10 @@ function spendingCutsItem(lens: LensResult, kf: KeyFinancials, unit: Unit): Stan
   if (sentences.length === 0) return undefined;
   const [first, ...rest] = sentences;
 
+  const cutLabels = (["R&D", "SG&A"] as const).filter((l) => cuts.some((c) => c.label === l));
+  const cutWords = cutLabels.length ? `${listInWords([...cutLabels])} down on last year` : undefined;
+  const headline = filings.length ? `Restructuring filed${cutWords ? `; ${cutWords}` : ""}.` : `${cutWords}.`;
+
   const figures = [
     ...filings.map((f, i) => `8-K filed ${dates[i]}, accession ${f.accessionNumber}`),
     ...cutFigures,
@@ -526,10 +531,10 @@ function spendingCutsItem(lens: LensResult, kf: KeyFinancials, unit: Unit): Stan
     kind: "spending-cuts",
     tag: "SPENDING CUTS",
     tone: "watch",
-    headline: "Spending under review; existing contracts may be revisited.",
+    headline,
     sentence: first.sentence,
     figures,
-    rule: `flagged on a restructuring filing (8-K Item 2.05) in the last 12 months, or R&D or SG&A down more than ${GROWTH_FLAT_BAND_PCT}% on last year. Raises risk on both lenses and sets opportunity low for ${LENS_NAME.SaaS}.`,
+    rule: `flagged on a restructuring filing (8-K Item 2.05) in the last 12 months, or R&D or SG&A down more than ${GROWTH_FLAT_BAND_PCT}% on last year.`,
     explainKey: first.explainKey,
     ...(filingSentence && keys.length > 1 ? { alsoExplainKeys: keys.slice(1) } : {}),
     ...(rest.length ? { more: rest } : {}),

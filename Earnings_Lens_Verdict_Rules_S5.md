@@ -468,3 +468,12 @@ Numbers in bullets come from the engine's computed values (one decimal for % and
 - The old missed-deadline red flag in What stands out is retired; the §14 D2 filing-status item is the single filing-status authority.
 - Operating segments are shown only when the filed segment amounts sum to total revenue within $1M; otherwise the section is hidden (no reconciling-items entry).
 - Build B open questions 1, 2, 3, 7, 10, 11 are accepted as implemented; a year-ago DPO is not added.
+
+### 17.7 Spending cuts headline (Oct 27, 2026)
+- The SPENDING CUTS finding's headline states what fired, with no figure:
+  - R&D cut: "R&D down on last year"; SG&A cut: "SG&A down on last year"; both: "R&D and SG&A down on last year";
+  - one or more restructuring filings (8-K Item 2.05): "Restructuring filed";
+  - filing and cut together: "Restructuring filed; " followed by the cut wording.
+- The same headline shows in What stands out and in Explained from the filings.
+- Unchanged: the firing rule, tag, tone, figures line, the Claude question and the trigger keys.
+- "Spending under review; existing contracts may be revisited" is retired: no filing states it.
